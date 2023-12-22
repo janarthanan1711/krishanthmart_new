@@ -359,18 +359,18 @@ class ProductCard extends StatelessWidget {
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       padding: EdgeInsets.zero,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: buildChoiceOpiton(
-              productController.productDetails!.choice_options, index),
+              productController.productDetails!.choice_options, index,productController.productDetails!.brand!.name),
         );
       },
     );
   }
 
-  buildChoiceOpiton(choiceOptions, choiceOptionsIndex) {
+  buildChoiceOpiton(choiceOptions, choiceOptionsIndex,mainPrice) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         0.0,
@@ -378,15 +378,15 @@ class ProductCard extends StatelessWidget {
         0.0,
         0.0,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
             padding: app_language_rtl.$!
                 ? const EdgeInsets.only(left: 8.0)
                 : const EdgeInsets.only(right: 8.0),
             child: SizedBox(
-              width: 80.w,
+              // width: 80.w,
               child: Text(
                 choiceOptions[choiceOptionsIndex].title,
                 style: const TextStyle(color: Color.fromRGBO(153, 153, 153, 1)),
@@ -394,7 +394,7 @@ class ProductCard extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 250.w,
+            // width: 250.w,
             child: Scrollbar(
               // controller: _variantScrollController,
               isAlwaysShown: false,
@@ -406,7 +406,7 @@ class ProductCard extends StatelessWidget {
                         child: buildChoiceItem(
                             choiceOptions[choiceOptionsIndex].options[index],
                             choiceOptionsIndex,
-                            index))),
+                            index,mainPrice),),),
               ),
 
               /*ListView.builder(
@@ -430,7 +430,7 @@ class ProductCard extends StatelessWidget {
     productController.getVariantData(product.id);
   }
 
-  buildChoiceItem(option, choiceOptionsIndex, index) {
+  buildChoiceItem(option, choiceOptionsIndex, index, mainPrice) {
     return Padding(
       padding: app_language_rtl.$!
           ? const EdgeInsets.only(left: 8.0)
@@ -442,16 +442,8 @@ class ProductCard extends StatelessWidget {
         child: Card(
           elevation: 10,
           margin: const EdgeInsets.all(10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: BorderSide(
-                color: productController.selectedChoices[choiceOptionsIndex] ==
-                        option
-                    ? MyTheme.accent_color
-                    : MyTheme.noColor,
-                width: 1.5),
-          ),
           child: Container(
+            height: 90.h,
             decoration: BoxDecoration(
               border: Border.all(
                   color:
@@ -472,11 +464,9 @@ class ProductCard extends StatelessWidget {
                 )
               ],
             ),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 3.0),
-              child: Center(
-                child: Text(
+            child: Row(
+              children: [
+                Text(
                   option,
                   style: TextStyle(
                       color: productController
@@ -487,7 +477,18 @@ class ProductCard extends StatelessWidget {
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w600),
                 ),
-              ),
+                Text(
+                  mainPrice,
+                  style: TextStyle(
+                      color: productController
+                          .selectedChoices[choiceOptionsIndex] ==
+                          option
+                          ? MyTheme.accent_color
+                          : const Color.fromRGBO(224, 224, 225, 1),
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600),
+                ),
+              ],
             ),
           ),
         ),

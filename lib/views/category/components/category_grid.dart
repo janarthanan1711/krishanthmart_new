@@ -10,7 +10,7 @@ import 'category_card.dart';
 class CategoryGridView extends StatelessWidget {
   final List<Category> categoryList;
 
-  const CategoryGridView(this.categoryList, {super.key});
+  const CategoryGridView(this.categoryList, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,8 @@ class CategoryGridView extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 8.0,
+          crossAxisSpacing: 4,
+          mainAxisSpacing: 4,
         ),
         itemCount: 6,
         itemBuilder: (context, index) {
