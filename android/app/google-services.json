@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "778048926701",
+    "project_id": "krishanthmart-d1e19",
+    "storage_bucket": "krishanthmart-d1e19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778048926701:android:5c3819d0fd96be6c572de4",
+        "android_client_info": {
+          "package_name": "com.customer.krishanth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA-ivH-JGN8O1KcNwNDXc-EKRg41UFS9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778048926701:android:dd9df8f8f945456a572de4",
+        "android_client_info": {
+          "package_name": "com.customer.krishanthmart_new"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA-ivH-JGN8O1KcNwNDXc-EKRg41UFS9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
