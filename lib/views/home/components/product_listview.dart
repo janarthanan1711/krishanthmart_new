@@ -24,7 +24,7 @@ class ProductCardList extends StatelessWidget {
       itemBuilder: (context, index) {
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
-            child: ProductCard(product: productList[index],onTap: onTap,));
+            child: ProductCard(product: productList[index],onTap: onTap,itemIndex: index,));
       },
     );
   }

@@ -82,6 +82,7 @@ class _TopSellingProductsState extends State<TopSellingProducts> {
                     product: productResponse.products![index],
                     onTap: (){
                     },
+                    itemIndex: index,
                   );
                 },
               ),

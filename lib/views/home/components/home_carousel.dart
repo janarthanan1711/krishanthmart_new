@@ -41,7 +41,7 @@ class CustomCarousel extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              padding:  EdgeInsets.all(16.h),
+              padding: EdgeInsets.only(left: 16.h,right: 16.h,bottom: 16.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(

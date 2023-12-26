@@ -193,7 +193,7 @@ class _BrandProductsState extends State<BrandProducts> {
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               // 3
-              return ProductCard(product: _productList[index], onTap: () {  },);
+              return ProductCard(product: _productList[index], onTap: () {  },itemIndex: index,);
             },
           ),
         ),

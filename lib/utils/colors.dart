@@ -15,6 +15,7 @@ class MyTheme {
   /*If you are not a developer, do not change the bottom colors*/
   static const Color white = Color.fromRGBO(255, 255, 255, 1);
   static const Color dark_purple = Color(0xFF741B47);
+  static const Color light_pink = Color(0xffFEF6FA);
   static Color noColor = const Color.fromRGBO(255, 255, 255, 0);
   static Color light_grey = const Color.fromRGBO(239, 239, 239, 1);
   static Color dark_grey = const Color.fromRGBO(107, 115, 119, 1);

@@ -15,28 +15,31 @@ class BrandCategoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(AppLocalizations.of(context)!.top_brands_ucf,
-              style: TextStyle(
-                  color: MyTheme.black,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold)),
-          TextButton(
-            onPressed: () {
-              Get.to(()=>const AllBrands());
-            },
-            child: Text(
-              AppLocalizations.of(context)!.view_more_ucf,
-              style: TextStyle(color: MyTheme.black, fontSize: 16.sp),
+      Padding(
+        padding: EdgeInsets.only(left: 4.w,right: 4.w,top: 2.h,bottom: 2.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(AppLocalizations.of(context)!.top_brands_ucf,
+                style: TextStyle(
+                    color: MyTheme.black,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold)),
+            InkWell(
+              child: Text(
+                AppLocalizations.of(context)!.view_more_ucf,
+                style: TextStyle(color: MyTheme.black, fontSize: 14.sp),
+              ),
+              onTap: () {
+                Get.to(() => const AllBrands());
+              },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       SizedBox(
           width: DeviceInfo(context).width,
-          height: 311.h,
+          height: 320.h,
           child: GetBuilder<HomeController>(
             builder: (homeController) {
               return GridView.builder(
@@ -44,8 +47,8 @@ class BrandCategoryView extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 22.0,
+                  mainAxisSpacing: 22.0,
                 ),
                 itemCount: homeController.topBrandsList.length,
                 itemBuilder: (context, index) {

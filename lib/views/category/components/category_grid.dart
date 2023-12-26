@@ -20,8 +20,8 @@ class CategoryGridView extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
-          crossAxisSpacing: 4,
-          mainAxisSpacing: 4,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 5,
         ),
         itemCount: 6,
         itemBuilder: (context, index) {

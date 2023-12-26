@@ -208,6 +208,7 @@ class _FlashDealProductsState extends State<FlashDealProducts> {
                       return ProductCard(
                         product: _searchList[index],
                         onTap: () {  },
+                        itemIndex: index,
                       );
                     },
                   ),

@@ -77,6 +77,8 @@ class ProductRepository{
           "Content-Type": "application/json",
         },
         body: post_body);
+    
+    print("Variant Price Update ${response.body}");
 
     return variantPriceResponseFromJson(response.body);
   }

@@ -28,8 +28,9 @@ class _CategoryProductsState extends State<CategoryProducts> {
   ScrollController _xcrollController = ScrollController();
   TextEditingController _searchController = TextEditingController();
 
-   List<Product> _productList = [];
+  List<Product> _productList = [];
   List<Category> _subCategoryList = [];
+
   // List<Product> _productList =[];
   bool _isInitial = true;
   int _page = 1;
@@ -40,7 +41,7 @@ class _CategoryProductsState extends State<CategoryProducts> {
 
   getSubCategory() async {
     var res =
-    await CategoryRepository().getCategories(parent_id: widget.category_id);
+        await CategoryRepository().getCategories(parent_id: widget.category_id);
     _subCategoryList.addAll(res.categories!);
     setState(() {});
   }
@@ -262,7 +263,8 @@ class _CategoryProductsState extends State<CategoryProducts> {
           ),
           filled: true,
           fillColor: MyTheme.white.withOpacity(0.6),
-          hintText: "${AppLocalizations.of(context)!.search_products_from} : ${widget.category_name!}",
+          hintText:
+              "${AppLocalizations.of(context)!.search_products_from} : ${widget.category_name!}",
           hintStyle: const TextStyle(fontSize: 14.0, color: MyTheme.font_grey),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: MyTheme.noColor, width: 0.0),
@@ -339,25 +341,20 @@ class _CategoryProductsState extends State<CategoryProducts> {
             crossAxisSpacing: 14,
             itemCount: _productList.length,
             shrinkWrap: true,
-            padding:
-            const EdgeInsets.only(top: 10.0, bottom: 10, left: 18, right: 18),
+            padding: const EdgeInsets.only(
+                top: 10.0, bottom: 10, left: 18, right: 18),
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               // 3
               return Container(
                 width: 200,
                 height: 200,
-                margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                 child: ProductCard(
-                  product: _productList[index], onTap: () {  },
-                    // id: _productList[index].id,
-                    // image: _productList[index].thumbnail_image,
-                    // name: _productList[index].name,
-                    // main_price: _productList[index].main_price,
-                    // stroked_price: _productList[index].stroked_price,
-                    // discount: _productList[index].discount,
-                    // is_wholesale: _productList[index].isWholesale,
-                    // has_discount: _productList[index].has_discount
+                  product: _productList[index],
+                  onTap: () {},
+                  itemIndex: index,
                 ),
               );
             },
