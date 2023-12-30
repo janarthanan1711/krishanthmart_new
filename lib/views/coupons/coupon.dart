@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
+import 'package:krishanthmart_new/views/coupons/coupon_products.dart';
 import 'package:toast/toast.dart';
 import '../../helpers/main_helpers.dart';
 import '../../repositories/coupon_repositories.dart';
@@ -41,7 +43,7 @@ class _CouponsState extends State<Coupons> {
   fetchData() async {
     var couponRes = await CouponRepository().getCouponResponseList(page: _page);
     _couponsList.addAll(couponRes.data!);
-    _totalData = couponRes.meta!.total;
+    _totalData = couponRes.meta?.total;
     _dataFetch = true;
     _showLoadingContainer = false;
     setState(() {});
@@ -88,7 +90,7 @@ class _CouponsState extends State<Coupons> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection:
-      app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
+          app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: buildAppBar(context),
@@ -131,12 +133,12 @@ class _CouponsState extends State<Coupons> {
       onRefresh: _onPageRefresh,
       child: SingleChildScrollView(
         controller: _xcrollController,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         child: ListView.separated(
           itemCount: _couponsList.length,
           shrinkWrap: true,
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          physics: NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          physics: const NeverScrollableScrollPhysics(),
           separatorBuilder: (BuildContext context, int index) => itemSpacer(),
           itemBuilder: (context, index) {
             return Stack(
@@ -145,16 +147,16 @@ class _CouponsState extends State<Coupons> {
                 Material(
                   elevation: 8,
                   borderRadius: const BorderRadius.all(
-                    const Radius.circular(30.0),
+                    Radius.circular(30.0),
                   ),
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: _selectGradient(index),
                       borderRadius: const BorderRadius.all(
-                        const Radius.circular(30.0),
+                        Radius.circular(30.0),
                       ),
                     ),
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                         left: 30, right: 30, top: 30, bottom: 20),
                     height: 200,
                     child: Column(
@@ -169,13 +171,13 @@ class _CouponsState extends State<Coupons> {
                               children: [
                                 Text(
                                   '${_couponsList[index].shopName}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 GestureDetector(
@@ -198,8 +200,9 @@ class _CouponsState extends State<Coupons> {
                                     }
                                   },
                                   child: Text(
-                                    AppLocalizations.of(context)!.visit_store_ucf,
-                                    style: TextStyle(
+                                    AppLocalizations.of(context)!
+                                        .visit_store_ucf,
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
@@ -211,55 +214,62 @@ class _CouponsState extends State<Coupons> {
                             itemSpacer(),
                             _couponsList[index].discountType == "percent"
                                 ? Text(
-                              "${_couponsList[index].discount}% ${AppLocalizations.of(context)!.off}",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
+                                    "${_couponsList[index].discount}% ${AppLocalizations.of(context)!.off}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
                                 : Text(
-                              "${convertPrice(_couponsList[index].discount.toString())} ${AppLocalizations.of(context)!.off}",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                                    "${convertPrice(_couponsList[index].discount.toString())} ${AppLocalizations.of(context)!.off}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ],
                         ),
                         itemSpacer(height: DeviceInfo(context).width! / 16),
                         // MySeparator(color: Colors.white),
-                        Spacer(),
+                        const Spacer(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 12.0),
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
                               child: _couponsList[index]
-                                  .couponDiscountDetails !=
-                                  null
+                                          .couponDiscountDetails !=
+                                      null
                                   ? richText(context, index)
                                   : GestureDetector(
-                                onTap: () {
-                                  // Navigator.push(context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) {
-                                  //           return CouponProducts(
-                                  //               code: _couponsList[index].code!,
-                                  //               id: _couponsList[index].id!);
-                                  //         }));
-                                },
-                                child: Text(
-                                  AppLocalizations.of(context)!.view_products_ucf,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
+                                      onTap: () {
+                                        // Navigator.push(context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) {
+                                        //           return CouponProducts(
+                                        //               code: _couponsList[index].code!,
+                                        //               id: _couponsList[index].id!
+                                        //               );
+                                        //         }));
+                                        Get.to(
+                                          () => CouponProducts(
+                                              code: _couponsList[index].code!,
+                                              id: _couponsList[index].id!),
+                                        );
+                                      },
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .view_products_ucf,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
                             ),
                             itemSpacer(height: 10.0),
                             Row(
@@ -267,29 +277,30 @@ class _CouponsState extends State<Coupons> {
                               children: [
                                 Text(
                                   "${AppLocalizations.of(context)!.code}: ${_couponsList[index].code}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 IconButton(
                                   padding: EdgeInsets.zero,
-                                  constraints: BoxConstraints(),
+                                  constraints: const BoxConstraints(),
                                   onPressed: () {
                                     Clipboard.setData(ClipboardData(
-                                        text: _couponsList[index].code!))
+                                            text: _couponsList[index].code!))
                                         .then((_) {
                                       ToastComponent.showDialog(
-                                          AppLocalizations.of(context)!.copied_ucf,
+                                          AppLocalizations.of(context)!
+                                              .copied_ucf,
                                           gravity: Toast.center,
                                           duration: 1);
                                     });
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     color: Colors.white,
                                     Icons.copy,
                                     size: 18.0,
@@ -309,22 +320,22 @@ class _CouponsState extends State<Coupons> {
                     Container(
                       height: 40,
                       width: 20,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius: const BorderRadius.only(
-                          topRight: const Radius.circular(30.0),
-                          bottomRight: const Radius.circular(30.0),
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(30.0),
+                          bottomRight: Radius.circular(30.0),
                         ),
                       ),
                     ),
                     Container(
                       height: 40,
                       width: 20,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: const Radius.circular(30.0),
-                          bottomLeft: const Radius.circular(30.0),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          bottomLeft: Radius.circular(30.0),
                         ),
                       ),
                     ),
@@ -342,48 +353,48 @@ class _CouponsState extends State<Coupons> {
     return RichText(
       text: TextSpan(
         text: '${AppLocalizations.of(context)!.min_spend_ucf} ',
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 12,
         ),
         children: [
           TextSpan(
             text:
-            '${convertPrice(_couponsList[index].couponDiscountDetails!.minBuy)}',
-            style: TextStyle(
+                '${convertPrice(_couponsList[index].couponDiscountDetails!.minBuy)}',
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12,
             ),
           ),
           TextSpan(
             text: ' ${AppLocalizations.of(context)!.from}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
             ),
           ),
           TextSpan(
             text: ' ${_couponsList[index].shopName}',
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12,
             ),
           ),
           TextSpan(
             text: ' ${AppLocalizations.of(context)!.store_to_get}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
             ),
           ),
           TextSpan(
             text:
-            ' ${_couponsList[index].discountType == "percent" ? _couponsList[index].discount.toString() + "%" : convertPrice(_couponsList[index].discount.toString())}',
-            style: TextStyle(
+                ' ${_couponsList[index].discountType == "percent" ? _couponsList[index].discount.toString() + "%" : convertPrice(_couponsList[index].discount.toString())}',
+            style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
           ),
           TextSpan(
             text: ' ${AppLocalizations.of(context)!.off_on_total_orders}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
             ),
           ),

@@ -8,6 +8,7 @@ import 'package:krishanthmart_new/helpers/auth_helpers.dart';
 import 'package:krishanthmart_new/utils/routes.dart';
 import 'package:krishanthmart_new/utils/shared_value.dart';
 import 'package:krishanthmart_new/utils/themes.dart';
+import 'package:krishanthmart_new/views/auth/splash_screen.dart';
 import 'package:krishanthmart_new/views/mainpage/main_page.dart';
 import 'package:one_context/one_context.dart';
 import 'package:shared_value/shared_value.dart';
@@ -76,7 +77,7 @@ class MyApp extends StatelessWidget {
             ],
             initialRoute: Routes.mainPage,
             getPages: getPages,
-            home: const MainPage()
+            home: const SplashScreen()
         );
       },
     );

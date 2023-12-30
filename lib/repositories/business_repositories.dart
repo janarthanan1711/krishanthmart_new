@@ -47,16 +47,38 @@ class BusinessSettingRepository {
           "App-Language": app_language.$!,
         },
       );
-      final data=jsonDecode(response.body.toString())['data'];
-     final map= data.map((e)=>Datum.fromJson(e)).toList();
+      Map<String, dynamic> responseData = jsonDecode(response.body.toString());
 
-      // BusinessLogicResponseDatas.fromJson(jsonDecode(response.body.toString()))
+      BusinessLogicResponseDatas businessResponseData =
+      BusinessLogicResponseDatas.fromJson(responseData);
 
-      print("businesss Response Datas=====[=======[[[[-===>${response.body}");
-      print("businesss Response Datas=====[=======[[[[-===>${data}");
-      print("businesss Response Datas=====[=======[[[[-===>${map[0].value}");
+      List<Datum> datumList = businessResponseData.data;
 
-      return map;
+      // Accessing individual values
+      print("Success: ${businessResponseData.success}");
+      print("Status: ${businessResponseData.status}");
+
+      for (Datum datum in datumList) {
+        print("Type: ${datum.type}, Value: ${datum.value}");
+        // Example: Accessing verification form
+        // if (datum.type == 'verification_form') {
+        //   VerificationForm verificationForm =
+        //   VerificationForm.fromJson(jsonDecode(datum.value));
+        //   print('Verification Form Fields: ${verificationForm.fields}');
+        // }
+      }
+
+      return datumList;
+     //  final data=jsonDecode(response.body.toString())['data'];
+     // final map = data.map((e)=>Datum.fromJson(e)).toList();
+     //
+     //  // BusinessLogicResponseDatas.fromJson(jsonDecode(response.body.toString()))
+     //
+     //  print("businesss Response Datas=====[=======[[[[-===>${response.body}");
+     //  print("businesss Response Datas=====[=======[[[[-===>${data}");
+     //  print("businesss Response mapss=====[=======[[[[-===>${map}");
+     //
+     //  return map;
 
       // return businessLogicResponseDatasFromJson(map);
 

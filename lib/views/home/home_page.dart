@@ -1,11 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/home_controller.dart';
+import 'package:krishanthmart_new/controllers/product_controller.dart';
 import 'package:krishanthmart_new/utils/colors.dart';
+import 'package:krishanthmart_new/views/coupons/coupon.dart';
 import 'package:krishanthmart_new/views/flashdeals/flashdealslist.dart';
 import 'package:krishanthmart_new/views/home/components/banner_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,15 +42,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final HomeController homeController = Get.put(HomeController());
   LocationController locationController = Get.put(LocationController());
+  final ProductController productController = Get.put(ProductController());
   late CarouselController _carouselController;
   late ScrollController _scrollController;
-
   // late ScrollController bodyScrollController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     // ProductRepository().getBestSellingProducts();
     // ProductRepository().getFeaturedProducts();
     _carouselController = CarouselController();
@@ -77,6 +81,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        dragStartBehavior: DragStartBehavior.start,
         controller: _scrollController,
         shrinkWrap: true,
         semanticChildCount: 1,
@@ -264,191 +269,34 @@ class _HomePageState extends State<HomePage> {
           // },
           SliverList(
             delegate: SliverChildBuilderDelegate(
+              addRepaintBoundaries: true,
               childCount: 1,
               (context, index) {
-                return Align(
-                  alignment: Alignment.topCenter,
-                  child: ListView.builder(
-                      // padding: EdgeInsets.only(top: 0),
-                      clipBehavior: Clip.none,
-                      semanticChildCount: 1,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 1,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          // physics: const NeverScrollableScrollPhysics(),
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          // shrinkWrap: true,
-                          children: [
-                            const CustomCarousel(),
-                            SizedBox(
-                              height: 26.h,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!
-                                          .shop_by_category,
-                                      style: TextStyle(
-                                          color: MyTheme.black,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    InkWell(
-                                      child: Text(
-                                        AppLocalizations.of(context)!
-                                            .view_more_ucf,
-                                        style: TextStyle(
-                                            color: MyTheme.black,
-                                            fontSize: 14.sp),
-                                      ),
-                                      onTap: () {
-                                        Get.to(() => CategoryListPages());
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              // width: DeviceInfo(context).width,
-                              // margin: EdgeInsets.symmetric(horizontal: 6.w),
-                              height: 216.h,
-                              child: CategoryGridView(
-                                  homeController.featuredCategoryList),
-                            ),
-                            Container(
+                return ListView.builder(
+                    // padding: EdgeInsets.only(top: 0),
+                    clipBehavior: Clip.none,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 1,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        // physics: const NeverScrollableScrollPhysics(),
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        // shrinkWrap: true,
+                        children: [
+                          const CustomCarousel(),
+                          SizedBox(
+                            height: 26.h,
+                            child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4.w),
-                              width: DeviceInfo(context).width,
-                              color: MyTheme.indigo,
-                              child: Text(
-                                AppLocalizations.of(context)!.highlight_ucf,
-                                style: TextStyle(
-                                    color: MyTheme.PrimaryColor,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Container(
-                              color: MyTheme.indigo,
-                              width: DeviceInfo(context).width,
-                              height: 324.h,
-                              child: Obx(
-                                () => ListView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: homeController
-                                        .bannerTwoImageList.length,
-                                    itemBuilder: (context, index) {
-                                      String imageUrl = homeController
-                                          .bannerTwoImageList[index];
-                                      if (homeController
-                                          .bannerTwoImageList.isEmpty) {
-                                        return const Center(
-                                            child: CircularProgressIndicator());
-                                      } else {
-                                        return BannersHomeList(
-                                            imageUrl: imageUrl);
-                                      }
-                                    }),
-                              ),
-                            ),
-                            Container(
-                              color: MyTheme.light_pink,
-                              width: DeviceInfo(context).width,
-                              height: 337.h,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 4.w),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .baskets_must_have,
-                                          style: TextStyle(
-                                              color: MyTheme.black,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        InkWell(
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .view_more_ucf,
-                                            style: TextStyle(
-                                                color: MyTheme.black,
-                                                fontSize: 14.sp),
-                                          ),
-                                          onTap: () {},
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: 4.w, right: 4.w, top: 4.h),
-                                    width: DeviceInfo(context).width,
-                                    height: 315.h,
-                                    child: GridView.builder(
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        crossAxisSpacing: 20,
-                                        mainAxisSpacing: 20,
-                                      ),
-                                      itemCount: 4,
-                                      itemBuilder: (context, index) {
-                                        if (homeController
-                                            .flashDealList.isEmpty) {
-                                          return ShimmerHelper()
-                                              .buildProductGridShimmer();
-                                        } else {
-                                          return Obx(
-                                            () => InkWell(
-                                              onTap: () {},
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        homeController
-                                                            .flashDealList[
-                                                                index]
-                                                            .banner!),
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 4.w, right: 4.w, top: 2.h),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     AppLocalizations.of(context)!
-                                        .todays_deal_ucf,
+                                        .shop_by_category,
                                     style: TextStyle(
                                         color: MyTheme.black,
                                         fontSize: 16.sp,
@@ -462,430 +310,641 @@ class _HomePageState extends State<HomePage> {
                                           color: MyTheme.black,
                                           fontSize: 14.sp),
                                     ),
-                                    onTap: () {},
-                                  )
+                                    onTap: () {
+                                      Get.to(() => CategoryListPages());
+                                    },
+                                  ),
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              width: DeviceInfo(context).width,
-                              height: 385.h,
-                              child: Column(
-                                children: [
-                                  Obx(
-                                    () => CarouselSlider.builder(
-                                      carouselController: _carouselController,
+                          ),
+                          SizedBox(
+                            // width: DeviceInfo(context).width,
+                            // margin: EdgeInsets.symmetric(horizontal: 6.w),
+                            height: 216.h,
+                            child: CategoryGridView(
+                                homeController.featuredCategoryList),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            width: DeviceInfo(context).width,
+                            color: MyTheme.indigo,
+                            child: Text(
+                              AppLocalizations.of(context)!.highlight_ucf,
+                              style: TextStyle(
+                                  color: MyTheme.PrimaryColor,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            color: MyTheme.indigo,
+                            width: DeviceInfo(context).width,
+                            height: 324.h,
+                            child: Obx(
+                              () => ListView.builder(
+                                  shrinkWrap: true,
+                                  physics:
+                                      const NeverScrollableScrollPhysics(),
+                                  itemCount: homeController
+                                      .bannerTwoImageList.length,
+                                  itemBuilder: (context, index) {
+                                    String imageUrl = homeController
+                                        .bannerTwoImageList[index];
+                                    if (homeController
+                                        .bannerTwoImageList.isEmpty) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    } else {
+                                      return BannersHomeList(
+                                          imageUrl: imageUrl);
+                                    }
+                                  }),
+                            ),
+                          ),
+                          Container(
+                            color: MyTheme.light_pink,
+                            width: DeviceInfo(context).width,
+                            height: 337.h,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 4.w),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .baskets_must_have,
+                                        style: TextStyle(
+                                            color: MyTheme.black,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      InkWell(
+                                        child: Text(
+                                          AppLocalizations.of(context)!
+                                              .view_more_ucf,
+                                          style: TextStyle(
+                                              color: MyTheme.black,
+                                              fontSize: 14.sp),
+                                        ),
+                                        onTap: () {},
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: 4.w, right: 4.w, top: 4.h),
+                                  width: DeviceInfo(context).width,
+                                  height: 315.h,
+                                  child: GridView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 20,
+                                      mainAxisSpacing: 20,
+                                    ),
+                                    itemCount: 4,
+                                    itemBuilder: (context, index) {
+                                      if (homeController
+                                          .flashDealList.isEmpty) {
+                                        return ShimmerHelper()
+                                            .buildProductGridShimmer();
+                                      } else {
+                                        return Obx(
+                                          () => InkWell(
+                                            onTap: () {},
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      homeController
+                                                          .flashDealList[
+                                                              index]
+                                                          .banner!),
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 4.w, right: 4.w, top: 2.h),
+                            child: Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .todays_deal_ucf,
+                                  style: TextStyle(
+                                      color: MyTheme.black,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                InkWell(
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .view_more_ucf,
+                                    style: TextStyle(
+                                        color: MyTheme.black,
+                                        fontSize: 14.sp),
+                                  ),
+                                  onTap: () {},
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: DeviceInfo(context).width,
+                            height: 385.h,
+                            child: Column(
+                              children: [
+                                Obx(
+                                  () => CarouselSlider.builder(
+                                    carouselController: _carouselController,
+                                    itemCount:
+                                        homeController.todayDealList.length,
+                                    options: CarouselOptions(
+                                      height: 297.h,
+                                      autoPlay: true,
+                                      aspectRatio: 2.0,
+                                      viewportFraction: 1,
+                                      autoPlayInterval:
+                                          const Duration(seconds: 3),
+                                      autoPlayAnimationDuration:
+                                          const Duration(milliseconds: 1000),
+                                      autoPlayCurve: Curves.slowMiddle,
+                                      onPageChanged: (index, reason) {
+                                        homeController.dealIndex.value =
+                                            index;
+                                      },
+                                    ),
+                                    itemBuilder: (BuildContext context,
+                                        int index, int realIndex) {
+                                      return Obx(
+                                        () => CarouselDealCard(
+                                          product: homeController
+                                              .todayDealList[index],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 85.h,
+                                  child: Obx(
+                                    () => ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
                                       itemCount:
                                           homeController.todayDealList.length,
-                                      options: CarouselOptions(
-                                        height: 297.h,
-                                        autoPlay: true,
-                                        aspectRatio: 2.0,
-                                        viewportFraction: 1,
-                                        autoPlayInterval:
-                                            const Duration(seconds: 3),
-                                        autoPlayAnimationDuration:
-                                            const Duration(milliseconds: 1000),
-                                        autoPlayCurve: Curves.slowMiddle,
-                                        onPageChanged: (index, reason) {
-                                          homeController.dealIndex.value =
-                                              index;
-                                        },
-                                      ),
-                                      itemBuilder: (BuildContext context,
-                                          int index, int realIndex) {
+                                      itemBuilder: (context, index) {
                                         return Obx(
-                                          () => CarouselDealCard(
-                                            product: homeController
-                                                .todayDealList[index],
+                                          () => InkWell(
+                                            child: Container(
+                                              height: 80.h,
+                                              width: 80.h,
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 4.w),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: homeController
+                                                              .dealIndex
+                                                              .value ==
+                                                          index
+                                                      ? MyTheme.green
+                                                      : MyTheme.white,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                    homeController
+                                                        .todayDealList[index]
+                                                        .thumbnail_image!,
+                                                  ),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              // homeController.dealIndex.value = index;
+                                              _carouselController
+                                                  .jumpToPage(index);
+                                            },
                                           ),
                                         );
                                       },
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 85.h,
-                                    child: Obx(
-                                      () => ListView.builder(
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount:
-                                            homeController.todayDealList.length,
-                                        itemBuilder: (context, index) {
-                                          return Obx(
-                                            () => InkWell(
-                                              child: Container(
-                                                height: 80.h,
-                                                width: 80.h,
-                                                margin: EdgeInsets.symmetric(
-                                                    horizontal: 4.w),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    color: homeController
-                                                                .dealIndex
-                                                                .value ==
-                                                            index
-                                                        ? MyTheme.green
-                                                        : MyTheme.white,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                      homeController
-                                                          .todayDealList[index]
-                                                          .thumbnail_image!,
-                                                    ),
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                // homeController.dealIndex.value = index;
-                                                _carouselController
-                                                    .jumpToPage(index);
-                                              },
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            Container(
-                              color: MyTheme.amber_medium,
-                              width: DeviceInfo(context).width,
+                          ),
+                          Container(
+                            color: MyTheme.amber_medium,
+                            width: DeviceInfo(context).width,
+                            height: 150.h,
+                            child: Container(
                               height: 150.h,
-                              child: Container(
-                                height: 150.h,
-                                width: DeviceInfo(context).width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  image: const DecorationImage(
-                                      image: AssetImage("assets/halfprice.jpg"),
-                                      fit: BoxFit.fill),
-                                ),
+                              width: DeviceInfo(context).width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                    image: AssetImage("assets/halfprice.jpg"),
+                                    fit: BoxFit.fill),
                               ),
                             ),
-                            Container(
-                              color: MyTheme.amber_medium,
-                              width: DeviceInfo(context).width,
+                          ),
+                          Container(
+                            color: MyTheme.amber_medium,
+                            width: DeviceInfo(context).width,
+                            height: 150.h,
+                            child: Container(
                               height: 150.h,
-                              child: Container(
-                                height: 150.h,
-                                width: DeviceInfo(context).width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  image: const DecorationImage(
-                                      image:
-                                          AssetImage("assets/baskets_have.jpg"),
-                                      fit: BoxFit.fill),
-                                ),
+                              width: DeviceInfo(context).width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                    image:
+                                        AssetImage("assets/baskets_have.jpg"),
+                                    fit: BoxFit.fill),
                               ),
                             ),
-                            Container(
-                              color: MyTheme.golden,
-                              width: DeviceInfo(context).width,
-                              height: 255.h,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 4.w),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .best_selling_ucf,
-                                          style: TextStyle(
-                                              color: MyTheme.white,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        InkWell(
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .view_more_ucf,
-                                            style: TextStyle(
-                                                color: MyTheme.white,
-                                                fontSize: 14.sp),
-                                          ),
-                                          onTap: () {},
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                      height: 210.h,
-                                      child: GetBuilder<HomeController>(
-                                        builder: (homeController) {
-                                          return ListView.builder(
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: homeController
-                                                .bestSellingProductList.length,
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) {
-                                              return Container(
-                                                  margin: const EdgeInsets
-                                                      .symmetric(horizontal: 5),
-                                                  child: ProductCard(
-                                                    product: homeController
-                                                            .bestSellingProductList[
-                                                        index],
-                                                    onTap: () {},
-                                                    itemIndex: index,
-                                                  ));
-                                            },
-                                          );
-                                        },
-                                      )),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: DeviceInfo(context).width,
-                              color: MyTheme.white,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 4.w, vertical: 5.h),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                        AppLocalizations.of(context)!
-                                            .flash_deal_ucf,
-                                        style: TextStyle(
-                                            color: MyTheme.black,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold)),
-                                    InkWell(
-                                      child: Text(
-                                        AppLocalizations.of(context)!
-                                            .view_more_ucf,
-                                        style: TextStyle(
-                                            color: MyTheme.black,
-                                            fontSize: 14.sp),
-                                      ),
-                                      onTap: () {
-                                        Get.to(() => const FlashDealList());
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            buildFlashDealList(context),
-                            Container(
-                                color: MyTheme.PrimaryLightColor,
-                                width: DeviceInfo(context).width,
-                                height: 150.h,
-                                child: Container(
-                                  height: 150.h,
-                                  width: DeviceInfo(context).width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    image: const DecorationImage(
-                                        image: NetworkImage(
-                                            "https://krishanthmart.com/public/uploads/all/E05zNYsRkZTDQwv3YGJvwQe05kY3MoqWKIrxkxFZ.jpg"),
-                                        fit: BoxFit.fill),
-                                  ),
-                                )),
-                            Container(
-                              height: 221.h,
-                              width: DeviceInfo(context).width,
-                              color: MyTheme.gigas,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 4.w, right: 4.w, top: 1.h),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .best_deals,
-                                          style: TextStyle(
-                                              color: MyTheme.white,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        InkWell(
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .view_more_ucf,
-                                            style: TextStyle(
-                                                color: MyTheme.white,
-                                                fontSize: 14.sp),
-                                          ),
-                                          onTap: () {},
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 202.h,
-                                    child: GetBuilder<HomeController>(
-                                      builder: (homeController) {
-                                        return ProductLargeCardList(
-                                            productList:
-                                                homeController.todayDealList,
-                                            onTap: () {});
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              color: MyTheme.white,
-                              width: DeviceInfo(context).width,
-                              height: 348.h,
-                              child: const BrandCategoryView(),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                          ),
+                          Container(
+                            color: MyTheme.golden,
+                            width: DeviceInfo(context).width,
+                            height: 255.h,
+                            child: Column(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(top: 1.h),
-                                  child: Text(
-                                    "Offer Zone",
-                                    style: TextStyle(
-                                        color: MyTheme.dark_purple,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 4.w),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .best_selling_ucf,
+                                        style: TextStyle(
+                                            color: MyTheme.white,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      InkWell(
+                                        child: Text(
+                                          AppLocalizations.of(context)!
+                                              .view_more_ucf,
+                                          style: TextStyle(
+                                              color: MyTheme.white,
+                                              fontSize: 14.sp),
+                                        ),
+                                        onTap: () {},
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                    height: 210.h,
+                                    child: GetBuilder<HomeController>(
+                                      builder: (homeController) {
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: homeController
+                                              .bestSellingProductList.length,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return Container(
+                                                margin: const EdgeInsets
+                                                    .symmetric(horizontal: 5),
+                                                child: ProductCard(
+                                                  product: homeController
+                                                          .bestSellingProductList[
+                                                      index],
+                                                  onTap: () {},
+                                                  itemIndex: index,
+                                                ));
+                                          },
+                                        );
+                                      },
+                                    )),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: DeviceInfo(context).width,
+                            color: MyTheme.white,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 4.w, vertical: 5.h),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      AppLocalizations.of(context)!
+                                          .flash_deal_ucf,
+                                      style: TextStyle(
+                                          color: MyTheme.black,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold)),
+                                  InkWell(
+                                    child: Text(
+                                      AppLocalizations.of(context)!
+                                          .view_more_ucf,
+                                      style: TextStyle(
+                                          color: MyTheme.black,
+                                          fontSize: 14.sp),
+                                    ),
+                                    onTap: () {
+                                      Get.to(() => const FlashDealList());
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          buildFlashDealList(context),
+                          Container(
+                              color: MyTheme.PrimaryLightColor,
+                              width: DeviceInfo(context).width,
+                              height: 150.h,
+                              child: Container(
+                                height: 150.h,
+                                width: DeviceInfo(context).width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: const DecorationImage(
+                                      image: NetworkImage(
+                                          "https://krishanthmart.com/public/uploads/all/E05zNYsRkZTDQwv3YGJvwQe05kY3MoqWKIrxkxFZ.jpg"),
+                                      fit: BoxFit.fill),
+                                ),
+                              )),
+                          Container(
+                            height: 221.h,
+                            width: DeviceInfo(context).width,
+                            color: MyTheme.gigas,
+                            child: Column(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 4.w, right: 4.w, top: 1.h),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .best_deals,
+                                        style: TextStyle(
+                                            color: MyTheme.white,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      InkWell(
+                                        child: Text(
+                                          AppLocalizations.of(context)!
+                                              .view_more_ucf,
+                                          style: TextStyle(
+                                              color: MyTheme.white,
+                                              fontSize: 14.sp),
+                                        ),
+                                        onTap: () {},
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 202.h,
+                                  child: GetBuilder<HomeController>(
+                                    builder: (homeController) {
+                                      return ProductLargeCardList(
+                                          productList:
+                                              homeController.todayDealList,
+                                          onTap: () {});
+                                    },
                                   ),
                                 ),
                               ],
                             ),
-                            Container(
-                              color: MyTheme.shimmer_highlighted,
-                              width: DeviceInfo(context).width,
-                              height: 100.h,
-                              child: Container(
-                                margin: EdgeInsets.only(top: 2.h, bottom: 2.h),
-                                width: DeviceInfo(context).width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  image: const DecorationImage(
-                                      image:
-                                          AssetImage("assets/offerzone1.jpg"),
-                                      fit: BoxFit.fill),
+                          ),
+                          Container(
+                            color: MyTheme.white,
+                            width: DeviceInfo(context).width,
+                            height: 348.h,
+                            child: const BrandCategoryView(),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 1.h),
+                                child: Text(
+                                  "Offer Zone",
+                                  style: TextStyle(
+                                      color: MyTheme.dark_purple,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            ),
-                            Container(
-                              color: MyTheme.shimmer_highlighted,
+                            ],
+                          ),
+                          Container(
+                            color: MyTheme.shimmer_highlighted,
+                            width: DeviceInfo(context).width,
+                            height: 100.h,
+                            child: Container(
+                              margin: EdgeInsets.only(top: 2.h, bottom: 2.h),
                               width: DeviceInfo(context).width,
-                              height: 100.h,
-                              child: Container(
-                                margin: EdgeInsets.only(top: 5.h, bottom: 2.h),
-                                width: DeviceInfo(context).width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  image: const DecorationImage(
-                                      image:
-                                          AssetImage("assets/offerzone2.jpg"),
-                                      fit: BoxFit.fill),
-                                ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                    image:
+                                        AssetImage("assets/offerzone1.jpg"),
+                                    fit: BoxFit.fill),
                               ),
                             ),
-                            Container(
-                              color: MyTheme.shimmer_highlighted,
+                          ),
+                          Container(
+                            color: MyTheme.shimmer_highlighted,
+                            width: DeviceInfo(context).width,
+                            height: 100.h,
+                            child: Container(
+                              margin: EdgeInsets.only(top: 5.h, bottom: 2.h),
                               width: DeviceInfo(context).width,
-                              height: 100.h,
-                              child: Container(
-                                margin: EdgeInsets.only(top: 5.h),
-                                width: DeviceInfo(context).width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  image: const DecorationImage(
-                                      image:
-                                          AssetImage("assets/offerzone3.jpg"),
-                                      fit: BoxFit.fill),
-                                ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                    image:
+                                        AssetImage("assets/offerzone2.jpg"),
+                                    fit: BoxFit.fill),
                               ),
                             ),
-                            Container(
-                              color: MyTheme.dark_purple,
+                          ),
+                          Container(
+                            color: MyTheme.shimmer_highlighted,
+                            width: DeviceInfo(context).width,
+                            height: 100.h,
+                            child: Container(
+                              margin: EdgeInsets.only(top: 5.h),
                               width: DeviceInfo(context).width,
-                              height: 255.h,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 4.w),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                            AppLocalizations.of(context)!
-                                                .featured_products_ucf,
-                                            style: TextStyle(
-                                                color: MyTheme.white,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold)),
-                                        InkWell(
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .view_more_ucf,
-                                            style: TextStyle(
-                                                color: MyTheme.white,
-                                                fontSize: 14.sp),
-                                          ),
-                                          onTap: () {},
-                                        )
-                                      ],
-                                    ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                    image:
+                                        AssetImage("assets/offerzone3.jpg"),
+                                    fit: BoxFit.fill),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            color: MyTheme.dark_purple,
+                            width: DeviceInfo(context).width,
+                            height: 255.h,
+                            child: Column(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                              children: [
+                                Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 4.w),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          AppLocalizations.of(context)!
+                                              .featured_products_ucf,
+                                          style: TextStyle(
+                                              color: MyTheme.white,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.bold)),
+                                      InkWell(
+                                        child: Text(
+                                          AppLocalizations.of(context)!
+                                              .view_more_ucf,
+                                          style: TextStyle(
+                                              color: MyTheme.white,
+                                              fontSize: 14.sp),
+                                        ),
+                                        onTap: () {},
+                                      )
+                                    ],
                                   ),
-                                  SizedBox(
-                                      height: 210.h,
-                                      child: GetBuilder<HomeController>(
-                                        builder: (homeController) {
-                                          return ListView.builder(
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: homeController
-                                                .featuredProductList.length,
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) {
-                                              return Container(
-                                                  margin: const EdgeInsets
-                                                      .symmetric(horizontal: 5),
-                                                  child: ProductCard(
-                                                    product: homeController
-                                                            .featuredProductList[
-                                                        index],
-                                                    onTap: () {},
-                                                    itemIndex: index,
-                                                  ));
-                                            },
+                                ),
+                                SizedBox(
+                                  height: 210.h,
+                                  child: GetBuilder<HomeController>(
+                                    builder: (homeController) {
+                                      return ListView.builder(
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: homeController
+                                            .featuredProductList.length,
+                                        physics:
+                                            const BouncingScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          // productController.itemsIndex.value = index;
+                                          return Container(
+                                            margin:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 5),
+                                            child: ProductCard(
+                                              product: homeController
+                                                  .featuredProductList[index],
+                                              onTap: () {
+                                                // productController
+                                                //     .isAddToCartFetchedByIndex(
+                                                //         id: homeController
+                                                //             .featuredProductList[
+                                                //                 index]
+                                                //             .id,
+                                                //         index: index);
+                                              },
+                                              itemIndex: index,
+                                            ),
                                           );
                                         },
-                                      )),
-                                ],
-                              ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        );
-                      }),
-                );
+                          ),
+                          Container(
+                            height: 182.h,
+                            padding: const EdgeInsets.all(10),
+                            color: homeController.hexToColor(homeController.couponColor.value),
+                            child: Column(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(homeController.couponTitle.value,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22.sp,
+                                        color: MyTheme.white),
+                                    textAlign: TextAlign.center),
+                                Text(homeController.couponSubTitle.value,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17.sp,
+                                        color: MyTheme.white),
+                                    textAlign: TextAlign.center),
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(()=>const Coupons());
+                                  },
+                                  child: Container(
+                                    height: 50.h,
+                                    width: 150.w,
+                                    decoration: BoxDecoration(
+                                        color: MyTheme.medium_grey,
+                                        border:
+                                            Border.all(color: MyTheme.white),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: const Center(
+                                      child: Text(
+                                        "View All Coupons",
+                                        style: TextStyle(
+                                            color: MyTheme.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      );
+                    });
               },
             ),
           ),

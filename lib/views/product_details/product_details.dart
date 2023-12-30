@@ -64,7 +64,6 @@ class _ProductDetailsState extends State<ProductDetails>
   TextEditingController sellerChatTitleController = TextEditingController();
   TextEditingController sellerChatMessageController = TextEditingController();
 
-  ProductController productController = Get.put(ProductController());
   CartController cartController = Get.put(CartController());
 
   double _scrollPosition = 0.0;
@@ -1647,7 +1646,7 @@ class _ProductDetailsState extends State<ProductDetails>
               color: Colors.white),*/
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
+            // mainAxisSize: MainAxisSize.max,
             children: [
               buildQuantityDownButton(),
               /* Container(
@@ -1658,14 +1657,14 @@ class _ProductDetailsState extends State<ProductDetails>
                     style: TextStyle(fontSize: 18, color: MyTheme.dark_grey),
                   ))),*/
               SizedBox(
-                  width: 36,
-                  child: Center(
-                      child: QuantityInputField.show(quantityText,
-                          isDisable: _quantity == 0, onSubmitted: () {
-                    _quantity = int.parse(quantityText.text);
-                    print(_quantity);
-                    fetchAndSetVariantWiseInfo();
-                  }))),
+                width: 50,
+                child: QuantityInputField.show(quantityText,
+                    isDisable: _quantity == 0, onSubmitted: () {
+                  _quantity = int.parse(quantityText.text);
+                  print(_quantity);
+                  fetchAndSetVariantWiseInfo();
+                }),
+              ),
               buildQuantityUpButton()
             ],
           ),

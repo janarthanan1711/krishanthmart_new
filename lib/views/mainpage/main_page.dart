@@ -11,7 +11,7 @@ import '../notification/notificationpage.dart';
 import '../profile/profile_page.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage({Key? key, go_back = true}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();

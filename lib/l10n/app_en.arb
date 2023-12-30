@@ -313,6 +313,8 @@
   "seller_ucf" : "Seller",
   "club_point_ucf" : "Club Point",
   "quantity_ucf" : "Quantity:",
+  "quantity": "Quantity",
+  "choose_option": "Choose Option",
   "video_not_available" : "Video not available",
   "video_ucf" : "Video",
   "reviews_ucf" : "Reviews",

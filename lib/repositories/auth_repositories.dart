@@ -8,19 +8,18 @@ import 'package:krishanthmart_new/utils/shared_value.dart';
 
 import '../models/common_response.dart';
 
-
 class AuthRepository {
-  Future<LoginResponse> getLoginResponse(String? email, String password,String loginBy) async {
+  Future<LoginResponse> getLoginResponse(
+      String? email, String password, String loginBy) async {
     var post_body = jsonEncode({
-      "email": "${email}",
-      "password": "$password",
-      "identity_matrix": AppConfig.purchase_code,
-      "login_by":loginBy
+      "email": "$email",
+      "password": password,
+      // "identity_matrix": AppConfig.purchase_code,
+      "login_by": loginBy
     });
 
     String url = ("${AppConfig.BASE_URL}/auth/login");
-    final response = await http.post(
-        Uri.parse(url),
+    final response = await http.post(Uri.parse(url),
         headers: {
           "Accept": "*/*",
           "Content-Type": "application/json",
@@ -28,19 +27,21 @@ class AuthRepository {
         },
         body: post_body);
 
+    print("post Login Data==========>${post_body}");
+
     print("login data ====> ${response.body}");
 
     return loginResponseFromJson(response.body);
   }
 
   Future<LoginResponse> getSocialLoginResponse(
-      String social_provider,
-      String? name,
-      String? email,
-      String? provider, {
-        access_token = "",
-        secret_token = "",
-      }) async {
+    String social_provider,
+    String? name,
+    String? email,
+    String? provider, {
+    access_token = "",
+    secret_token = "",
+  }) async {
     email = email == ("null") ? "" : email;
 
     var post_body = jsonEncode({
@@ -99,52 +100,32 @@ class AuthRepository {
   }
 
   Future<LoginResponse> getSignupResponse(
-      String name,
-      String? email_or_phone,
-      String password,
-      String passowrd_confirmation,
-      // String register_by,
-      // String capchaKey,
-      ) async {
+    String name,
+    String? email_or_phone,
+    String password,
+    String passowrd_confirmation,
+    String register_by,
+    String capchaKey,
+  ) async {
     var post_body = jsonEncode({
       "name": "$name",
       "email_or_phone": "${email_or_phone}",
       "password": "$password",
       "password_confirmation": "${passowrd_confirmation}",
-      // "register_by": "$register_by",
-      // "g-recaptcha-response": "$capchaKey",
+      "register_by": "$register_by",
+      "g-recaptcha-response": "$capchaKey",
     });
 
     String url = ("${AppConfig.BASE_URL}/auth/signup");
-    try {
-      final response = await ApiRequest.post(
+    final response = await ApiRequest.post(
         url: url,
         headers: {
           "Content-Type": "application/json",
           "App-Language": app_language.$!,
         },
-        body: post_body,
-      );
-
-      print("response signup=======> ${post_body}");
-      print("response signup=======> ${response.body}");
-      print("response signup=======> ${loginResponseFromJson(response.body)}");
-
-      if (response.statusCode == 200) {
-        // Assuming success status code is 200
-        return loginResponseFromJson(response.body);
-      } else {
-        throw Exception("Failed to sign up: ${response.statusCode}");
-      }
-    } catch (e) {
-      print("Error during signup: $e");
-      throw Exception("Failed to sign up: $e");
-    }
-
-
-
-
-
+        body: post_body);
+    print("Signup_Response=========>${response.body}");
+    return loginResponseFromJson(response.body);
   }
 
   // Future<ResendCodeResponse> getResendCodeResponse() async {
@@ -234,7 +215,8 @@ class AuthRepository {
 
     String url = ("${AppConfig.BASE_URL}/auth/info");
     if (access_token.$!.isNotEmpty) {
-      final response = await ApiRequest.post(url:url,
+      final response = await ApiRequest.post(
+          url: url,
           headers: {
             "Content-Type": "application/json",
             "App-Language": app_language.$!,

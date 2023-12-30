@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/models/brand_model.dart';
+import 'package:krishanthmart_new/models/business_data_response.dart';
 import 'package:krishanthmart_new/models/flash_deal_model.dart';
 import 'package:krishanthmart_new/repositories/brand_repository.dart';
 
@@ -27,35 +30,30 @@ class HomeController extends GetxController {
   bool isBannerTwoInitial = true;
   bool isCategoryInitial = true;
   bool isBrandInitiated = true;
-  bool isFeaturedProductInitial=true;
+  bool isFeaturedProductInitial = true;
   bool isTodaysDealAvailable = true;
-  bool isFlashDeal= false;
+  bool isFlashDeal = false;
   bool isBestSellingProductAvailable = true;
   bool showFeaturedLoadingContainer = true;
   var currentPage = 0.obs;
   RxInt dealIndex = 0.obs;
   RxInt dealListIndex = 0.obs;
   var isAddedToCart = false.obs;
-  int featuredProductPage= 1;
+  int featuredProductPage = 1;
   var businessResponseDataList = [].obs;
   int? totalFeaturedProductData = 0;
+  var couponColor = "".obs;
+  var couponTitle = "".obs;
+  var couponSubTitle = "".obs;
+  Color? hexColorCoupon;
+
   // var isExpanded = false.obs;
 
   var isExpanded = RxBool(false);
 
   @override
   void onInit() {
-    fetchFlashDealData();
-    fetchCarouselImages();
-    fetchFeaturedCategories();
-    fetchBannerTwoImages();
-    fetchBestSellingProducts();
-    fetchTodaysDealproducts();
-    fetchBrandsData();
-    fetchTopBrandsData();
-    fetchFeaturedProducts();
-    fetchBusinessResponse();
-    // Future.delayed(const Duration(seconds: 0),() => fetchAll(),);
+    fetchAll();
     super.onInit();
   }
 
@@ -75,21 +73,21 @@ class HomeController extends GetxController {
   }
 
   fetchBrandsData() async {
-    try{
+    try {
       var brandsResponse = await BrandRepository().getBrands();
       brandProductList.addAll(brandsResponse.brands! ?? []);
       isBrandInitiated = false;
-    }catch(error){
+    } catch (error) {
       print("Error fetching products: $error");
     }
     update();
   }
 
   fetchTopBrandsData() async {
-    try{
+    try {
       var brandsResponse = await BrandRepository().getTopBrands();
       topBrandsList.addAll(brandsResponse.brands! ?? []);
-    }catch(error){
+    } catch (error) {
       print("Error fetching products: $error");
     }
     update();
@@ -119,8 +117,8 @@ class HomeController extends GetxController {
 
   fetchFeaturedProducts() async {
     var featuredProductResponse = await ProductRepository().getFeaturedProducts(
-      // page: featuredProductPage,
-    );
+        // page: featuredProductPage,
+        );
     // featuredProductPage++;
     featuredProductList.addAll(featuredProductResponse.products ?? []);
     // featuredProductList.addAll(productResponse.products!);
@@ -131,13 +129,53 @@ class HomeController extends GetxController {
   }
 
   fetchBusinessResponse() async {
-    var businessResponse = await BusinessSettingRepository().getBusinessResponse();
+    var businessResponse =
+        await BusinessSettingRepository().getBusinessResponse();
     print("Getted Business Response =======>${businessResponse[0].value}");
     if (businessResponse.isNotEmpty) {
       businessResponseDataList.addAll(businessResponse);
-      print("Getted Business List =======>${businessResponseDataList[0].value}");
+      for (Datum businessType in businessResponseDataList) {
+        switch (businessType.type) {
+          case "cupon_background_color":
+            couponColor.value = businessType.value;
+            print("Coupon Background Color: ${couponColor}");
+            break;
+          case "cupon_title":
+            couponTitle.value = businessType.value;
+            print("Coupon Title: ${couponTitle}");
+            break;
+          case "cupon_subtitle":
+            couponSubTitle.value = businessType.value;
+            print("Coupon Subtitle: ${couponSubTitle}");
+            break;
+          default:
+            // Handle other types if needed
+            break;
+        }
+      }
+      // print("Getted Business List =======>${businessResponseDataList[0].value}");
     }
   }
+
+  Color hexToColor(hexColorCode) {
+    // Ensure the input string is at least 7 characters long
+    if (hexColorCode.length < 7) {
+      throw ArgumentError("Invalid hex color code: $hexColorCode");
+    }
+
+    // Extract the substring from index 1 to 7
+    String hexWithoutHash = hexColorCode.substring(1, 7);
+
+    // Ensure the substring is a valid hexadecimal color code
+    if (RegExp(r'^[0-9a-fA-F]{6}$').hasMatch(hexWithoutHash)) {
+      // Parse the hexadecimal color code and add the alpha value
+      return Color(int.parse(hexWithoutHash, radix: 16) + 0xFF000000);
+    } else {
+      throw ArgumentError("Invalid hex color code: $hexColorCode");
+    }
+    // return Color(int.parse(hexColorCode.substring(1, 7), radix: 16) + 0xFF000000);
+  }
+
   void toggleExpansion() {
     isExpanded(!isExpanded.value);
   }
@@ -164,6 +202,7 @@ class HomeController extends GetxController {
     }
     update();
   }
+
   fetchTopCategories() async {
     try {
       var categoryResponse = await CategoryRepository().getTopCategories();
@@ -184,8 +223,8 @@ class HomeController extends GetxController {
     update();
   }
 
-
   fetchAll() {
+    // hexColorCoupon = hexToColor(couponColor.value);
     fetchFlashDealData();
     fetchCarouselImages();
     fetchFeaturedCategories();
@@ -193,6 +232,7 @@ class HomeController extends GetxController {
     fetchBestSellingProducts();
     fetchTodaysDealproducts();
     fetchBrandsData();
+    fetchTopBrandsData();
     fetchFeaturedProducts();
     fetchBusinessResponse();
     update();

@@ -54,7 +54,14 @@ dependencies:
   webview_flutter: ^4.4.2
   image_picker:
   firebase_core:
+  intl_phone_number_input:
+  flutter_facebook_auth:
+  google_sign_in:
+  twitter_login:
+  sign_in_with_apple:
   badges:
+  crypto:
+  package_info:
   carousel_slider:
   flutter_countdown_timer:
   flutter_local_notifications:

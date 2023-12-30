@@ -15,6 +15,7 @@ import '../../utils/colors.dart';
 import '../../utils/device_info.dart';
 import '../../utils/shared_value.dart';
 import '../../utils/toast_component.dart';
+import '../auth/login.dart';
 import '../change_language/change_language.dart';
 import '../coupons/coupon.dart';
 import '../mainpage/components/box_decorations.dart';
@@ -1459,9 +1460,9 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: () {
                 if (is_logged_in.$)
                   onTapLogout(context);
-                // else
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => Login()));
+                else
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Login()));
               },
             ),
           ),

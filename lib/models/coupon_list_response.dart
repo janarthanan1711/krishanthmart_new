@@ -208,7 +208,7 @@ class Meta {
     path: json["path"],
     perPage: json["per_page"],
     to: json["to"],
-    total: json["total"],
+    total: json["total"] ?? 0,
   );
 
   Map<String, dynamic> toJson() => {
