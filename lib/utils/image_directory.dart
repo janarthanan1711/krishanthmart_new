@@ -11,6 +11,7 @@ class ImageDirectory{
   static const String locationImage = 'assets/location.png';
   static const String cartImage = 'assets/cart.png';
   static const String profilePlaceHolder = 'assets/profile_placeholder.png';
+  static const String appLogo = 'assets/app_logo.png';
   //login and signup images
   static const String loginLogo = "assets/login_registration_form_logo.png";
   static const String loginBackground = "assets/background_1.png";
@@ -29,4 +30,5 @@ class ImageDirectory{
   static const String orderHistory = "assets/order_history.png";
   static const String compareImages = "assets/compare.png";
   static const String refundRequest = "assets/refund.png";
+  static const String halfPrice = "assets/halfprice.jpg";
 }

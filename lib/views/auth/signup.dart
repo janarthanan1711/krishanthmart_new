@@ -80,7 +80,7 @@ class _RegistrationState extends State<Registration> {
     var name = _nameController.text.toString();
     var email = _emailController.text.toString();
     var password = _passwordController.text.toString();
-    var password_confirm = _passwordConfirmController.text.toString();
+    var passwordConfirm = _passwordConfirmController.text.toString();
 
     if (name == "") {
       ToastComponent.showDialog(AppLocalizations.of(context)!.enter_your_name,
@@ -100,7 +100,7 @@ class _RegistrationState extends State<Registration> {
       ToastComponent.showDialog(AppLocalizations.of(context)!.enter_password,
           gravity: Toast.center, duration: Toast.lengthLong);
       return;
-    } else if (password_confirm == "") {
+    } else if (passwordConfirm == "") {
       ToastComponent.showDialog(
           AppLocalizations.of(context)!.confirm_your_password,
           gravity: Toast.center,
@@ -113,7 +113,7 @@ class _RegistrationState extends State<Registration> {
           gravity: Toast.center,
           duration: Toast.lengthLong);
       return;
-    } else if (password != password_confirm) {
+    } else if (password != passwordConfirm) {
       ToastComponent.showDialog(
           AppLocalizations.of(context)!.passwords_do_not_match,
           gravity: Toast.center,
@@ -125,10 +125,16 @@ class _RegistrationState extends State<Registration> {
         name,
         _register_by == 'email' ? email : _phone,
         password,
-        password_confirm,
+        passwordConfirm,
         _register_by,
         googleRecaptchaKey);
     Loading.close();
+    print("userName========>${name}");
+    print("registerby========>${email}");
+    print("password========>${password}");
+    print("confirm password========>${passwordConfirm}");
+    print("2ndRegister========>${_register_by}");
+    print("captchaKey========>${googleRecaptchaKey}");
 
     if (signupResponse.result == false) {
       var message = "";
@@ -147,14 +153,25 @@ class _RegistrationState extends State<Registration> {
       // });
 
       ToastComponent.showDialog(message, gravity: Toast.center, duration: 3);
-    } else {
+    }
+    else {
+      print("userName========>${name}");
+      print("registerby========>${_register_by}");
+      print("password========>${password}");
+      print("confirm password========>${passwordConfirm}");
+      print("2ndRegister========>${_register_by}");
+      print("captchaKey========>${googleRecaptchaKey}");
+
+      print("Getuer Registration========>${signupResponse.user?.email}");
+      print("loginRESPONSE RESULT=========>${signupResponse.result}");
+        AuthHelper().setUserData(signupResponse);
+      // AuthHelper().setUserData(signupResponse.user as LoginResponse);
       ToastComponent.showDialog(signupResponse.message,
           gravity: Toast.center, duration: Toast.lengthLong);
-      AuthHelper().setUserData(signupResponse);
       // push notification starts
       if (OtherConfig.USE_PUSH_NOTIFICATION) {
-        final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-        await _fcm.requestPermission(
+        final FirebaseMessaging fcm = FirebaseMessaging.instance;
+        await fcm.requestPermission(
           alert: true,
           announcement: false,
           badge: true,
@@ -164,7 +181,7 @@ class _RegistrationState extends State<Registration> {
           sound: true,
         );
 
-        String? fcmToken = await _fcm.getToken();
+        String? fcmToken = await fcm.getToken();
 
         if (fcmToken != null) {
           print("--fcm token--");
@@ -177,10 +194,10 @@ class _RegistrationState extends State<Registration> {
         }
       }
 
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) {
-        return const MainPage();
-      }), (newRoute) => false);
+      // Navigator.pushAndRemoveUntil(context,
+      //     MaterialPageRoute(builder: (context) {
+      //   return MainPage();
+      // }), (newRoute) => false);
       if ((mail_verification_status.$ && _register_by == "email") ||
           _register_by == "phone") {
         // Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -403,13 +420,16 @@ class _RegistrationState extends State<Registration> {
                   width: 300,
                   child: Captcha(
                     (keyValue) {
-                      googleRecaptchaKey = keyValue;
-                      setState(() {});
+                      setState(() {
+                        googleRecaptchaKey = keyValue;
+                      });
+                      print("google Captcha showing========>${googleRecaptchaKey} ${keyValue}");
                     },
                     handleCaptcha: (data) {
                       if (_isCaptchaShowing.toString() != data) {
-                        _isCaptchaShowing = data;
-                        setState(() {});
+                        setState(() {
+                          _isCaptchaShowing = data;
+                        });
                       }
                     },
                     isIOS: Platform.isIOS,

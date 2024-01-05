@@ -23,12 +23,11 @@ class CaptchaState extends State<Captcha> {
 
   @override
   initState() {
+    google_recaptcha();
     print("Called Successfully");
     if(widget.isIOS){
       zoomValue=0.5;
     }
-
-    google_recaptcha();
     super.initState();
   }
 
@@ -39,6 +38,7 @@ class CaptchaState extends State<Captcha> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
       ..enableZoom(false)
+      ..loadRequest(Uri.parse("${AppConfig.BASE_URL}/google-recaptcha"))
       ..loadHtmlString(html(AppConfig.BASE_URL)).then((value) {
         _webViewController..addJavaScriptChannel(
           'Captcha',
@@ -48,7 +48,10 @@ class CaptchaState extends State<Captcha> {
             //like here, the message is just being printed
             //in Run/LogCat window of android studio
             //print(message.message);
-            widget.callback(message.message);
+            setState(() {
+              widget.callback(message.message);
+            });
+            print("aptcha message getted or not ${message.message}");
             //Navigator.of(context).pop();
           },
         )
@@ -58,8 +61,10 @@ class CaptchaState extends State<Captcha> {
             //like here, the message is just being printed
             //in Run/LogCat window of android studio
             print("message.message");
-            bool value = message.message=="true";
-            widget.handleCaptcha!(value);
+            setState(() {
+              bool value = message.message=="true";
+              widget.handleCaptcha!(value);
+            });
             // widget.callback(message.message);
             //Navigator.of(context).pop();
           },);
@@ -77,9 +82,10 @@ class CaptchaState extends State<Captcha> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: DeviceInfo(context).width,
       height: 70,
+      color: Colors.indigo,
       child: WebViewWidget(
         controller: _webViewController,
       ),
@@ -123,7 +129,7 @@ class CaptchaState extends State<Captcha> {
   </head>
   <body>
     <div id="wrap">
-	
+
 	<iframe id="scaled-frame" src="${url}/google-recaptcha" allowfullscreen></iframe>
     </div>
   </body>

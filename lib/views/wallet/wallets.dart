@@ -135,7 +135,7 @@ class _WalletState extends State<Wallet> {
       onWillPop: () {
         if (widget.from_recharge) {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const MainPage();
+            return MainPage();
           }));
         } else {
           Navigator.of(context).pop();
@@ -231,7 +231,7 @@ class _WalletState extends State<Wallet> {
           onPressed: () {
             if (widget.from_recharge) {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const MainPage();
+                return MainPage();
               }));
             } else {
               return Navigator.of(context).pop();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../models/category_model.dart';
+import '../../../utils/colors.dart';
 
 class ProductCategoryCard extends StatelessWidget {
   final Category category;
@@ -14,6 +15,7 @@ class ProductCategoryCard extends StatelessWidget {
           width: 100.w,
           height: 86.h,
           decoration: BoxDecoration(
+            color: MyTheme.white,
             image: DecorationImage(
               fit: BoxFit.fill,
               image: NetworkImage(category.banner!),

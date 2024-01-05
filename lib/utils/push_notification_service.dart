@@ -9,7 +9,7 @@ import '../repositories/profile_repositories.dart';
 import 'btn_elements.dart';
 
 final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
+ AndroidNotificationChannel channel = AndroidNotificationChannel(
   '0', // id
   'High Importance Notifications', // title
   importance: Importance.max,

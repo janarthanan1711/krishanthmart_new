@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -14,21 +15,28 @@ import 'package:one_context/one_context.dart';
 import 'package:shared_value/shared_value.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'firebase_options.dart';
+import 'helpers/business_settings_helpers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FlutterDownloader.initialize(
+      debug: true,
+      // optional: set to false to disable printing logs to console (default: true)
+      ignoreSsl:
+      true // option: set to false to disable working with http links (default: false)
+  );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
   // AddonsHelper().setAddonsData();
-  // BusinessSettingHelper().setBusinessSettingData();
-  // app_language.load();
-  // app_mobile_language.load();
-  // app_language_rtl.load();
+  BusinessSettingHelper().setBusinessSettingData();
+  app_language.load();
+  app_mobile_language.load();
+  app_language_rtl.load();
   //
 
   access_token.load().whenComplete(() {
@@ -58,12 +66,6 @@ class MyApp extends StatelessWidget {
             navigatorKey: OneContext().navigator.key,
             debugShowCheckedModeBanner: false,
             theme: theme(),
-            // theme: ThemeData(
-            //   primaryColor: MyTheme.white,
-            //   scaffoldBackgroundColor: MyTheme.white,
-            //   visualDensity: VisualDensity.adaptivePlatformDensity,
-            //   fontFamily: "PublicSansSerif",
-            // ),
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

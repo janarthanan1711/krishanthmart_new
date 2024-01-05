@@ -31,7 +31,7 @@ class OrderRepository {
 
   Future<dynamic> getOrderDetails({int? id = 0}) async {
     String url =
-    ("${AppConfig.BASE_URL}/purchase-history-details/" + id.toString());
+    ("${AppConfig.BASE_URL}/purchase-history-details/$id");
 
     Map<String,String> header = commonHeader;
 

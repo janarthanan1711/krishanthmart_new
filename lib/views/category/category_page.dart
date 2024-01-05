@@ -269,7 +269,6 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                                         subCategoryId: categoryController
                                             .subChildCategories[index].id,
                                       ),
-                                      arguments: categoryController.subChildCategories[index]
                                     );
                                   },
                                 );

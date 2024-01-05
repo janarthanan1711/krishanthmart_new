@@ -112,8 +112,8 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
 
 
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
-        return const MainPage(
-          // go_back: false,
+        return MainPage(
+          go_back: false,
         );
       }),(route)=>false);
     }

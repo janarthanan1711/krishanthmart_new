@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:krishanthmart_new/models/product_response_model.dart';
+import 'package:krishanthmart_new/utils/common_btn_options.dart';
+import '../../../controllers/product_controller.dart';
+import '../../../helpers/main_helpers.dart';
 import '../../../utils/colors.dart';
+import '../../product_details/components/product_bottom_sheet.dart';
 
 class ProductCategoryCardLarge extends StatelessWidget {
   ProductCategoryCardLarge({super.key, required this.product});
 
   Product product;
+  ProductController productController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 142.h,
+      height: 110.h,
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
       child: Card(
         elevation: 10,
@@ -21,18 +27,29 @@ class ProductCategoryCardLarge extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Image.network(
-              product.thumbnail_image!,
+            Container(
               height: 110.h,
               width: 105.w,
-              fit: BoxFit.fill,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(product.thumbnail_image!),
+                ),
+              ),
             ),
+            // Image.network(
+            //   product.thumbnail_image!,
+            //   height: 110.h,
+            //   width: 105.w,
+            //   fit: BoxFit.fill,
+            // ),
             Container(
               height: 142.h,
               width: 1.h,
               color: MyTheme.medium_grey,
             ),
-            SizedBox(width: 2.5.w,),
+            SizedBox(
+              width: 2.5.w,
+            ),
             Container(
               width: 232.w,
               padding: EdgeInsets.only(left: 5.w, right: 5.w),
@@ -45,6 +62,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                 // border: Border(left: BorderSide(color: MyTheme.medium_grey))
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
@@ -98,15 +116,15 @@ class ProductCategoryCardLarge extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text(product.main_price!,
+                      Text(convertPrice(product.main_price!),
                           style: TextStyle(
-                              fontSize: 12.sp, fontWeight: FontWeight.bold)),
+                              fontSize: 12.sp, fontWeight: FontWeight.bold,color: MyTheme.accent_color),),
                       SizedBox(
                         width: 15.h,
                       ),
                       if (product.has_discount!)
                         Text(
-                          product.stroked_price!,
+                          convertPrice(product.stroked_price!),
                           style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               color: MyTheme.medium_grey,
@@ -119,84 +137,38 @@ class ProductCategoryCardLarge extends StatelessWidget {
                   SizedBox(
                     height: 5.h,
                   ),
-                  InkWell(
-                    onTap: () {
-                      // productController.getVariantData(product.id);
+                  ChooseOptionButton(
+                    height: 20.h,
+                    width: 250.w,
+                    onTap: ()async {
+                     await variantBottomSheet();
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          // color: MyTheme.medium_grey,
-                          border: Border.all(color: MyTheme.green),
-                          borderRadius: BorderRadius.circular(5)),
-                      height: 20.h,
-                      width: 250.w,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Choose Option"),
-                          Icon(Icons.arrow_drop_down_outlined)
-                        ],
-                      ),
-                    ),
+                    iconColor: MyTheme.black,
+                    bgColor: MyTheme.green_light,
                   ),
                   SizedBox(
-                    height: 5.h,
+                    height: 6.h,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          height: 30.h,
-                          width: 60.w,
-                          decoration: BoxDecoration(
-                              color: MyTheme.green_new,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: const Center(
-                              child: Icon(
-                            Icons.favorite,
-                            color: MyTheme.white,
-                          )),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          height: 30.h,
-                          width: 60.w,
-                          decoration: BoxDecoration(
-                              color: MyTheme.green_new,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: const Center(
-                              child: Icon(
-                            Icons.share,
-                            color: MyTheme.white,
-                          )),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          height: 30.h,
-                          width: 60.w,
-                          decoration: BoxDecoration(
-                              color: MyTheme.green_new,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: const Center(
-                              child: Icon(
-                            Icons.shopping_cart_rounded,
-                            color: MyTheme.white,
-                          )),
-                        ),
-                      )
-                    ],
-                  )
+
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+  Future variantBottomSheet() async {
+    await productController.fetchProductDetailsMain(product.id);
+    await Get.bottomSheet(
+      isDismissible: false,
+      GetBuilder<ProductController>(builder: (productController) {
+        return ProductVariantBottomSheet(product: product,productController: productController,);
+      }),
+      backgroundColor: Colors.white,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
       ),
     );
   }

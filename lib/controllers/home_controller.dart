@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:get/get.dart';
+import 'package:krishanthmart_new/controllers/cart_controller.dart';
 import 'package:krishanthmart_new/models/brand_model.dart';
 import 'package:krishanthmart_new/models/business_data_response.dart';
 import 'package:krishanthmart_new/models/flash_deal_model.dart';
 import 'package:krishanthmart_new/repositories/brand_repository.dart';
+import 'package:krishanthmart_new/utils/colors.dart';
 
 import '../models/category_model.dart';
 import '../models/product_response_model.dart';
@@ -46,6 +48,7 @@ class HomeController extends GetxController {
   var couponTitle = "".obs;
   var couponSubTitle = "".obs;
   Color? hexColorCoupon;
+  CartController cartController = Get.put(CartController());
 
   // var isExpanded = false.obs;
 
@@ -158,22 +161,27 @@ class HomeController extends GetxController {
   }
 
   Color hexToColor(hexColorCode) {
-    // Ensure the input string is at least 7 characters long
-    if (hexColorCode.length < 7) {
-      throw ArgumentError("Invalid hex color code: $hexColorCode");
-    }
+    try {
+      // Ensure the input string is at least 7 characters long
+      if (hexColorCode.length < 7) {
+        throw ArgumentError("Invalid hex color code: $hexColorCode");
+      }
 
-    // Extract the substring from index 1 to 7
-    String hexWithoutHash = hexColorCode.substring(1, 7);
+      // Extract the substring from index 1 to 7
+      String hexWithoutHash = hexColorCode.substring(1, 7);
 
-    // Ensure the substring is a valid hexadecimal color code
-    if (RegExp(r'^[0-9a-fA-F]{6}$').hasMatch(hexWithoutHash)) {
-      // Parse the hexadecimal color code and add the alpha value
-      return Color(int.parse(hexWithoutHash, radix: 16) + 0xFF000000);
-    } else {
-      throw ArgumentError("Invalid hex color code: $hexColorCode");
+      // Ensure the substring is a valid hexadecimal color code
+      if (RegExp(r'^[0-9a-fA-F]{6}$').hasMatch(hexWithoutHash)) {
+        // Parse the hexadecimal color code and add the alpha value
+        return Color(int.parse(hexWithoutHash, radix: 16) + 0xFF000000);
+      } else {
+        throw ArgumentError("Invalid hex color code: $hexColorCode");
+      }
+    } catch (e) {
+      // If any error occurs, return a default color (e.g., black)
+      print("Error converting hex color: $e");
+      return MyTheme.noColor;
     }
-    // return Color(int.parse(hexColorCode.substring(1, 7), radix: 16) + 0xFF000000);
   }
 
   void toggleExpansion() {

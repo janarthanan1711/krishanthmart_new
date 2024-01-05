@@ -48,7 +48,8 @@ class Users {
     this.email,
     this.avatar,
     this.avatar_original,
-    this.phone, this.emailVerified,
+    this.phone,
+    this.emailVerified,
   });
 
   int? id;

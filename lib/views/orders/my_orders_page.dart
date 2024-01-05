@@ -213,7 +213,7 @@ class _OrderListState extends State<OrderList> {
           if (widget.from_checkout) {
             Navigator.pushAndRemoveUntil(context,
                 MaterialPageRoute(builder: (context) {
-                  return const MainPage();
+                  return MainPage();
                 }), (reute) => false);
             return Future<bool>.value(false);
           } else {

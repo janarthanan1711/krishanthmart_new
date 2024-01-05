@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:krishanthmart_new/helpers/main_helpers.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/system_config.dart';
 import '../../mainpage/components/box_decorations.dart';
@@ -78,7 +79,7 @@ class _ListProductCardState extends State<ListProductCard> {
                     alignment: WrapAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.main_price!,
+                        convertPrice(widget.main_price!),
                         // SystemConfig.systemCurrency!.code!=null?
                         // widget.main_price!.replaceAll(SystemConfig.systemCurrency!.code!, SystemConfig.systemCurrency!.symbol!)
                         //     :widget.main_price!,

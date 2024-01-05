@@ -21,13 +21,14 @@ class WishlistResponse {
   bool? success;
   int? status;
 
-  factory WishlistResponse.fromJson(Map<String, dynamic> json) =>
-      WishlistResponse(
-        wishlist_items: List<WishlistItem>.from(
-            json["data"].map((x) => WishlistItem.fromJson(x))),
-        success: json["success"],
-        status: json["status"],
-      );
+  factory WishlistResponse.fromJson(Map<String, dynamic> json) {
+    return WishlistResponse(
+      wishlist_items: List<WishlistItem>.from(
+          json["data"].map((x) => WishlistItem.fromJson(x))),
+      success: json["success"],
+      status: json["status"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "data": List<dynamic>.from(wishlist_items!.map((x) => x.toJson())),
@@ -43,11 +44,11 @@ class WishlistItem {
   });
 
   int? id;
-  Product? product;
+  Products? product;
 
   factory WishlistItem.fromJson(Map<String, dynamic> json) => WishlistItem(
         id: json["id"],
-        product: Product.fromJson(json["product"]),
+        product: Products.fromJson(json["product"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -56,8 +57,8 @@ class WishlistItem {
       };
 }
 
-class Product {
-  Product({
+class Products {
+  Products({
     this.id,
     this.name,
     this.thumbnail_image,
@@ -71,7 +72,7 @@ class Product {
   String? base_price;
   int? rating;
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
+  factory Products.fromJson(Map<String, dynamic> json) => Products(
         id: json["id"],
         name: json["name"],
         thumbnail_image: json["thumbnail_image"],

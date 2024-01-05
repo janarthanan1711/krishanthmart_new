@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/models/product_response_model.dart';
+import 'package:krishanthmart_new/views/product_details/components/product_bottom_sheet.dart';
 import 'package:krishanthmart_new/views/product_details/product_details.dart';
+import '../../../controllers/product_controller.dart';
+import '../../../helpers/main_helpers.dart';
 import '../../../utils/colors.dart';
+import '../../../utils/common_btn_options.dart';
+import '../../../utils/shared_value.dart';
+import '../../home/components/product_card.dart';
+import '../../mainpage/components/box_decorations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LargeProductCard extends StatelessWidget {
   LargeProductCard({super.key, required this.product});
 
   Product product;
-
+  ProductController productController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,14 +75,14 @@ class LargeProductCard extends StatelessWidget {
                       // ),
                       Row(
                         children: [
-                          Text(product.main_price!,
+                          Text(convertPrice(product.main_price!),
                               style: TextStyle(fontSize: 14.sp,color: MyTheme.accent_color)),
                            SizedBox(
                             width: 10.w,
                           ),
                           if (product.has_discount!)
                             Text(
-                              product.stroked_price!,
+                              convertPrice(product.stroked_price!),
                               style: TextStyle(
                                 decoration: TextDecoration.lineThrough,
                                 color: MyTheme.medium_grey,
@@ -136,29 +144,38 @@ class LargeProductCard extends StatelessWidget {
                         ),
                       )
                     : const SizedBox(),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: MyTheme.green,
-                        borderRadius: BorderRadius.circular(5)),
-                    height: 25.h,
-                    width: 140.w,
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Add",
-                          style: TextStyle(color: MyTheme.white),
-                        ),
-                        Icon(
-                          Icons.add,
-                          color: MyTheme.white,
-                        )
-                      ],
-                    ),
-                  ),
+                ChooseOptionButton(
+                  height: 25.h,
+                  width: 140.w,
+                  onTap: () async{
+                    await variantBottomSheet();
+                  },
+                   iconColor: MyTheme.black,
+                   bgColor: MyTheme.green_light,
                 ),
+                // InkWell(
+                //   onTap: () {},
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //         color: MyTheme.green,
+                //         borderRadius: BorderRadius.circular(5)),
+                //     height: 25.h,
+                //     width: 140.w,
+                //     child: const Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Text(
+                //           "Add",
+                //           style: TextStyle(color: MyTheme.white),
+                //         ),
+                //         Icon(
+                //           Icons.add,
+                //           color: MyTheme.white,
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           )
@@ -166,4 +183,21 @@ class LargeProductCard extends StatelessWidget {
       ),
     );
   }
+
+  Future variantBottomSheet() async {
+    await productController.fetchProductDetailsMain(product.id);
+    await Get.bottomSheet(
+      isDismissible: false,
+      GetBuilder<ProductController>(builder: (productController) {
+        return ProductVariantBottomSheet(product: product,productController: productController,);
+      }),
+      backgroundColor: Colors.white,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
 }
+
+

@@ -15,6 +15,7 @@ import '../../utils/system_config.dart';
 import '../../utils/text_styles.dart';
 import '../../utils/toast_component.dart';
 import '../../utils/useful_elements.dart';
+import '../address/select_address.dart';
 import '../mainpage/components/box_decorations.dart';
 
 class CartPage extends StatefulWidget {
@@ -74,26 +75,26 @@ class _CartPageState extends State<CartPage> {
 
   fetchData() async {
     getCartCount();
-    CartResponse cartResponseList =
+    var cartResponseList =
     await CartRepository().getCartResponseList(user_id.$);
-
+    print("grandtotal===============>${cartResponseList.grandTotal}");
     if (cartResponseList != null || cartResponseList.data!.isNotEmpty) {
       _shopList = cartResponseList.data!;
       _shopResponse = cartResponseList;
-      getSetCartTotal();
+      // getSetCartTotal();
     }
     _isInitial = false;
 
     setState(() {});
   }
 
-  getSetCartTotal() {
-    _cartTotalString = _shopResponse!.grandTotal!.replaceAll(
-        SystemConfig.systemCurrency!.code!,
-        SystemConfig.systemCurrency!.symbol!);
-
-    setState(() {});
-  }
+  // getSetCartTotal() {
+  //   _cartTotalString = _shopResponse!.grandTotal!.replaceAll(
+  //       SystemConfig.systemCurrency!.code!,
+  //       SystemConfig.systemCurrency!.symbol!);
+  //
+  //   setState(() {});
+  // }
 
   onQuantityIncrease(sellerIndex, itemIndex) {
     if (_shopList[sellerIndex].cartItems[itemIndex].quantity <
@@ -232,9 +233,9 @@ class _CartPageState extends State<CartPage> {
         // reset();
         fetchData();
       } else if (mode == "proceed_to_shipping") {
-        // AIZRoute.push(context, SelectAddress()).then((value) {
-        //   onPopped(value);
-        // });
+        AIZRoute.push(context, SelectAddress()).then((value) {
+          onPopped(value);
+        });
       }
     }
   }

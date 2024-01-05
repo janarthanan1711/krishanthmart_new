@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/index.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:toast/toast.dart';
 import '../../helpers/string_helpers.dart';
 import '../../models/product_response_model.dart';
 import '../../repositories/product_repository.dart';

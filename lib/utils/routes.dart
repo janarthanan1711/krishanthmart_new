@@ -7,12 +7,15 @@ import 'package:krishanthmart_new/views/brand_products/brand_products.dart';
 import 'package:krishanthmart_new/views/brands/all_brands.dart';
 import 'package:krishanthmart_new/views/category/category_page.dart';
 import 'package:krishanthmart_new/views/category/sub_category_page.dart';
+import 'package:krishanthmart_new/views/checkout/checkout_page.dart';
 import 'package:krishanthmart_new/views/coupons/coupon.dart';
 import 'package:krishanthmart_new/views/coupons/coupon_products.dart';
 import 'package:krishanthmart_new/views/flashdeals/flashdealproducts.dart';
 import 'package:krishanthmart_new/views/flashdeals/flashdealslist.dart';
 import 'package:krishanthmart_new/views/mainpage/main_page.dart';
 import 'package:krishanthmart_new/views/product_details/product_details.dart';
+import 'package:krishanthmart_new/views/profile/profile_edit.dart';
+import 'package:krishanthmart_new/views/shipping/shipping_info.dart';
 import 'package:krishanthmart_new/views/top_selling/top_sellers.dart';
 import 'package:krishanthmart_new/views/wallet/wallets.dart';
 import '../views/auth/login.dart';
@@ -40,6 +43,9 @@ class Routes {
   static String couponProducts = '/couponProducts';
   static String login = '/login';
   static String registration = '/registration';
+  static String profileEdit = '/profileEdit';
+  static String checkout = '/checkout';
+  static String shippingInfo = '/shippingInfo';
 }
 
 List<GetPage<dynamic>>? getPages = [
@@ -61,7 +67,7 @@ List<GetPage<dynamic>>? getPages = [
   ),
   GetPage(
     name: Routes.wishlist,
-    page: () => const WishlistPage(),
+    page: () => WishlistPage(),
   ),
   GetPage(
     name: Routes.orders,
@@ -69,7 +75,7 @@ List<GetPage<dynamic>>? getPages = [
   ),
   GetPage(
     name: Routes.address,
-    page: () => const AddressPage(),
+    page: () => Address(),
   ),
   GetPage(
     name: Routes.accountsPage,
@@ -118,5 +124,17 @@ List<GetPage<dynamic>>? getPages = [
   GetPage(
     name: Routes.registration,
     page: () => Registration(),
-  )
+  ),
+  GetPage(
+    name: Routes.profileEdit,
+    page: () => ProfileEdit(),
+  ),
+  GetPage(
+    name: Routes.checkout,
+    page: () => Checkout(),
+  ),
+  GetPage(
+    name: Routes.shippingInfo,
+    page: () => ShippingInfo(),
+  ),
 ];

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:krishanthmart_new/views/auth/passwor_forget.dart';
 import 'package:krishanthmart_new/views/auth/signup.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:toast/toast.dart';
@@ -29,7 +30,6 @@ import 'components/auth_screen_widget.dart';
 import 'components/custom_intl_input.dart';
 import 'components/loading_widget.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -110,9 +110,9 @@ class _LoginState extends State<Login> {
       AuthHelper().setUserData(loginResponse);
       // push notification starts
       if (OtherConfig.USE_PUSH_NOTIFICATION) {
-        final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+        final FirebaseMessaging fcm = FirebaseMessaging.instance;
 
-        await _fcm.requestPermission(
+        await fcm.requestPermission(
           alert: true,
           announcement: false,
           badge: true,
@@ -122,7 +122,7 @@ class _LoginState extends State<Login> {
           sound: true,
         );
 
-        String? fcmToken = await _fcm.getToken();
+        String? fcmToken = await fcm.getToken();
 
         if (fcmToken != null) {
           print("--fcm token--");
@@ -136,51 +136,51 @@ class _LoginState extends State<Login> {
 
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
-            return const MainPage();
+            return MainPage();
           }), (newRoute) => false);
     }
   }
 
-  onPressedFacebookLogin() async {
-    try {
-      final facebookLogin = await FacebookAuth.instance
-          .login(loginBehavior: LoginBehavior.webOnly);
-
-      if (facebookLogin.status == LoginStatus.success) {
-        // get the user data
-        // by default we get the userId, email,name and picture
-        final userData = await FacebookAuth.instance.getUserData();
-        var loginResponse = await AuthRepository().getSocialLoginResponse(
-            "facebook",
-            userData['name'].toString(),
-            userData['email'].toString(),
-            userData['id'].toString(),
-            access_token: facebookLogin.accessToken!.token);
-        print("..........................${loginResponse.toString()}");
-        if (loginResponse.result == false) {
-          ToastComponent.showDialog(loginResponse.message!,
-              gravity: Toast.center, duration: Toast.lengthLong);
-        } else {
-          ToastComponent.showDialog(loginResponse.message!,
-              gravity: Toast.center, duration: Toast.lengthLong);
-
-          AuthHelper().setUserData(loginResponse);
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const MainPage();
-          }));
-          FacebookAuth.instance.logOut();
-        }
-        // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
-      } else {
-        print("....Facebook auth Failed.........");
-        print(facebookLogin.status);
-        print(facebookLogin.message);
-      }
-    } on Exception catch (e) {
-      print(e);
-      // TODO
-    }
-  }
+  // onPressedFacebookLogin() async {
+  //   try {
+  //     final facebookLogin = await FacebookAuth.instance
+  //         .login(loginBehavior: LoginBehavior.webOnly);
+  //
+  //     if (facebookLogin.status == LoginStatus.success) {
+  //       // get the user data
+  //       // by default we get the userId, email,name and picture
+  //       final userData = await FacebookAuth.instance.getUserData();
+  //       var loginResponse = await AuthRepository().getSocialLoginResponse(
+  //           "facebook",
+  //           userData['name'].toString(),
+  //           userData['email'].toString(),
+  //           userData['id'].toString(),
+  //           access_token: facebookLogin.accessToken!.token);
+  //       print("..........................${loginResponse.toString()}");
+  //       if (loginResponse.result == false) {
+  //         ToastComponent.showDialog(loginResponse.message!,
+  //             gravity: Toast.center, duration: Toast.lengthLong);
+  //       } else {
+  //         ToastComponent.showDialog(loginResponse.message!,
+  //             gravity: Toast.center, duration: Toast.lengthLong);
+  //
+  //         AuthHelper().setUserData(loginResponse);
+  //         Navigator.push(context, MaterialPageRoute(builder: (context) {
+  //           return MainPage();
+  //         }));
+  //         FacebookAuth.instance.logOut();
+  //       }
+  //       // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+  //     } else {
+  //       print("....Facebook auth Failed.........");
+  //       print(facebookLogin.status);
+  //       print(facebookLogin.message);
+  //     }
+  //   } on Exception catch (e) {
+  //     print(e);
+  //     // TODO
+  //   }
+  // }
 
   onPressedGoogleLogin() async {
     try {
@@ -208,7 +208,7 @@ class _LoginState extends State<Login> {
             gravity: Toast.center, duration: Toast.lengthLong);
         AuthHelper().setUserData(loginResponse);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const MainPage();
+          return MainPage();
         }));
       }
       GoogleSignIn().disconnect();
@@ -248,7 +248,7 @@ class _LoginState extends State<Login> {
             gravity: Toast.center, duration: Toast.lengthLong);
         AuthHelper().setUserData(loginResponse);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const MainPage();
+          return MainPage();
         }));
       }
     } on Exception catch (e) {
@@ -305,7 +305,7 @@ class _LoginState extends State<Login> {
             gravity: Toast.center, duration: Toast.lengthLong);
         AuthHelper().setUserData(loginResponse);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const MainPage();
+          return MainPage();
         }));
       }
     } on Exception catch (e) {
@@ -474,10 +474,10 @@ class _LoginState extends State<Login> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) {
-                        //       return PasswordForget();
-                        //     }));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                              return PasswordForget();
+                            }));
                       },
                       child: Text(
                         AppLocalizations.of(context)!
@@ -598,7 +598,7 @@ class _LoginState extends State<Login> {
                           visible: allow_facebook_login.$,
                           child: InkWell(
                             onTap: () {
-                              onPressedFacebookLogin();
+                              // onPressedFacebookLogin();
                             },
                             child: SizedBox(
                               width: 28,

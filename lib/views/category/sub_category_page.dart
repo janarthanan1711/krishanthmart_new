@@ -31,7 +31,6 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   int page = 1;
   String searchKey = "";
-  var getCategoryIndex = Get.arguments;
 
   // bool showLoadingContainer = false;
   bool showSearchBar = false;
@@ -39,6 +38,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
   @override
   void initState() {
     getAll();
+    // subCategoryController.selectedIndex.value = widget.categoryId!;
+    // print("cehckn sub Category Index =======>${subCategoryController.selectedIndex.value}");
     print(widget.subCategoryId);
     //to assign the subcategory id to selected index in subcategory list
     subCategoryController.subCategoryIndex.value = widget.subCategoryId!;
@@ -61,7 +62,6 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
         // }
       }
     });
-    getCategoryIndex = subCategoryController.selectedIndex.value;
     super.initState();
   }
 
@@ -80,6 +80,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    subCategoryController.selectedIndex.value = widget.categoryId!;
     return Scaffold(
       appBar: AppBar(
         title: buildAppBarTitle(context),
@@ -368,7 +369,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   Container buildLoadingContainer() {
     return Container(
-      height: subCategoryController.showLoadingContainer ? 15.h : 0,
+      height: subCategoryController.showLoadingContainer ? 10.h : 0,
       width: double.infinity,
       color: MyTheme.white,
       child: Center(
@@ -555,5 +556,6 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
     subCategoryController.showAllProducts.value = false;
     subCategoryController.selectedIndex.value = 0;
     subCategoryController.subSelectedIndex.value = 0;
+    subCategoryController.subCategoryIndex.value = 0;
   }
 }

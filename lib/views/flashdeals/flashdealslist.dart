@@ -15,7 +15,9 @@ import '../mainpage/components/box_decorations.dart';
 import 'package:flutter_countdown_timer/index.dart';
 
 class FlashDealList extends StatefulWidget {
-  const FlashDealList({super.key});
+  const FlashDealList({super.key,this.hasBottomNav = false});
+
+  final bool hasBottomNav;
 
   @override
   _FlashDealListState createState() => _FlashDealListState();

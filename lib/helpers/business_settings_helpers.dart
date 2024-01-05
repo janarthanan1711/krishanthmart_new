@@ -8,7 +8,7 @@ class BusinessSettingHelper {
     await BusinessSettingRepository().getBusinessSettingList();
 
 
-    businessLists.forEach((element) {
+    for (var element in businessLists) {
       switch (element.type) {
         case 'facebook_login':
           {
@@ -104,7 +104,7 @@ class BusinessSettingHelper {
           break;
         case 'google_recaptcha':
           {
-            print(element.type.toString());
+            print("element captcha called or not=============> ${element.type.toString()}");
             print(element.value.toString());
             if (element.value.toString() == "1") {
               google_recaptcha.$ = true;
@@ -129,6 +129,6 @@ class BusinessSettingHelper {
           {}
           break;
       }
-    });
+    }
   }
 }

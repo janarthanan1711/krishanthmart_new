@@ -306,7 +306,8 @@ class _ProductDetailsState extends State<ProductDetails>
         variants: _choiceString,
         qty: _quantity);
     print("single price ${variantResponse.variantData!.price}");
-    print("Variants data Response=============>${variantResponse.variantData!.image}");
+    print(
+        "Variants data Response=============>${variantResponse.variantData!.image}");
     /*print("vr"+variantResponse.toJson().toString());
     return;*/
 
@@ -402,8 +403,10 @@ class _ProductDetailsState extends State<ProductDetails>
 
   addToCart({mode, context = null, snackbar = null}) async {
     if (is_logged_in.$ == false) {
-      ToastComponent.showDialog(AppLocalizations.of(context)!.you_need_to_log_in,
-          gravity: Toast.center, duration: Toast.lengthLong);
+      ToastComponent.showDialog(
+          AppLocalizations.of(context)!.you_need_to_log_in,
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
       // Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
       return;
     }
@@ -423,7 +426,6 @@ class _ProductDetailsState extends State<ProductDetails>
     } else {
       // Provider.of<CartCounter>(context, listen: false).getCount();
       cartController.getCount();
-
       if (mode == "add_to_cart") {
         if (snackbar != null && context != null) {
           ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -705,7 +707,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         child: Btn.minWidthFixHeight(
                           minWidth: 75,
                           height: 30,
-                          color: MyTheme.accent_color,
+                          color: MyTheme.accent_color2,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                               side: BorderSide(
@@ -805,18 +807,23 @@ class _ProductDetailsState extends State<ProductDetails>
         AppLocalizations.of(context)!.added_to_cart,
         style: const TextStyle(color: MyTheme.font_grey),
       ),
-      backgroundColor: MyTheme.soft_accent_color,
+      // backgroundColor: MyTheme.soft_accent_color,
+      backgroundColor: MyTheme.green_light,
       duration: const Duration(seconds: 3),
       action: SnackBarAction(
         label: AppLocalizations.of(context)!.show_cart_all_capital,
         onPressed: () {
           // Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //   return Cart(has_bottomnav: false);
+          //   return CartPage(has_bottomnav: false);
           // })).then((value) {
           //   onPopped(value);
           // });
+          Get.to(() => CartPage(
+                    has_bottomnav: false,
+                  ))!
+              .then((value) => onPopped(value));
         },
-        textColor: MyTheme.accent_color,
+        textColor: MyTheme.accent_color2,
         disabledTextColor: Colors.grey,
       ),
     );
@@ -829,7 +836,7 @@ class _ProductDetailsState extends State<ProductDetails>
           bottomNavigationBar: buildBottomAppBar(context, _addedToCartSnackbar),
           //appBar: buildAppBar(statusBarHeight, context),
           body: RefreshIndicator(
-            color: MyTheme.accent_color,
+            color: MyTheme.golden,
             backgroundColor: Colors.white,
             onRefresh: _onPageRefresh,
             child: CustomScrollView(
@@ -918,15 +925,6 @@ class _ProductDetailsState extends State<ProductDetails>
                               color: MyTheme.dark_font_grey,
                               height: 16,
                             ),
-                            // badgeContent: Consumer<CartCounter>(
-                            //   builder: (context, cart, child) {
-                            //     return Text(
-                            //       "${cart.cartCounter}",
-                            //       style: const TextStyle(
-                            //           fontSize: 12, color: Colors.white),
-                            //     );
-                            //   },
-                            // ),
                           ),
                         ),
                       ),
@@ -1260,9 +1258,10 @@ class _ProductDetailsState extends State<ProductDetails>
                         divider(),
                         InkWell(
                           onTap: () {
-                            Get.to(()=>ProductReviews(id:widget.id))?.then((value) {
-                                onPopped(value);
-                              });
+                            Get.to(() => ProductReviews(id: widget.id))
+                                ?.then((value) {
+                              onPopped(value);
+                            });
                           },
                           child: Container(
                             color: MyTheme.white,
@@ -1603,13 +1602,13 @@ class _ProductDetailsState extends State<ProductDetails>
           Padding(
             padding: const EdgeInsets.only(left: 5.0),
             child: Text(
-              _totalPrice.toString(),
-              // SystemConfig.systemCurrency != null
-              //     ? _totalPrice.toString().replaceAll(
-              //         SystemConfig.systemCurrency!.code as Pattern,
-              //         SystemConfig.systemCurrency!.symbol!)
-              //     : SystemConfig.systemCurrency!.symbol! +
-              //         _totalPrice.toString(),
+              // _totalPrice.toString(),
+              SystemConfig.systemCurrency != null
+                  ? _totalPrice.toString().replaceAll(
+                      SystemConfig.systemCurrency!.code as Pattern,
+                      SystemConfig.systemCurrency!.symbol!)
+                  : SystemConfig.systemCurrency!.symbol! +
+                      _totalPrice.toString(),
               style: const TextStyle(
                   color: MyTheme.accent_color,
                   fontSize: 16.0,
@@ -1855,7 +1854,7 @@ class _ProductDetailsState extends State<ProductDetails>
           decoration: BoxDecoration(
             border: Border.all(
                 color: _selectedChoices[choiceOptionsIndex] == option
-                    ? MyTheme.accent_color
+                    ? MyTheme.accent_color2
                     : MyTheme.noColor,
                 width: 1.5),
             borderRadius: BorderRadius.circular(3.0),
@@ -1878,7 +1877,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 option,
                 style: TextStyle(
                     color: _selectedChoices[choiceOptionsIndex] == option
-                        ? MyTheme.accent_color
+                        ? MyTheme.accent_color2
                         : const Color.fromRGBO(224, 224, 225, 1),
                     fontSize: 12.0,
                     fontWeight: FontWeight.w600),
@@ -1897,7 +1896,7 @@ class _ProductDetailsState extends State<ProductDetails>
           padding: app_language_rtl.$!
               ? const EdgeInsets.only(left: 8.0)
               : const EdgeInsets.only(right: 8.0),
-          child: Container(
+          child: SizedBox(
             width: 75,
             child: Text(
               AppLocalizations.of(context)!.color_ucf,
@@ -2201,15 +2200,15 @@ class _ProductDetailsState extends State<ProductDetails>
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
-                color: MyTheme.accent_color,
-                boxShadow: const [
-                  BoxShadow(
-                    color: MyTheme.accent_color_shadow,
-                    blurRadius: 20,
-                    spreadRadius: 0.0,
-                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
-                  )
-                ],
+                color: MyTheme.accent_color2,
+                // boxShadow: const [
+                //   BoxShadow(
+                //     color: MyTheme.accent_color2,
+                //     blurRadius: 20,
+                //     spreadRadius: 0.0,
+                //     offset: Offset(0.0, 10.0), // shadow direction: bottom right
+                //   )
+                // ],
               ),
               height: 50,
               child: Center(
@@ -2236,15 +2235,15 @@ class _ProductDetailsState extends State<ProductDetails>
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
                 color: MyTheme.golden,
-                boxShadow: [
-                  BoxShadow(
-                    color: MyTheme.golden_shadow,
-                    blurRadius: 20,
-                    spreadRadius: 0.0,
-                    offset: const Offset(
-                        0.0, 10.0), // shadow direction: bottom right
-                  )
-                ],
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: MyTheme.golden_shadow,
+                //     blurRadius: 20,
+                //     spreadRadius: 0.0,
+                //     offset: const Offset(
+                //         0.0, 10.0), // shadow direction: bottom right
+                //   )
+                // ],
               ),
               child: Center(
                 child: Text(
@@ -2746,21 +2745,22 @@ class _ProductDetailsState extends State<ProductDetails>
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                                 color: _currentImage == itemIndex
-                                    ? MyTheme.accent_color
+                                    ? MyTheme.accent_color2
                                     : const Color.fromRGBO(112, 112, 112, .3),
                                 width: _currentImage == itemIndex ? 2 : 1),
                             //shape: BoxShape.rectangle,
                           ),
                           child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child:
-                                  /*Image.asset(
+                            borderRadius: BorderRadius.circular(10),
+                            child:
+                                /*Image.asset(
                                         singleProduct.product_images[index])*/
-                                  FadeInImage.assetNetwork(
-                                placeholder: 'assets/placeholder.png',
-                                image: _productImageList[index],
-                                fit: BoxFit.contain,
-                              )),
+                                FadeInImage.assetNetwork(
+                              placeholder: 'assets/placeholder.png',
+                              image: _productImageList[index],
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         ),
                       );
                     }),
@@ -2771,15 +2771,14 @@ class _ProductDetailsState extends State<ProductDetails>
             onTap: () {
               openPhotoDialog(context, _productImageList[_currentImage]);
             },
-            child: Container(
+            child: SizedBox(
               height: 250,
               width: MediaQuery.of(context).size.width - 96,
-              child: Container(
-                  child: FadeInImage.assetNetwork(
+              child: FadeInImage.assetNetwork(
                 placeholder: 'assets/placeholder_rectangle.png',
                 image: _productImageList[_currentImage],
                 fit: BoxFit.scaleDown,
-              )),
+              ),
             ),
           ),
         ],
@@ -2788,7 +2787,7 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   Widget buildProductSliderImageSection() {
-    if (_productImageList.length == 0) {
+    if (_productImageList.isEmpty) {
       return ShimmerHelper().buildBasicShimmer(
         height: 190.0,
       );

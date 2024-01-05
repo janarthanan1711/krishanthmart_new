@@ -12,7 +12,6 @@ class FlashDealRepository {
         "App-Language": app_language.$!,
       },
     );
-
     return flashDealResponseFromJson(response.body.toString());
   }
 }

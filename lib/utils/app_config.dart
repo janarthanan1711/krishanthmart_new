@@ -6,7 +6,7 @@ class AppConfig {
   static String app_name = "krishanthmart"; //this shows in the splash screen
 
   static String purchase_code =
-      ""; //enter your purchase code for the app from codecanyon
+      "12EF34"; //enter your purchase code for the app from codecanyon
   static String system_key =
       ""; //enter your purchase code for the app from codecanyon
 

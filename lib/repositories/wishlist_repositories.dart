@@ -18,6 +18,8 @@ class WishListRepository {
     final response = await ApiRequest.get(
         url: url, headers: header, middleware: BannedUser());
 
+    print("GET WISHLIST=======>${response.body}");
+
     return wishlistResponseFromJson(response.body);
   }
 
@@ -32,6 +34,7 @@ class WishListRepository {
           "App-Language": app_language.$!,
         },
         middleware: BannedUser());
+    print("wishlist response========>${response.body}");
     return wishlistDeleteResponseFromJson(response.body);
   }
 
@@ -61,6 +64,7 @@ class WishListRepository {
           "App-Language": app_language.$!,
         },
         middleware: BannedUser());
+    print("product wishlist response=====================================>${response.body}");
 
     return wishListChekResponseFromJson(response.body);
   }
@@ -75,6 +79,7 @@ class WishListRepository {
           "App-Language": app_language.$!,
         },
         middleware: BannedUser());
+    print("product wishlist response=====================================>${response.body}");
 
     return wishListChekResponseFromJson(response.body);
   }

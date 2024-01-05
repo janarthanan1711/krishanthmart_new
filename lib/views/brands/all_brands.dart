@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/home_controller.dart';
 import 'package:krishanthmart_new/utils/colors.dart';
@@ -31,10 +32,14 @@ class AllBrands extends StatelessWidget {
             primary: false,
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 4,
-              mainAxisSpacing: 4,
-              crossAxisCount: 3,
+            gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 1.0,
+                mainAxisExtent: 82.h
+              // crossAxisSpacing: 4,
+              // mainAxisSpacing: 4,
+              // crossAxisCount: 3,
             ),
             itemCount: homeController.brandProductList.length,
             itemBuilder: (context, index) {

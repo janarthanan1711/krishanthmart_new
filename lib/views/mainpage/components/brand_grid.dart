@@ -16,7 +16,7 @@ class BrandCategoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       Padding(
-        padding: EdgeInsets.only(left: 4.w,right: 4.w,top: 2.h,bottom: 2.h),
+        padding: EdgeInsets.only(left: 4.w, right: 4.w, top: 2.h, bottom: 2.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -38,21 +38,24 @@ class BrandCategoryView extends StatelessWidget {
         ),
       ),
       SizedBox(
-          width: DeviceInfo(context).width,
-          height: 320.h,
-          child: GetBuilder<HomeController>(
-            builder: (homeController) {
-              return GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 22.0,
-                  mainAxisSpacing: 22.0,
-                ),
-                itemCount: homeController.topBrandsList.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
+        height: 252.h,
+        child: GetBuilder<HomeController>(
+          builder: (homeController) {
+            return GridView.builder(
+              padding: const EdgeInsets.all(0),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 1.0,
+                  mainAxisExtent: 82.h),
+              itemCount: 6,
+              itemBuilder: (context, index) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    InkWell(
                       onTap: () {
                         Get.to(
                           () => BrandProducts(
@@ -63,11 +66,39 @@ class BrandCategoryView extends StatelessWidget {
                         );
                       },
                       child: BrandCategoryCard(
-                          brands: homeController.topBrandsList[index]));
-                },
-              );
-            },
-          ))
+                          brands: homeController.topBrandsList[index]),
+                    ),
+                  ],
+                );
+              },
+            );
+            // return GridView.builder(
+            //   shrinkWrap: true,
+            //   physics: const NeverScrollableScrollPhysics(),
+            //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //     crossAxisCount: 3,
+            //     crossAxisSpacing: 22.0,
+            //     mainAxisSpacing: 22.0,
+            //   ),
+            //   itemCount: homeController.topBrandsList.length,
+            //   itemBuilder: (context, index) {
+            //     return InkWell(
+            //         onTap: () {
+            //           Get.to(
+            //             () => BrandProducts(
+            //               brand_name:
+            //                   homeController.topBrandsList[index].name,
+            //               id: homeController.topBrandsList[index].id,
+            //             ),
+            //           );
+            //         },
+            //         child: BrandCategoryCard(
+            //             brands: homeController.topBrandsList[index]));
+            //   },
+            // );
+          },
+        ),
+      )
     ]);
   }
 }

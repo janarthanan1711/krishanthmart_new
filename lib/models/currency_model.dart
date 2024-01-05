@@ -45,14 +45,17 @@ class CurrencyInfo {
   String? exchangeRate;
   bool? isDefault;
 
-  factory CurrencyInfo.fromJson(Map<String, dynamic> json) => CurrencyInfo(
-    id: json["id"],
-    name: json["name"],
-    code: json["code"],
-    symbol: json["symbol"],
-    exchangeRate: json["exchange_rate"].toString(),
-    isDefault: json["is_default"],
-  );
+  factory CurrencyInfo.fromJson(Map<String, dynamic> json) {
+    print("Currency Info jpgehsdihiwefiu==========>${json}");
+    return CurrencyInfo(
+      id: json["id"],
+      name: json["name"],
+      code: json["code"],
+      symbol: json["symbol"],
+      exchangeRate: json["exchange_rate"].toString(),
+      isDefault: json["is_default"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,

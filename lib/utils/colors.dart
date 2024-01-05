@@ -34,6 +34,7 @@ class MyTheme {
   static Color green = Colors.green;
   static Color green_new = const Color(0xFF38761D);
   static Color? green_light = Colors.green[200];
+  static Color light_brown = Color(0XFFDAD5BD);
   static const Color pale = Color(0xFFFAF9DE);
   static Color shimmer_base = Colors.grey.shade50;
   static Color shimmer_highlighted = Colors.grey.shade200;
@@ -56,7 +57,7 @@ class MyTheme {
   static const Color teal = Color(0xff065535);
 
  static const PrimaryColor = Color(0xffea4b4b);
-static const PrimaryLightColor = Color(0xffebeded);
+static const PrimaryLightColor = Color(0xffF7F9F9);
 static const CardBackgroundColor = Color(0xfff3f4f4);
 static const PrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,

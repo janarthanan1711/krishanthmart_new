@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:krishanthmart_new/views/address/address_page.dart';
+import 'package:krishanthmart_new/views/profile/profile_edit.dart';
 import 'package:krishanthmart_new/views/top_selling/top_sellers.dart';
 import 'package:krishanthmart_new/views/wishlist/wishlist.dart';
 import 'package:one_context/one_context.dart';
@@ -97,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
     loading();
     var response = await AuthRepository().getAccountDeleteResponse();
 
-    if (response.result!) {
+    if (response.result) {
       AuthHelper().clearUserData();
       Navigator.pop(loadingcontext);
       Navigator.pushAndRemoveUntil(context,
@@ -105,7 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
             return MainPage();
           }), (route) => false);
     }
-    ToastComponent.showDialog(response.message!);
+    ToastComponent.showDialog(response.message);
   }
 
   String counterText(String txt, {default_length = 3}) {
@@ -150,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
     AuthHelper().clearUserData();
 
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
-      return const MainPage();
+      return MainPage();
     }), (route) => false);
   }
 
@@ -253,8 +255,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget buildBottomVerticalCardList() {
     return Container(
-      margin: EdgeInsets.only(bottom: 120, top: 14),
-      padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+      margin: const EdgeInsets.only(bottom: 120, top: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
       decoration: BoxDecorations.buildBoxDecoration_1(),
       child: Column(
         children: [
@@ -641,7 +643,7 @@ class _ProfilePageState extends State<ProfilePage> {
   // change Language, Edit Profile and Address section
   Widget buildHorizontalSettings() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -656,65 +658,38 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 );
               }),
-          InkWell(
-            onTap: () {
-              // Navigator.push(context, MaterialPageRoute(builder: (context) {
-              //   return CurrencyChange();
-              // }));
-            },
-            child: Column(
-              children: [
-                Image.asset(
-                  "assets/currency.png",
-                  height: 16,
-                  width: 16,
-                  color: MyTheme.white,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  AppLocalizations.of(context)!.currency_ucf,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 10,
-                      color: MyTheme.white,
-                      fontWeight: FontWeight.w500),
-                )
-              ],
-            ),
-          ),
           buildHorizontalSettingItem(
               is_logged_in.$,
               "assets/edit.png",
               AppLocalizations.of(context)!.edit_profile_ucf,
               is_logged_in.$
-                  ? () {
-                // AIZRoute.push(context, ProfileEdit()).then((value) {
-                //   //onPopped(value);
-                // });
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) {
-                //   return ProfileEdit();
-                // }))
+                  ?
+                  () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                  return ProfileEdit();
+                }));
               }
-                  : () => showLoginWarning()),
+              : () => showLoginWarning()
+              ),
           buildHorizontalSettingItem(
               is_logged_in.$,
               "assets/location.png",
               AppLocalizations.of(context)!.address_ucf,
               is_logged_in.$
-                  ? () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) {
-                //       return Address();
-                //     },
-                //   ),
-                // );
+                  ?
+                  () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return Address();
+                    },
+                  ),
+                );
               }
-                  : () => showLoginWarning()),
+              : () => showLoginWarning(),
+    ),
         ],
       ),
     );
@@ -732,7 +707,7 @@ class _ProfilePageState extends State<ProfilePage> {
             width: 16,
             color: isLogin ? MyTheme.white : MyTheme.blue_grey,
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
@@ -899,8 +874,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget buildSettingAndAddonsHorizontalMenu() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-      margin: EdgeInsets.only(top: 14),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      margin: const EdgeInsets.only(top: 14),
       width: DeviceInfo(context).width,
       decoration: BoxDecorations.buildBoxDecoration_1(),
       child: GridView.count(
@@ -908,9 +883,8 @@ class _ProfilePageState extends State<ProfilePage> {
         //   crossAxisCount: 3,
         // ),
         crossAxisCount: 3,
-
         childAspectRatio: 2,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         cacheExtent: 5.0,
         mainAxisSpacing: 16,
@@ -918,7 +892,6 @@ class _ProfilePageState extends State<ProfilePage> {
           if (wallet_system_status.$)
             Container(
               // color: Colors.red,
-
               child: buildSettingAndAddonsHorizontalMenuItem(
                   "assets/wallet.png",
                   AppLocalizations.of(context)!.my_wallet_ucf, () {
@@ -943,24 +916,13 @@ class _ProfilePageState extends State<ProfilePage> {
               AppLocalizations.of(context)!.my_wishlist_ucf,
               is_logged_in.$
                   ? () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                      return const WishlistPage();
-                    }));
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) {
+                //       return WishlistPage();
+                //     }));
+                Get.to(()=>WishlistPage());
               }
                   : () => null),
-          if (club_point_addon_installed.$)
-            buildSettingAndAddonsHorizontalMenuItem(
-                "assets/points.png",
-                AppLocalizations.of(context)!.earned_points_ucf,
-                is_logged_in.$
-                    ? () {
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) {
-                  //       return Clubpoint();
-                  //     }));
-                }
-                    : () => null),
           if (refund_addon_installed.$)
             buildSettingAndAddonsHorizontalMenuItem(
                 "assets/refund.png",
@@ -970,43 +932,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   // Navigator.push(context,
                   //     MaterialPageRoute(builder: (context) {
                   //       return RefundRequest();
-                  //     }));
-                }
-                    : () => null),
-          if (conversation_system_status.$)
-            buildSettingAndAddonsHorizontalMenuItem(
-                "assets/messages.png",
-                AppLocalizations.of(context)!.messages_ucf,
-                is_logged_in.$
-                    ? () {
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) {
-                  //       return MessengerList();
-                  //     }));
-                }
-                    : () => null),
-          // if (auction_addon_installed.$)
-          if (false)
-            buildSettingAndAddonsHorizontalMenuItem(
-                "assets/auction.png",
-                AppLocalizations.of(context)!.auction_ucf,
-                is_logged_in.$
-                    ? () {
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) {
-                  //   return MessengerList();
-                  // }));
-                }
-                    : () => null),
-          if (classified_product_status.$)
-            buildSettingAndAddonsHorizontalMenuItem(
-                "assets/classified_product.png",
-                AppLocalizations.of(context)!.classified_products,
-                is_logged_in.$
-                    ? () {
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) {
-                  //       return MyClassifiedAds();
                   //     }));
                 }
                     : () => null),
@@ -1050,7 +975,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ? MyTheme.dark_font_grey
                   : MyTheme.medium_grey_50,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
@@ -1360,8 +1285,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget buildCountersRowItem(String counter, String title) {
     return Container(
-      margin: EdgeInsets.only(top: 20),
-      padding: EdgeInsets.symmetric(vertical: 14),
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.symmetric(vertical: 14),
       width: DeviceInfo(context).width! / 3.5,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
@@ -1378,7 +1303,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: MyTheme.dark_font_grey,
                 fontWeight: FontWeight.w600),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
@@ -1423,7 +1348,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: is_logged_in.$
                   ? ClipRRect(
                   clipBehavior: Clip.hardEdge,
-                  borderRadius: BorderRadius.all(Radius.circular(100.0)),
+                  borderRadius: const BorderRadius.all(Radius.circular(100.0)),
                   child: FadeInImage.assetNetwork(
                     placeholder: 'assets/placeholder.png',
                     image: "${avatar_original.$}",
@@ -1438,21 +1363,21 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           buildUserInfo(),
-          Spacer(),
+          const Spacer(),
           Container(
             width: 70,
             height: 26,
             child: Btn.basic(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
               // 	rgb(50,205,50)
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6),
-                  side: BorderSide(color: MyTheme.white)),
+                  side: const BorderSide(color: MyTheme.white)),
               child: Text(
                 is_logged_in.$
                     ? AppLocalizations.of(context)!.logout_ucf
                     : AppLocalizations.of(context)!.login_ucf,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.white,
                     fontSize: 10,
                     fontWeight: FontWeight.w500),
@@ -1479,7 +1404,7 @@ class _ProfilePageState extends State<ProfilePage> {
       children: [
         Text(
           "${user_name.$}",
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 14,
               color: MyTheme.white,
               fontWeight: FontWeight.w600),
@@ -1495,7 +1420,7 @@ class _ProfilePageState extends State<ProfilePage> {
             )),
       ],
     )
-        : Text(
+        : const Text(
       "Login/Registration",
       style: TextStyle(
           fontSize: 14,
@@ -1555,8 +1480,8 @@ class _ProfilePageState extends State<ProfilePage> {
           return AlertDialog(
               content: Row(
                 children: [
-                  CircularProgressIndicator(),
-                  SizedBox(
+                  const CircularProgressIndicator(),
+                  const SizedBox(
                     width: 10,
                   ),
                   Text("${AppLocalizations.of(context)!.please_wait_ucf}"),

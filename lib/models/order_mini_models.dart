@@ -24,8 +24,12 @@ class OrderMiniResponse {
   int? status;
 
   factory OrderMiniResponse.fromJson(Map<String, dynamic> json) => OrderMiniResponse(
-    orders: List<Order>.from(json["data"].map((x) => Order.fromJson(x))),
-    links: OrderMiniResponseLinks.fromJson(json["links"]),
+    // orders: List<Order>.from(json["data"].map((x) => Order.fromJson(x))),
+    orders: json["data"] != null && json["data"] is Iterable
+        ? List<Order>.from(json["data"].map((x) => Order.fromJson(x)))
+        : [],
+    links: json["links"] != null ? OrderMiniResponseLinks.fromJson(json["links"]) : null,
+    // links: OrderMiniResponseLinks.fromJson(json["links"]),
     meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
     success: json["success"],
     status: json["status"],

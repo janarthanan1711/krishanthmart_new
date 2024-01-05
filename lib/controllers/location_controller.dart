@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,14 @@ class LocationController extends GetxController {
   var locationId = "";
   var isAddressSelected = false.obs;
 
+  @override
+  void onInit() {
+    getUserLocation();
+    super.onInit();
+  }
+
   Future<void> getUserLocation() async {
+    print("Calling location Function");
     LocationPermission permission;
     permission = await Geolocator.checkPermission();
 
@@ -20,15 +28,16 @@ class LocationController extends GetxController {
         if (permission == LocationPermission.deniedForever) {
           return Future.error('Location Not Available');
         }
-      } else if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
+      } else if (permission == LocationPermission.whileInUse ||
+          permission == LocationPermission.always) {
         position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high,
+          desiredAccuracy: LocationAccuracy.medium,
           forceAndroidLocationManager: true,
         );
 
         if (position != null) {
           isAddressSelected.value = true;
-          _getAddressFromLatLng();
+          getAddressFromLatLng();
 
           double latitude = position!.latitude;
           double longitude = position!.longitude;
@@ -42,8 +51,8 @@ class LocationController extends GetxController {
     } catch (e) {
       print('Error: $e');
     }
+    update();
   }
-
 
   Future<void> getLocationId(double latitude, double longitude) async {
     String apiKey =
@@ -58,7 +67,6 @@ class LocationController extends GetxController {
 
         // Extract the location ID or address from the response
         locationId = data['results'][0]['formatted'];
-
         print('Location ID: $locationId');
       } else {
         print(
@@ -67,18 +75,23 @@ class LocationController extends GetxController {
     } catch (e) {
       print('Error: $e');
     }
+    update();
   }
 
-  _getAddressFromLatLng() async {
+  getAddressFromLatLng() async {
+    print("address caLLLED");
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-          position!.latitude, position!.longitude);
-      Placemark place = placemarks[0];
-      currentLocation.value =
-          "${place.subAdministrativeArea} ${place.street}, ${place.locality},${place.country}";
-      print(currentLocation.value);
+      if (position != null) {
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+            position!.latitude, position!.longitude);
+        Placemark place = placemarks[0];
+        currentLocation.value =
+            "${place.subAdministrativeArea} ${place.street}, ${place.locality},${place.country}";
+        print(currentLocation.value);
+      }
     } catch (e) {
       print(e);
     }
+
   }
 }

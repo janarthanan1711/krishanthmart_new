@@ -10,6 +10,7 @@ import '../../helpers/business_settings_helpers.dart';
 import '../../utils/app_config.dart';
 import '../../utils/colors.dart';
 import '../../utils/device_info.dart';
+import '../../utils/image_directory.dart';
 import '../../utils/shared_value.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -53,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
         //   ),(route)=>false,);
         Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
-            return const MainPage(go_back: false,);
+            return MainPage(go_back: false,);
           },
           ),(route)=>false,);
       }
@@ -73,21 +74,9 @@ class _SplashScreenState extends State<SplashScreen> {
       color:  MyTheme.white,
       child: InkWell(
         child: Stack(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            // CircleAvatar(
-            //   backgroundColor: Colors.transparent,
-            //   radius: 140.0,
-            //   child: Hero(
-            //     tag: "backgroundImageInSplash",
-            //     child: Image.asset(
-            //         "assets/splash_login_registration_background_image.png"),
-            //   ),
-            // ),
             Align(
               alignment: Alignment.center,
-              // top: DeviceInfo(context).height!/2-72,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -104,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
                             borderRadius: BorderRadius.circular(8)
                         ),
                         child: Image.asset(
-                          "assets/app_logo.png",
+                          ImageDirectory.appLogo,
                           filterQuality: FilterQuality.low,
                         ),
                       ),
@@ -148,19 +137,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
             ),
-/*
-            Padding(
-              padding: const EdgeInsets.only(top: 120.0),
-              child: Container(
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-
-                    ],
-                  )),
-            ),*/
           ],
         ),
       ),
@@ -178,11 +154,6 @@ class _SplashScreenState extends State<SplashScreen> {
     await app_language_rtl.load();
     await system_currency.load();
     currencyController.fetchListData();
-    // Provider.of<CurrencyPresenter>(context, listen: false).fetchListData();
-
-    // print("new splash screen ${app_mobile_language.$}");
-    // print("new splash screen app_language_rtl ${app_language_rtl.$}");
-
     return app_mobile_language.$;
 
   }

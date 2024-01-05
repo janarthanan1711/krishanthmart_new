@@ -13,22 +13,25 @@ import '../utils/app_config.dart';
 import '../utils/shared_value.dart';
 
 class CartRepository {
-  Future<dynamic> getCartResponseList(
+  Future<CartResponse> getCartResponseList(
       int? user_id,
       ) async {
     String url = ("${AppConfig.BASE_URL}/carts");
+    var post_body = jsonEncode({
+      'user_id':user_id
+    });
     final response = await ApiRequest.post(
         url: url,
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${access_token.$}",
           "App-Language": app_language.$!,
-
         },
-        body: '',
+        body: post_body,
         middleware: BannedUser());
-
-    return cartResponseFromJson(response.body);
+    print("cartResponse body=========>${response.body}");
+    // return cartResponseFromJson(response.body);
+    return CartResponse.fromJson(jsonDecode(response.body));
   }
 
   Future<dynamic> getCartCount() async {
