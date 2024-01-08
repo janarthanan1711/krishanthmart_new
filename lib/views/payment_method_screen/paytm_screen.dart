@@ -108,10 +108,10 @@ class _PaytmScreenState extends State<PaytmScreen> {
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(
-          // onPageStarted: (controller) {
-          //   // _webViewController = controller;
-          //   _webViewController.loadRequest((initial_url));
-          // },
+          onPageStarted: (controller) {
+            // _webViewController = controller;
+            _webViewController.loadRequest(Uri.parse(initial_url));
+          },
           onWebResourceError: (error) {},
           onPageFinished: (page) {
             if (page.contains("/paytm/payment/callback")) {

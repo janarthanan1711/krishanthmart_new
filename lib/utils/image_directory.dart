@@ -31,4 +31,5 @@ class ImageDirectory{
   static const String compareImages = "assets/compare.png";
   static const String refundRequest = "assets/refund.png";
   static const String halfPrice = "assets/halfprice.jpg";
+  static const String whatsApp = "assets/whatsapp.png";
 }

@@ -2,21 +2,61 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/product_controller.dart';
+import 'package:social_share/social_share.dart';
 import '../../../helpers/main_helpers.dart';
 import '../../../models/product_response_model.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/shared_value.dart';
+import '../../cart/cart_page.dart';
 import '../../mainpage/components/box_decorations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductVariantBottomSheet extends StatelessWidget {
   final ProductController productController;
   final Product product;
-  const ProductVariantBottomSheet({super.key, required this.productController, required this.product});
 
+  const ProductVariantBottomSheet(
+      {super.key, required this.productController, required this.product});
 
   @override
   Widget build(BuildContext context) {
+    SnackBar _addedToCartSnackbar = SnackBar(
+      content: Text(
+        AppLocalizations.of(context)!.added_to_cart,
+        style: TextStyle(color: MyTheme.black,fontWeight: FontWeight.bold,fontSize: 18.sp),
+      ),
+      // backgroundColor: MyTheme.soft_accent_color,
+      backgroundColor: MyTheme.green_light,
+      duration: const Duration(seconds: 3),
+      action: SnackBarAction(
+        label: AppLocalizations.of(context)!.show_cart_all_capital,
+        onPressed: () {
+          Get.to(() => CartPage(
+            has_bottomnav: false,
+          ));
+        },
+        textColor: MyTheme.white,
+        disabledTextColor: Colors.grey,
+      ),
+    );
+    SnackBar removeFromWislist = SnackBar(
+      content: Text(
+        "Remove From Wishlist",
+        style: TextStyle(color: MyTheme.black,fontWeight: FontWeight.bold,fontSize: 18.sp),
+      ),
+      backgroundColor: MyTheme.soft_accent_color,
+      // backgroundColor: MyTheme.green_light,
+      duration: const Duration(seconds: 3),
+    );
+    SnackBar addToWishList = SnackBar(
+      content: Text(
+        "Added to Wishlist",
+        style: TextStyle(color: MyTheme.black,fontWeight: FontWeight.bold,fontSize: 18.sp),
+      ),
+      // backgroundColor: MyTheme.soft_accent_color,
+      backgroundColor: MyTheme.green_light,
+      duration: const Duration(seconds: 3),
+    );
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -76,44 +116,44 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w700),
                                 ),
-
                                 SizedBox(
                                   width: 10.w,
                                 ),
                                 product.has_discount!
                                     ? Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 6),
-                                  margin: const EdgeInsets.only(bottom: 5),
-                                  decoration: const BoxDecoration(
-                                    color: MyTheme.accent_color2,
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(6.0),
-                                      bottomLeft: Radius.circular(6.0),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color(0x14000000),
-                                        offset: Offset(-1, 1),
-                                        blurRadius: 1,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Text(
-                                    product.discount ?? "",
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xffffffff),
-                                      fontWeight: FontWeight.w700,
-                                      height: 1.8,
-                                    ),
-                                    textHeightBehavior:
-                                    const TextHeightBehavior(
-                                        applyHeightToFirstAscent:
-                                        false),
-                                    softWrap: false,
-                                  ),
-                                )
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 6),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 5),
+                                        decoration: const BoxDecoration(
+                                          color: MyTheme.accent_color2,
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(6.0),
+                                            bottomLeft: Radius.circular(6.0),
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Color(0x14000000),
+                                              offset: Offset(-1, 1),
+                                              blurRadius: 1,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Text(
+                                          product.discount ?? "",
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Color(0xffffffff),
+                                            fontWeight: FontWeight.w700,
+                                            height: 1.8,
+                                          ),
+                                          textHeightBehavior:
+                                              const TextHeightBehavior(
+                                                  applyHeightToFirstAscent:
+                                                      false),
+                                          softWrap: false,
+                                        ),
+                                      )
                                     : Container(),
                               ],
                             )
@@ -127,12 +167,13 @@ class ProductVariantBottomSheet extends StatelessWidget {
               Align(
                 alignment: Alignment.topRight,
                 child: InkWell(
-                  child: const Icon(Icons.close,size: 25),
-                  onTap: (){
+                  child: const Icon(Icons.close, size: 25),
+                  onTap: () {
                     productController.clearAll();
                     Get.back();
                   },
-                ),),
+                ),
+              ),
             ],
           ),
           buildChoiceOptionList(),
@@ -171,12 +212,10 @@ class ProductVariantBottomSheet extends StatelessWidget {
                   padding: EdgeInsets.only(left: 6.w),
                   child: buildQuantityButton(
                       onTapIncrement: () {
-                        productController
-                            .incrementQuantityCart(product.id);
+                        productController.incrementQuantityCart(product.id);
                       },
                       onTapDecrement: () {
-                        productController
-                            .decrementQuantityCart(product.id);
+                        productController.decrementQuantityCart(product.id);
                       },
                       quantityText: productController.quantityText.value),
                 )
@@ -195,9 +234,29 @@ class ProductVariantBottomSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                iconButton(onTap: (){}, height: 35.h, width: 100.w, icon: Icons.favorite),
-                iconButton(onTap: (){}, height: 35.h, width: 100.w, icon: Icons.share),
-                iconButton(onTap: (){}, height: 35.h, width: 100.w, icon: Icons.shopping_cart_rounded),
+                iconButton(
+                    onTap: () {
+                      productController.onWishTap(context, product.id,productController.isInWishList ?  removeFromWislist : addToWishList);
+                    },
+                    height: 35.h,
+                    width: 100.w,
+                    icon: Icons.favorite,),
+                iconButton(
+                  onTap: () {
+                    SocialShare.shareOptions(productController.productDetails!.link!);
+                  },
+                  height: 35.h,
+                  width: 100.w,
+                  icon: Icons.share,
+                ),
+                iconButton(
+                  onTap: () {
+                    productController.addToCart(id: product.id,mode: "add_to_cart",context: context,snackbar: _addedToCartSnackbar);
+                  },
+                  height: 35.h,
+                  width: 100.w,
+                  icon: Icons.shopping_cart_rounded,
+                ),
               ],
             ),
           )
@@ -206,21 +265,24 @@ class ProductVariantBottomSheet extends StatelessWidget {
     );
   }
 
-
-  static iconButton({required onTap,required height,required width,required icon}){
+  static iconButton(
+      {required onTap,
+      required height,
+      required width,
+      required icon}) {
     return InkWell(
-      onTap:onTap,
+      onTap: onTap,
       child: Container(
         height: height,
         width: width,
         decoration: BoxDecoration(
-            color: MyTheme.green,
-            borderRadius: BorderRadius.circular(10)),
-        child:  Center(
+            color: MyTheme.green, borderRadius: BorderRadius.circular(10)),
+        child: Center(
             child: Icon(
-              icon,
-              color: MyTheme.white,
-            )),
+          icon,
+          color: MyTheme.white,
+          // color: MyTheme.white,
+        )),
       ),
     );
   }
@@ -277,7 +339,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
               child: Wrap(
                 children: List.generate(
                   choiceOptions[choiceOptionsIndex].options.length,
-                      (index) => Padding(
+                  (index) => Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: buildChoiceItem(
                         choiceOptions[choiceOptionsIndex].options[index],
@@ -327,10 +389,10 @@ class ProductVariantBottomSheet extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(
                   color:
-                  productController.selectedChoices[choiceOptionsIndex] ==
-                      option
-                      ? MyTheme.accent_color2
-                      : MyTheme.noColor,
+                      productController.selectedChoices[choiceOptionsIndex] ==
+                              option
+                          ? MyTheme.accent_color2
+                          : MyTheme.noColor,
                   width: 1.5),
               borderRadius: BorderRadius.circular(3.0),
               color: MyTheme.white,
@@ -340,7 +402,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                   blurRadius: 6,
                   spreadRadius: 1,
                   offset:
-                  const Offset(0.0, 3.0), // shadow direction: bottom right
+                      const Offset(0.0, 3.0), // shadow direction: bottom right
                 )
               ],
             ),
@@ -349,10 +411,10 @@ class ProductVariantBottomSheet extends StatelessWidget {
                 option,
                 style: TextStyle(
                     color:
-                    productController.selectedChoices[choiceOptionsIndex] ==
-                        option
-                        ? MyTheme.accent_color2
-                        : const Color.fromRGBO(224, 224, 225, 1),
+                        productController.selectedChoices[choiceOptionsIndex] ==
+                                option
+                            ? MyTheme.accent_color2
+                            : const Color.fromRGBO(224, 224, 225, 1),
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600),
               ),
@@ -362,10 +424,11 @@ class ProductVariantBottomSheet extends StatelessWidget {
       ),
     );
   }
+
   static buildQuantityButton(
       {required onTapIncrement,
-        required onTapDecrement,
-        required quantityText}) {
+      required onTapDecrement,
+      required quantityText}) {
     return Container(
       decoration: BoxDecoration(
           color: MyTheme.green, borderRadius: BorderRadius.circular(5)),

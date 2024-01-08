@@ -80,7 +80,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    subCategoryController.selectedIndex.value = widget.categoryId!;
+    // subCategoryController.selectedIndex.value = widget.categoryId!;
     return Scaffold(
       appBar: AppBar(
         title: buildAppBarTitle(context),

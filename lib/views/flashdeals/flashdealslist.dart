@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:krishanthmart_new/views/flashdeals/flashdealproducts.dart';
 import 'package:krishanthmart_new/views/product_details/product_details.dart';
 import 'package:toast/toast.dart';
+import '../../helpers/main_helpers.dart';
 import '../../models/flash_deal_model.dart';
 import '../../repositories/flashdeal_repositories.dart';
 import '../../utils/colors.dart';
@@ -431,10 +432,10 @@ class _FlashDealListState extends State<FlashDealList> {
                 child: Row(
                   children: [
                     Text(
-                      flashDealResponse.flashDeals[flashDealIndex].products!
-                          .products[productIndex].price,
-                      // convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
-                      //     .products[productIndex].price),
+                      // flashDealResponse.flashDeals[flashDealIndex].products!
+                      //     .products[productIndex].price,
+                      convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
+                          .products[productIndex].price),
                       style: TextStyle(
                           fontSize: 12,
                           color: MyTheme.green,

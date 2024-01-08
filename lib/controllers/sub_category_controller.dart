@@ -86,6 +86,7 @@ class SubCategoryController extends GetxController {
     isInitial.value = true;
     showAllProducts.value = false;
     mainNameChanged.value = false;
+    selectedIndex.value = 0;
     update();
   }
 }

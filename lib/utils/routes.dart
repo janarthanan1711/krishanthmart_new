@@ -10,9 +10,12 @@ import 'package:krishanthmart_new/views/category/sub_category_page.dart';
 import 'package:krishanthmart_new/views/checkout/checkout_page.dart';
 import 'package:krishanthmart_new/views/coupons/coupon.dart';
 import 'package:krishanthmart_new/views/coupons/coupon_products.dart';
+import 'package:krishanthmart_new/views/filters/filters.dart';
 import 'package:krishanthmart_new/views/flashdeals/flashdealproducts.dart';
 import 'package:krishanthmart_new/views/flashdeals/flashdealslist.dart';
 import 'package:krishanthmart_new/views/mainpage/main_page.dart';
+import 'package:krishanthmart_new/views/orders/order_details.dart';
+import 'package:krishanthmart_new/views/orders/refund_request.dart';
 import 'package:krishanthmart_new/views/product_details/product_details.dart';
 import 'package:krishanthmart_new/views/profile/profile_edit.dart';
 import 'package:krishanthmart_new/views/shipping/shipping_info.dart';
@@ -46,6 +49,10 @@ class Routes {
   static String profileEdit = '/profileEdit';
   static String checkout = '/checkout';
   static String shippingInfo = '/shippingInfo';
+  static String refundRequest = '/refundRequest';
+  static String ordersPage = '/ordersPage';
+  static String ordersDetails = '/ordersDetails';
+  static String filtersPage = '/filters';
 }
 
 List<GetPage<dynamic>>? getPages = [
@@ -137,4 +144,20 @@ List<GetPage<dynamic>>? getPages = [
     name: Routes.shippingInfo,
     page: () => ShippingInfo(),
   ),
+  GetPage(
+    name: Routes.refundRequest,
+    page: () => RefundRequest(),
+  ),
+  GetPage(
+    name: Routes.ordersPage,
+    page: () => OrderList(),
+  ),
+  GetPage(
+    name: Routes.ordersDetails,
+    page: () => OrderDetails(),
+  ),
+  GetPage(
+    name: Routes.filtersPage,
+    page: () => Filter(),
+  )
 ];

@@ -30,8 +30,8 @@ class CartRepository {
         body: post_body,
         middleware: BannedUser());
     print("cartResponse body=========>${response.body}");
-    // return cartResponseFromJson(response.body);
-    return CartResponse.fromJson(jsonDecode(response.body));
+    return cartResponseFromJson(response.body);
+    // return CartResponse.fromJson(jsonDecode(response.body));
   }
 
   Future<dynamic> getCartCount() async {

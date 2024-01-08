@@ -4,6 +4,8 @@ import 'dart:isolate';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:krishanthmart_new/views/orders/refund_request.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../helpers/main_helpers.dart';
@@ -512,6 +514,7 @@ class _OrderDetailsState extends State<OrderDetails> {
           // })).then((value) {
           //   onPopped(value);
           // });
+          Get.to(()=>RefundRequest())?.then((value) => onPopped(value));
         },
         textColor: MyTheme.accent_color,
         disabledTextColor: Colors.grey,

@@ -47,6 +47,7 @@ class MyTheme {
   static const Color light_purple = Color(0xffeee5ff);
   static const Color polo_blue = Color.fromRGBO(152, 179, 209, 1);
   static const Color indigo = Colors.indigo;
+  static const Color light_blue = Color(0xFFb5def4);
   //------------
   static const Color blue_chill = Color.fromRGBO(71, 148, 147, 1);
   static const Color cruise = Color.fromRGBO(124, 196, 195, 1);

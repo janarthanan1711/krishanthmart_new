@@ -7,8 +7,10 @@ import '../models/product_details_model.dart';
 import '../models/product_response_model.dart';
 import '../repositories/cart_repositories.dart';
 import '../repositories/product_repository.dart';
+import '../repositories/wishlist_repositories.dart';
 import '../utils/shared_value.dart';
 import '../utils/toast_component.dart';
+import '../views/auth/login.dart';
 import '../views/cart/cart_page.dart';
 import '../views/product_details/product_details.dart';
 
@@ -31,6 +33,7 @@ class ProductController extends GetxController {
   var quantityText = "1".obs;
   var itemsIndex = 0.obs;
   var getProductId = 0.obs;
+  bool isInWishList = false;
 
 
   @override
@@ -139,15 +142,14 @@ class ProductController extends GetxController {
   }
 
   addToCart({mode, context = null, snackbar = null, id}) async {
-    // if (is_logged_in.$ == false) {
-    //   ToastComponent.showDialog(AppLocalizations.of(context)!.you_need_to_log_in,
-    //       gravity: Toast.center, duration: Toast.lengthLong);
-    //   // Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-    //   return;
-    // }
+    if (is_logged_in.$ == false) {
+      ToastComponent.showDialog(AppLocalizations.of(context)!.you_need_to_log_in,
+          gravity: Toast.center, duration: Toast.lengthLong);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+      return;
+    }
     var cartAddResponse = await CartRepository()
         .getCartAddResponse(id, variant, user_id.$, quantity);
-    print("Product Cart Id ========>$id");
     if (cartAddResponse.result == false) {
       ToastComponent.showDialog(cartAddResponse.message,
           gravity: Toast.center, duration: Toast.lengthLong);
@@ -157,6 +159,7 @@ class ProductController extends GetxController {
       cartController.getCount();
       if (mode == "add_to_cart") {
         if (snackbar != null && context != null) {
+          print("getted");
           ScaffoldMessenger.of(context).showSnackBar(snackbar);
         }
         // reset();
@@ -168,6 +171,57 @@ class ProductController extends GetxController {
           // onPopped(value);
         });
       }
+    }
+  }
+  fetchWishListCheckInfo(id) async {
+    var wishListCheckResponse =
+    await WishListRepository().isProductInUserWishList(
+      product_id: id,
+    );
+
+    //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
+    isInWishList = wishListCheckResponse.is_in_wishlist;
+    update();
+  }
+
+  addToWishList(id,{context = null}) async {
+    var wishListCheckResponse =
+    await WishListRepository().add(product_id: id);
+    //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
+    isInWishList = wishListCheckResponse.is_in_wishlist;
+    update();
+  }
+
+  removeFromWishList(id,{context = null}) async {
+    var wishListCheckResponse =
+    await WishListRepository().remove(product_id: id);
+    //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
+    isInWishList = wishListCheckResponse.is_in_wishlist;
+    update();
+  }
+
+  onWishTap(context,id,snackbar) {
+    if (is_logged_in.$ == false) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context)!.you_need_to_log_in,
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
+      return;
+    }
+    if (isInWishList) {
+      isInWishList = false;
+      if(snackbar != null && context != null){
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      }
+      removeFromWishList(id);
+      update();
+    } else {
+      isInWishList = true;
+      if(snackbar != null && context != null){
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      }
+      addToWishList(id);
+      update();
     }
   }
   clearAll(){

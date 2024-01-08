@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/cart_controller.dart';
 import 'package:krishanthmart_new/models/brand_model.dart';
@@ -7,6 +9,7 @@ import 'package:krishanthmart_new/models/business_data_response.dart';
 import 'package:krishanthmart_new/models/flash_deal_model.dart';
 import 'package:krishanthmart_new/repositories/brand_repository.dart';
 import 'package:krishanthmart_new/utils/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/category_model.dart';
 import '../models/product_response_model.dart';
@@ -48,7 +51,6 @@ class HomeController extends GetxController {
   var couponTitle = "".obs;
   var couponSubTitle = "".obs;
   Color? hexColorCoupon;
-  CartController cartController = Get.put(CartController());
 
   // var isExpanded = false.obs;
 
@@ -229,6 +231,28 @@ class HomeController extends GetxController {
     }
     isBannerTwoInitial = false;
     update();
+  }
+  openWhatsApp(context) async{
+    var whatsapp ="+919597959797";
+    var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=Hello, I have a question about https://krishanthmart.com/";
+    var whatsappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
+    if(Platform.isIOS){
+      // for iOS phone only
+      if( await canLaunch(whatsappURL_ios)){
+        await launch(whatsappURL_ios, forceSafariVC: false);
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: new Text("whatsapp not installed")));
+      }
+    }else{
+      // android , web
+      if( await canLaunch(whatsappURl_android)){
+        await launch(whatsappURl_android);
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: new Text("whatsapp not installed")));
+      }
+    }
   }
 
   fetchAll() {

@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/cart_controller.dart';
 import 'package:photo_view/photo_view.dart';
@@ -292,22 +293,12 @@ class _ProductDetailsState extends State<ProductDetails>
     var colorString = _colorList.length > 0
         ? _colorList[_selectedColorIndex].toString().replaceAll("#", "")
         : "";
-    print("Color String:=====>${colorString}");
-    // /*print("color string: "+color_string);
-    // return;*/
-    print("varianrt id ${widget.id}");
-    print("varianrt choiceString ${_choiceString}");
-    print("varianrt colorString ${colorString}");
-    print("varianrt qty ${_quantity}");
 
     var variantResponse = await ProductRepository().getVariantWiseInfo(
         id: widget.id,
         color: colorString,
         variants: _choiceString,
         qty: _quantity);
-    print("single price ${variantResponse.variantData!.price}");
-    print(
-        "Variants data Response=============>${variantResponse.variantData!.image}");
     /*print("vr"+variantResponse.toJson().toString());
     return;*/
 
@@ -468,12 +459,20 @@ class _ProductDetailsState extends State<ProductDetails>
               contentPadding: const EdgeInsets.only(
                   top: 36.0, left: 36.0, right: 36.0, bottom: 2.0),
               content: SizedBox(
-                width: 400,
+                width: 390.w,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Container(
+                        height: 60.h,
+                        width: 60.w,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(image: NetworkImage(_productDetails!.thumbnail_image!),fit: BoxFit.fill),
+                          border: Border.all(color: MyTheme.medium_grey)
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Btn.minWidthFixHeight(
@@ -514,7 +513,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         child: Btn.minWidthFixHeight(
                           minWidth: 75,
                           height: 26,
-                          color: Colors.blue,
+                          color: MyTheme.green_light,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                               side: const BorderSide(
@@ -533,33 +532,28 @@ class _ProductDetailsState extends State<ProductDetails>
                 ),
               ),
               actions: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Padding(
-                      padding: app_language_rtl.$!
-                          ? const EdgeInsets.only(left: 8.0)
-                          : const EdgeInsets.only(right: 8.0),
-                      child: Btn.minWidthFixHeight(
-                        minWidth: 75,
-                        height: 30,
-                        color: const Color.fromRGBO(253, 253, 253, 1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            side: const BorderSide(
-                                color: MyTheme.font_grey, width: 1.0)),
-                        child: const Text(
-                          "CLOSE",
-                          style: TextStyle(
-                            color: MyTheme.font_grey,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                        },
+                Padding(
+                  padding: app_language_rtl.$!
+                      ? const EdgeInsets.only(left: 8.0)
+                      : const EdgeInsets.only(right: 8.0),
+                  child: Btn.minWidthFixHeight(
+                    minWidth: 75,
+                    height: 30,
+                    color: const Color.fromRGBO(253, 253, 253, 1),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: const BorderSide(
+                            color: MyTheme.font_grey, width: 1.0)),
+                    child: const Text(
+                      "CLOSE",
+                      style: TextStyle(
+                        color: MyTheme.font_grey,
                       ),
                     ),
-                  ],
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                  ),
                 )
               ],
             );
@@ -578,7 +572,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 contentPadding: const EdgeInsets.only(
                     top: 36.0, left: 36.0, right: 36.0, bottom: 2.0),
                 content: SizedBox(
-                  width: 400,
+                  width: 400.w,
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -813,11 +807,6 @@ class _ProductDetailsState extends State<ProductDetails>
       action: SnackBarAction(
         label: AppLocalizations.of(context)!.show_cart_all_capital,
         onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //   return CartPage(has_bottomnav: false);
-          // })).then((value) {
-          //   onPopped(value);
-          // });
           Get.to(() => CartPage(
                     has_bottomnav: false,
                   ))!
@@ -827,14 +816,13 @@ class _ProductDetailsState extends State<ProductDetails>
         disabledTextColor: Colors.grey,
       ),
     );
-
     return Directionality(
       textDirection:
           app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
           extendBody: true,
           bottomNavigationBar: buildBottomAppBar(context, _addedToCartSnackbar),
-          //appBar: buildAppBar(statusBarHeight, context),
+          appBar: buildAppBar(statusBarHeight, context),
           body: RefreshIndicator(
             color: MyTheme.golden,
             backgroundColor: Colors.white,
@@ -846,133 +834,104 @@ class _ProductDetailsState extends State<ProductDetails>
               slivers: <Widget>[
                 SliverAppBar(
                   elevation: 0,
-                  backgroundColor: Colors.white.withOpacity(opacity),
-                  pinned: true,
+                  backgroundColor: MyTheme.white,
+                  pinned: false,
                   automaticallyImplyLeading: false,
-                  //titleSpacing: 0,
-                  title: Row(
-                    children: [
-                      Builder(
-                        builder: (context) => InkWell(
-                          onTap: () {
-                            return Navigator.of(context).pop();
-                          },
-                          child: Container(
-                            decoration: BoxDecorations
-                                .buildCircularButtonDecoration_1(),
-                            width: 36,
-                            height: 36,
-                            child: Center(
-                              child: Icon(
-                                CupertinoIcons.arrow_left,
-                                color: MyTheme.dark_font_grey,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      //Show product name in appbar
-                      AnimatedOpacity(
-                          opacity: _scrollPosition > 350 ? 1 : 0,
-                          duration: const Duration(milliseconds: 200),
-                          child: Container(
-                              padding: const EdgeInsets.only(left: 8),
-                              width: DeviceInfo(context).width! / 3,
-                              child: Text(
-                                "${_productDetails != null ? _productDetails!.name : ''}",
-                                style: TextStyle(
-                                    color: MyTheme.dark_font_grey,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold),
-                              ))),
-                      const Spacer(),
-                      InkWell(
-                        onTap: () {
-                          // Navigator.push(context,
-                          //     MaterialPageRoute(builder: (context) {
-                          //   return Cart(has_bottomnav: false);
-                          // })).then((value) {
-                          //   onPopped(value);
-                          // });
-                        },
-                        child: Container(
-                          decoration:
-                              BoxDecorations.buildCircularButtonDecoration_1(),
-                          width: 36,
-                          height: 36,
-                          padding: const EdgeInsets.all(8),
-                          child: badges.Badge(
-                            badgeStyle: badges.BadgeStyle(
-                              shape: badges.BadgeShape.circle,
-                              badgeColor: MyTheme.accent_color,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            badgeAnimation: const badges.BadgeAnimation.slide(
-                              toAnimate: true,
-                            ),
-                            stackFit: StackFit.loose,
-                            badgeContent: Obx(
-                              () => Text(
-                                "${cartController.cartCounter}",
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.white),
-                              ),
-                            ),
-                            child: Image.asset(
-                              "assets/cart.png",
-                              color: MyTheme.dark_font_grey,
-                              height: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 15),
-                      InkWell(
-                        onTap: () {
-                          onPressShare(context);
-                        },
-                        child: Container(
-                          decoration:
-                              BoxDecorations.buildCircularButtonDecoration_1(),
-                          width: 36,
-                          height: 36,
-                          child: Center(
-                            child: Icon(
-                              Icons.share_outlined,
-                              color: MyTheme.dark_font_grey,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 15),
-                      InkWell(
-                        onTap: () {
-                          onWishTap();
-                        },
-                        child: Container(
-                          decoration:
-                              BoxDecorations.buildCircularButtonDecoration_1(),
-                          width: 36,
-                          height: 36,
-                          child: Center(
-                            child: Icon(
-                              Icons.favorite,
-                              color: _isInWishList
-                                  ? const Color.fromRGBO(230, 46, 4, 1)
-                                  : MyTheme.dark_font_grey,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   expandedHeight: 375.0,
                   flexibleSpace: FlexibleSpaceBar(
-                    background: buildProductSliderImageSection(),
+                    background: Stack(
+                      children: [
+                        buildProductSliderImageSection(),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Column(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return CartPage(has_bottomnav: false);
+                                  })).then((value) {
+                                    onPopped(value);
+                                  });
+                                },
+                                child: Container(
+                                  decoration: BoxDecorations
+                                      .buildCircularButtonDecoration_1(),
+                                  width: 36,
+                                  height: 36,
+                                  padding: const EdgeInsets.all(8),
+                                  child: badges.Badge(
+                                    badgeStyle: badges.BadgeStyle(
+                                      shape: badges.BadgeShape.circle,
+                                      badgeColor: MyTheme.accent_color,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    badgeAnimation:
+                                        const badges.BadgeAnimation.slide(
+                                      toAnimate: true,
+                                    ),
+                                    stackFit: StackFit.loose,
+                                    badgeContent: Obx(
+                                      () => Text(
+                                        "${cartController.cartCounter}",
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                      ),
+                                    ),
+                                    child: Image.asset(
+                                      "assets/cart.png",
+                                      color: MyTheme.dark_font_grey,
+                                      height: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 6.h),
+                              InkWell(
+                                onTap: () {
+                                  onPressShare(context);
+                                },
+                                child: Container(
+                                  decoration: BoxDecorations
+                                      .buildCircularButtonDecoration_1(),
+                                  width: 36,
+                                  height: 36,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.share_outlined,
+                                      color: MyTheme.dark_font_grey,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 6.h),
+                              InkWell(
+                                onTap: () {
+                                  onWishTap();
+                                },
+                                child: Container(
+                                  decoration: BoxDecorations
+                                      .buildCircularButtonDecoration_1(),
+                                  width: 36,
+                                  height: 36,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.favorite,
+                                      color: _isInWishList
+                                          ? const Color.fromRGBO(230, 46, 4, 1)
+                                          : MyTheme.dark_font_grey,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SliverToBoxAdapter(
@@ -2144,41 +2103,26 @@ class _ProductDetailsState extends State<ProductDetails>
 
   AppBar buildAppBar(double statusBarHeight, BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: MyTheme.white,
       leading: Builder(
         builder: (context) => IconButton(
           icon: Icon(CupertinoIcons.arrow_left, color: MyTheme.dark_grey),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
+      centerTitle: true,
       title: Container(
-        height: kToolbarHeight +
-            statusBarHeight -
-            (MediaQuery.of(context).viewPadding.top > 40 ? 32.0 : 16.0),
-        //MediaQuery.of(context).viewPadding.top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
-        child: Container(
-            width: 300,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 22.0),
-              child: Text(
-                _appbarPriceString!,
-                style: const TextStyle(fontSize: 16, color: MyTheme.font_grey),
-              ),
-            )),
+        padding: const EdgeInsets.only(left: 8),
+        child: Text(
+          "${_productDetails != null ? _productDetails!.name : ''}",
+          style: TextStyle(
+              color: MyTheme.dark_font_grey,
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold),
+        ),
       ),
       elevation: 0.0,
       titleSpacing: 0,
-      actions: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-          child: IconButton(
-            icon: Icon(Icons.share_outlined, color: MyTheme.dark_grey),
-            onPressed: () {
-              onPressShare(context);
-            },
-          ),
-        ),
-      ],
     );
   }
 
@@ -2789,15 +2733,16 @@ class _ProductDetailsState extends State<ProductDetails>
   Widget buildProductSliderImageSection() {
     if (_productImageList.isEmpty) {
       return ShimmerHelper().buildBasicShimmer(
-        height: 190.0,
+        height: 300.h,
       );
     } else {
       return CarouselSlider(
         carouselController: _carouselController,
         options: CarouselOptions(
-            aspectRatio: 355 / 375,
+            // aspectRatio: 355 / 375,
             viewportFraction: 1,
             initialPage: 0,
+            height: 300.h,
             autoPlay: true,
             autoPlayInterval: const Duration(seconds: 5),
             autoPlayAnimationDuration: const Duration(milliseconds: 1000),
@@ -2814,6 +2759,7 @@ class _ProductDetailsState extends State<ProductDetails>
           return Builder(
             builder: (BuildContext context) {
               return Container(
+                // color: Colors.yellow,
                 child: Stack(
                   children: <Widget>[
                     InkWell(
@@ -2822,32 +2768,37 @@ class _ProductDetailsState extends State<ProductDetails>
                             context, _productImageList[_currentImage]);
                       },
                       child: Container(
-                          height: double.infinity,
-                          width: double.infinity,
-                          child: FadeInImage.assetNetwork(
-                            placeholder: 'assets/placeholder_rectangle.png',
-                            image: i,
-                            fit: BoxFit.fitHeight,
-                          )),
+                        height: double.infinity,
+                        // height: 600,
+                        // height: 350.h,
+                        width: double.infinity,
+                        child: FadeInImage.assetNetwork(
+                          placeholder: 'assets/placeholder_rectangle.png',
+                          image: i,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                              _productImageList.length,
-                              (index) => Container(
-                                    width: 7.0,
-                                    height: 7.0,
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 4.0),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: _currentImage == index
-                                          ? MyTheme.font_grey
-                                          : Colors.grey.withOpacity(0.2),
-                                    ),
-                                  ))),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          _productImageList.length,
+                          (index) => Container(
+                            width: 7.0,
+                            height: 7.0,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 4.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _currentImage == index
+                                  ? MyTheme.font_grey
+                                  : Colors.grey.withOpacity(0.2),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

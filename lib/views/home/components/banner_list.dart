@@ -9,8 +9,9 @@ class BannersHomeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      height: 100.h,
+      margin:  EdgeInsets.symmetric(vertical: 2.5.h),
+      // height: 100.h,
+      height: 200.h,
       width:  DeviceInfo(context).width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),

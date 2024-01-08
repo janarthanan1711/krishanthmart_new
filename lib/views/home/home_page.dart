@@ -1,15 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:krishanthmart_new/controllers/cart_controller.dart';
 import 'package:krishanthmart_new/controllers/home_controller.dart';
 import 'package:krishanthmart_new/controllers/product_controller.dart';
 import 'package:krishanthmart_new/utils/colors.dart';
 import 'package:krishanthmart_new/utils/image_directory.dart';
 import 'package:krishanthmart_new/views/coupons/coupon.dart';
+import 'package:krishanthmart_new/views/filters/filters.dart';
 import 'package:krishanthmart_new/views/flashdeals/flashdealslist.dart';
 import 'package:krishanthmart_new/views/home/components/banner_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,6 +17,7 @@ import 'package:krishanthmart_new/views/mainpage/components/brand_grid.dart';
 import 'package:krishanthmart_new/views/product_details/components/product_large_card_list.dart';
 import 'package:toast/toast.dart';
 import '../../controllers/location_controller.dart';
+import '../../helpers/main_helpers.dart';
 import '../../models/flash_deal_model.dart';
 import '../../repositories/flashdeal_repositories.dart';
 import '../../utils/device_info.dart';
@@ -30,7 +31,6 @@ import '../mainpage/components/box_decorations.dart';
 import 'components/carousel_deal_card.dart';
 import 'components/home_carousel.dart';
 import 'package:flutter_countdown_timer/index.dart';
-
 import 'components/product_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,8 +42,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeController homeController = Get.put(HomeController());
-  LocationController locationController = Get.put(LocationController());
+  final LocationController locationController = Get.put(LocationController());
   final ProductController productController = Get.put(ProductController());
+  final CartController cartController = Get.put(CartController());
   late CarouselController _carouselController;
   late ScrollController _scrollController;
 
@@ -56,6 +57,8 @@ class _HomePageState extends State<HomePage> {
       ..addListener(() {
         setState(() {});
       });
+    print("World of Langauages=======> ${app_language_rtl.$}");
+    cartController.getCount();
   }
 
   bool get _isSliverAppBarExpanded {
@@ -117,16 +120,17 @@ class _HomePageState extends State<HomePage> {
               ),
               actions: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    homeController.openWhatsApp(context);
+                  },
                   child: Container(
                     margin: const EdgeInsets.only(left: 10, right: 10),
-                    padding: const EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(0),
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                     ),
                     child: const CircleAvatar(
-                      backgroundImage:
-                          AssetImage(ImageDirectory.profileIconImage),
+                      backgroundImage: AssetImage(ImageDirectory.whatsApp),
                     ),
                   ),
                 ),
@@ -138,36 +142,48 @@ class _HomePageState extends State<HomePage> {
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                     ),
-                    child: const CircleAvatar(
-                      backgroundImage:
-                      AssetImage(ImageDirectory.profileIconImage),
-                    ),
+                    child: is_logged_in.$
+                        ? CircleAvatar(
+                            backgroundImage:
+                                NetworkImage("${avatar_original.$}"))
+                        : Image.asset(
+                            'assets/profile_placeholder.png',
+                            height: 48,
+                            width: 48,
+                            fit: BoxFit.fitHeight,
+                          ),
+                    // child: const CircleAvatar(
+                    //   backgroundImage:
+                    //   AssetImage(ImageDirectory.profileIconImage),
+                    // ),
                   ),
                 ),
               ],
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(24.6.h),
                 child: _isSliverAppBarExpanded
-                    ? Container(
-                   // color: Colors.black,
-                        height: 70.h,
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.all(14.5.h),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: 'Search....',
-                              prefixIcon: Icon(
-                                Icons.search,
-                                color: MyTheme.black,
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.keyboard_voice_outlined,
-                                  color: MyTheme.black,
+                    ? InkWell(
+                        onTap: () {
+                          Get.to(() => Filter());
+                        },
+                        child: Container(
+                          // color: Colors.black,
+                          height: 70.h,
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.all(14.5.h),
+                            child: TextField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                hintText: 'Search....',
+                                suffixIcon: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.search,
+                                    color: MyTheme.black,
+                                  ),
                                 ),
                               ),
                             ),
@@ -198,26 +214,28 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          Container(
-                            height: 42.h,
-                            padding: EdgeInsets.only(
-                                right: 14.5.w,left: 14.5.w),
-                            alignment: Alignment.centerLeft,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'Search....',
-                                  prefixIcon: Icon(
-                                    Icons.search,
-                                    color: MyTheme.black,
-                                  ),
-                                  suffixIcon: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.keyboard_voice_outlined,
-                                        color: MyTheme.black,
-                                      ))),
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => Filter());
+                            },
+                            child: Container(
+                              height: 42.h,
+                              padding:
+                                  EdgeInsets.only(right: 14.5.w, left: 14.5.w),
+                              alignment: Alignment.centerLeft,
+                              child: TextField(
+                                enabled: false,
+                                decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    hintText: 'Search....',
+                                    suffixIcon: IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.search,
+                                          color: MyTheme.black,
+                                        ))),
+                              ),
                             ),
                           ),
                           Container(
@@ -289,205 +307,108 @@ class _HomePageState extends State<HomePage> {
                   addRepaintBoundaries: true,
                   childCount: 1,
                   (context, index) {
-                    return ListView.builder(
-                        padding: const EdgeInsets.only(top: 0),
-                        clipBehavior: Clip.none,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 1,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            // physics: const NeverScrollableScrollPhysics(),
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            // shrinkWrap: true,
-                            children: [
-                              const CustomCarousel(),
-                              SizedBox(
-                                height: 26.h,
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 4.w),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        AppLocalizations.of(context)!
-                                            .shop_by_category,
-                                        style: TextStyle(
-                                            color: MyTheme.black,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      InkWell(
-                                        child: Text(
-                                          AppLocalizations.of(context)!
-                                              .view_more_ucf,
-                                          style: TextStyle(
-                                              color: MyTheme.black,
-                                              fontSize: 14.sp),
-                                        ),
-                                        onTap: () {
-                                          Get.to(() => CategoryListPages());
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                // width: DeviceInfo(context).width,
-                                // margin: EdgeInsets.symmetric(horizontal: 6.w),
-                                height: 216.h,
-                                child: CategoryGridView(
-                                    homeController.featuredCategoryList),
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                width: DeviceInfo(context).width,
-                                color: MyTheme.indigo,
-                                child: Text(
-                                  AppLocalizations.of(context)!.highlight_ucf,
+                    // return ListView.builder(
+                    //     padding: const EdgeInsets.only(top: 0),
+                    //     clipBehavior: Clip.none,
+                    //     shrinkWrap: true,
+                    //     physics: const NeverScrollableScrollPhysics(),
+                    //     itemCount: 1,
+                    //     itemBuilder: (context, index) {
+                    return Column(
+                      // physics: const NeverScrollableScrollPhysics(),
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      // shrinkWrap: true,
+                      children: [
+                        const CustomCarousel(),
+                        SizedBox(
+                          height: 26.h,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .shop_by_category,
                                   style: TextStyle(
-                                      color: MyTheme.PrimaryColor,
+                                      color: MyTheme.black,
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.bold),
                                 ),
-                              ),
-                              Container(
-                                color: MyTheme.indigo,
-                                width: DeviceInfo(context).width,
-                                height: 324.h,
-                                child: Obx(
-                                  () => ListView.builder(
-                                      padding: const EdgeInsets.all(0),
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: homeController
-                                          .bannerTwoImageList.length,
-                                      itemBuilder: (context, index) {
-                                        String imageUrl = homeController
-                                            .bannerTwoImageList[index];
-                                        if (homeController
-                                            .bannerTwoImageList.isEmpty) {
-                                          return const Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        } else {
-                                          return BannersHomeList(
-                                              imageUrl: imageUrl);
-                                        }
-                                      }),
-                                ),
-                              ),
-                              Container(
-                                color: MyTheme.light_brown,
-                                width: DeviceInfo(context).width,
-                                height: 337.h,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 4.w),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .baskets_must_have,
-                                            style: TextStyle(
-                                                color: MyTheme.black,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          InkWell(
-                                            child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .view_more_ucf,
-                                              style: TextStyle(
-                                                  color: MyTheme.black,
-                                                  fontSize: 14.sp),
-                                            ),
-                                            onTap: () {},
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          left: 4.w, right: 4.w, top: 4.h),
-                                      width: DeviceInfo(context).width,
-                                      height: 315.h,
-                                      child: GridView.builder(
-                                        padding: const EdgeInsets.all(0),
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          crossAxisSpacing: 20,
-                                          mainAxisSpacing: 20,
-                                        ),
-                                        itemCount: homeController
-                                            .bestSellingProductList.length,
-                                        itemBuilder: (context, index) {
-                                          if (homeController
-                                              .bestSellingProductList.isEmpty) {
-                                            return ShimmerHelper()
-                                                .buildProductGridShimmer();
-                                          } else {
-                                            return InkWell(
-                                              onTap: () {},
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        homeController
-                                                            .bestSellingProductList[
-                                                                index]
-                                                            .thumbnail_image!),
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                color: MyTheme.amber_medium,
-                                width: DeviceInfo(context).width,
-                                height: 150.h,
-                                child: Container(
-                                  height: 150.h,
-                                  width: DeviceInfo(context).width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    image: const DecorationImage(
-                                        image: AssetImage(
-                                            ImageDirectory.halfPrice),
-                                        fit: BoxFit.fill),
+                                InkWell(
+                                  child: Text(
+                                    AppLocalizations.of(context)!.view_more_ucf,
+                                    style: TextStyle(
+                                        color: MyTheme.black, fontSize: 14.sp),
                                   ),
+                                  onTap: () {
+                                    Get.to(() => CategoryListPages());
+                                  },
                                 ),
-                              ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          // width: DeviceInfo(context).width,
+                          // margin: EdgeInsets.symmetric(horizontal: 6.w),
+                          height: 216.h,
+                          child: CategoryGridView(
+                              homeController.featuredCategoryList),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 4.w),
+                          width: DeviceInfo(context).width,
+                          color: MyTheme.light_blue,
+                          child: Text(
+                            AppLocalizations.of(context)!.highlight_ucf,
+                            style: TextStyle(
+                                color: MyTheme.PrimaryColor,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.light_blue,
+                          width: DeviceInfo(context).width,
+                          // height: 324.h,
+                          height: 618.h,
+                          child: Obx(
+                            () => ListView.builder(
+                                padding: const EdgeInsets.all(0),
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount:
+                                    homeController.bannerTwoImageList.length,
+                                itemBuilder: (context, index) {
+                                  String imageUrl =
+                                      homeController.bannerTwoImageList[index];
+                                  if (homeController
+                                      .bannerTwoImageList.isEmpty) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else {
+                                    return BannersHomeList(imageUrl: imageUrl);
+                                  }
+                                }),
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.light_brown,
+                          width: DeviceInfo(context).width,
+                          height: 337.h,
+                          child: Column(
+                            children: [
                               Padding(
-                                padding: EdgeInsets.only(
-                                    left: 4.w, right: 4.w, top: 2.h),
+                                padding: EdgeInsets.symmetric(horizontal: 4.w),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       AppLocalizations.of(context)!
-                                          .todays_deal_ucf,
+                                          .baskets_must_have,
                                       style: TextStyle(
                                           color: MyTheme.black,
                                           fontSize: 16.sp,
@@ -506,482 +427,540 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                width: DeviceInfo(context).width,
-                                height: 385.h,
-                                child: Column(
-                                  children: [
-                                    Obx(
-                                      () => CarouselSlider.builder(
-                                        carouselController: _carouselController,
-                                        itemCount:
-                                            homeController.todayDealList.length,
-                                        options: CarouselOptions(
-                                          height: 297.h,
-                                          autoPlay: true,
-                                          aspectRatio: 2.0,
-                                          viewportFraction: 1,
-                                          autoPlayInterval:
-                                              const Duration(seconds: 3),
-                                          autoPlayAnimationDuration:
-                                              const Duration(
-                                                  milliseconds: 1000),
-                                          autoPlayCurve: Curves.slowMiddle,
-                                          onPageChanged: (index, reason) {
-                                            homeController.dealIndex.value =
-                                                index;
-                                          },
-                                        ),
-                                        itemBuilder: (BuildContext context,
-                                            int index, int realIndex) {
-                                          return Obx(
-                                            () => CarouselDealCard(
-                                              product: homeController
-                                                  .todayDealList[index],
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 85.h,
-                                      child: Obx(
-                                        () => ListView.builder(
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: homeController
-                                              .todayDealList.length,
-                                          itemBuilder: (context, index) {
-                                            return Obx(
-                                              () => InkWell(
-                                                child: Container(
-                                                  height: 80.h,
-                                                  width: 80.h,
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal: 4.w),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: homeController
-                                                                  .dealIndex
-                                                                  .value ==
-                                                              index
-                                                          ? MyTheme.green
-                                                          : MyTheme
-                                                              .golden_shadow,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(
-                                                        homeController
-                                                            .todayDealList[
-                                                                index]
-                                                            .thumbnail_image!,
-                                                      ),
-                                                      fit: BoxFit.fill,
-                                                    ),
-                                                  ),
-                                                ),
-                                                onTap: () {
-                                                  // homeController.dealIndex.value = index;
-                                                  _carouselController
-                                                      .jumpToPage(index);
-                                                },
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                               Container(
-                                color: MyTheme.amber_medium,
+                                margin: EdgeInsets.only(
+                                    left: 4.w, right: 4.w, top: 4.h),
                                 width: DeviceInfo(context).width,
-                                height: 150.h,
-                                child: Container(
-                                  height: 150.h,
-                                  width: DeviceInfo(context).width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    image: const DecorationImage(
-                                        image: NetworkImage(
-                                            "https://krishanthmart.com/public/uploads/all/1g3OBsGdgw85JcWqFLRGLJMGfMWjK2UmGRyYoqMz.jpg"),
-                                        fit: BoxFit.fill),
+                                height: 315.h,
+                                child: GridView.builder(
+                                  padding: const EdgeInsets.all(0),
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20,
                                   ),
-                                ),
-                              ),
-                              Container(
-                                color: MyTheme.golden,
-                                width: DeviceInfo(context).width,
-                                height: 255.h,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 4.w),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .best_selling_ucf,
-                                            style: TextStyle(
-                                                color: MyTheme.white,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          InkWell(
-                                            child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .view_more_ucf,
-                                              style: TextStyle(
-                                                  color: MyTheme.white,
-                                                  fontSize: 14.sp),
+                                  itemCount: homeController
+                                      .bestSellingProductList.length,
+                                  itemBuilder: (context, index) {
+                                    if (homeController
+                                        .bestSellingProductList.isEmpty) {
+                                      return ShimmerHelper()
+                                          .buildProductGridShimmer();
+                                    } else {
+                                      return InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage(homeController
+                                                  .bestSellingProductList[index]
+                                                  .thumbnail_image!),
                                             ),
-                                            onTap: () {},
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 210.h,
-                                      child: GetBuilder<HomeController>(
-                                        builder: (homeController) {
-                                          return ListView.builder(
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: homeController
-                                                .bestSellingProductList.length,
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) {
-                                              return Container(
-                                                  margin: const EdgeInsets
-                                                      .symmetric(horizontal: 5),
-                                                  child: ProductCard(
-                                                    product: homeController
-                                                            .bestSellingProductList[
-                                                        index],
-                                                    onTap: () {},
-                                                    itemIndex: index,
-                                                  ));
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              homeController.flashDealList.isNotEmpty
-                                  ? Container(
-                                      width: DeviceInfo(context).width,
-                                      color: MyTheme.white,
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 4.w, vertical: 5.h),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                                AppLocalizations.of(context)!
-                                                    .flash_deal_ucf,
-                                                style: TextStyle(
-                                                    color: MyTheme.black,
-                                                    fontSize: 16.sp,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            InkWell(
-                                              child: Text(
-                                                AppLocalizations.of(context)!
-                                                    .view_more_ucf,
-                                                style: TextStyle(
-                                                    color: MyTheme.black,
-                                                    fontSize: 14.sp),
-                                              ),
-                                              onTap: () {
-                                                Get.to(() =>
-                                                    const FlashDealList());
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              homeController.flashDealList.isNotEmpty
-                                  ? buildFlashDealList(context)
-                                  : const SizedBox(),
-                              Container(
-                                  color: MyTheme.PrimaryLightColor,
-                                  width: DeviceInfo(context).width,
-                                  height: 150.h,
-                                  child: Container(
-                                    height: 150.h,
-                                    width: DeviceInfo(context).width,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      image: const DecorationImage(
-                                          image: NetworkImage(
-                                              "https://krishanthmart.com/public/uploads/all/E05zNYsRkZTDQwv3YGJvwQe05kY3MoqWKIrxkxFZ.jpg"),
-                                          fit: BoxFit.fill),
-                                    ),
-                                  )),
-                              Container(
-                                height: 221.h,
-                                width: DeviceInfo(context).width,
-                                color: MyTheme.gigas,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 4.w, right: 4.w, top: 1.h),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .best_deals,
-                                            style: TextStyle(
-                                                color: MyTheme.white,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          InkWell(
-                                            child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .view_more_ucf,
-                                              style: TextStyle(
-                                                  color: MyTheme.white,
-                                                  fontSize: 14.sp),
-                                            ),
-                                            onTap: () {},
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 202.h,
-                                      child: GetBuilder<HomeController>(
-                                        builder: (homeController) {
-                                          return ProductLargeCardList(
-                                              productList:
-                                                  homeController.todayDealList,
-                                              onTap: () {});
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                color: MyTheme.dark_purple,
-                                width: DeviceInfo(context).width,
-                                height: 255.h,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 4.w),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                              AppLocalizations.of(context)!
-                                                  .featured_products_ucf,
-                                              style: TextStyle(
-                                                  color: MyTheme.white,
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.bold)),
-                                          InkWell(
-                                            child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .view_more_ucf,
-                                              style: TextStyle(
-                                                  color: MyTheme.white,
-                                                  fontSize: 14.sp),
-                                            ),
-                                            onTap: () {},
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 210.h,
-                                      child: GetBuilder<HomeController>(
-                                        builder: (homeController) {
-                                          return ListView.builder(
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: homeController
-                                                .featuredProductList.length,
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) {
-                                              // productController.itemsIndex.value = index;
-                                              return Container(
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 5),
-                                                child: ProductCard(
-                                                  product: homeController
-                                                          .featuredProductList[
-                                                      index],
-                                                  onTap: () {
-                                                    // productController
-                                                    //     .isAddToCartFetchedByIndex(
-                                                    //         id: homeController
-                                                    //             .featuredProductList[
-                                                    //                 index]
-                                                    //             .id,
-                                                    //         index: index);
-                                                  },
-                                                  itemIndex: index,
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                color: MyTheme.light_purple,
-                                width: DeviceInfo(context).width,
-                                height: 274.h,
-                                child: const BrandCategoryView(),
-                              ),
-                              Container(
-                                height: 182.h,
-                                padding: const EdgeInsets.all(10),
-                                color: homeController.hexToColor(
-                                    homeController.couponColor.value),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(homeController.couponTitle.value,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 22.sp,
-                                            color: MyTheme.white),
-                                        textAlign: TextAlign.center),
-                                    Text(homeController.couponSubTitle.value,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 17.sp,
-                                            color: MyTheme.white),
-                                        textAlign: TextAlign.center),
-                                    InkWell(
-                                      onTap: () {
-                                        Get.to(() => const Coupons());
-                                      },
-                                      child: Container(
-                                        height: 50.h,
-                                        width: 150.w,
-                                        decoration: BoxDecoration(
-                                            color: MyTheme.medium_grey,
-                                            border: Border.all(
-                                                color: MyTheme.white),
                                             borderRadius:
-                                                BorderRadius.circular(15)),
-                                        child: Center(
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .view_coupon,
-                                            style: const TextStyle(
-                                                color: MyTheme.white,
-                                                fontWeight: FontWeight.bold),
+                                                BorderRadius.circular(15),
                                           ),
                                         ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.amber_medium,
+                          width: DeviceInfo(context).width,
+                          height: 150.h,
+                          child: Container(
+                            height: 150.h,
+                            width: DeviceInfo(context).width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              image: const DecorationImage(
+                                  image: AssetImage(ImageDirectory.halfPrice),
+                                  fit: BoxFit.fill),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(left: 4.w, right: 4.w, top: 2.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.todays_deal_ucf,
+                                style: TextStyle(
+                                    color: MyTheme.black,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              InkWell(
+                                child: Text(
+                                  AppLocalizations.of(context)!.view_more_ucf,
+                                  style: TextStyle(
+                                      color: MyTheme.black, fontSize: 14.sp),
+                                ),
+                                onTap: () {},
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: DeviceInfo(context).width,
+                          height: 385.h,
+                          child: Column(
+                            children: [
+                              Obx(
+                                () => CarouselSlider.builder(
+                                  carouselController: _carouselController,
+                                  itemCount:
+                                      homeController.todayDealList.length,
+                                  options: CarouselOptions(
+                                    height: 297.h,
+                                    autoPlay: true,
+                                    aspectRatio: 2.0,
+                                    viewportFraction: 1,
+                                    autoPlayInterval:
+                                        const Duration(seconds: 3),
+                                    autoPlayAnimationDuration:
+                                        const Duration(milliseconds: 1000),
+                                    autoPlayCurve: Curves.slowMiddle,
+                                    onPageChanged: (index, reason) {
+                                      homeController.dealIndex.value = index;
+                                    },
+                                  ),
+                                  itemBuilder: (BuildContext context, int index,
+                                      int realIndex) {
+                                    return Obx(
+                                      () => CarouselDealCard(
+                                        product:
+                                            homeController.todayDealList[index],
                                       ),
-                                    )
-                                  ],
+                                    );
+                                  },
                                 ),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 1.h),
-                                    child: Text(
-                                      AppLocalizations.of(context)!.offer_zone,
-                                      style: TextStyle(
-                                          color: MyTheme.dark_purple,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                color: MyTheme.shimmer_highlighted,
-                                width: DeviceInfo(context).width,
-                                height: 100.h,
-                                child: Container(
-                                  margin:
-                                      EdgeInsets.only(top: 2.h, bottom: 2.h),
-                                  width: DeviceInfo(context).width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    image: const DecorationImage(
-                                        image: NetworkImage(
-                                            "https://krishanthmart.com/public/uploads/all/qCVSw6g2WUwPQjRGK1ZMbsYYSX7u7pOCn3RoAa8N.jpg"),
-                                        fit: BoxFit.fill),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                color: MyTheme.shimmer_highlighted,
-                                width: DeviceInfo(context).width,
-                                height: 100.h,
-                                child: Container(
-                                  margin:
-                                      EdgeInsets.only(top: 5.h, bottom: 2.h),
-                                  width: DeviceInfo(context).width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    image: const DecorationImage(
-                                        image: NetworkImage(
-                                            "https://krishanthmart.com/public/uploads/all/oHbGJMp36NWHz6WVkKYKZ49hOkXPM4UH6gSDVELs.jpg"),
-                                        fit: BoxFit.fill),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                color: MyTheme.shimmer_highlighted,
-                                width: DeviceInfo(context).width,
-                                height: 100.h,
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 5.h),
-                                  width: DeviceInfo(context).width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    image: const DecorationImage(
-                                        image: NetworkImage(
-                                            "https://krishanthmart.com/public/uploads/all/rfh8dfT69psXS8ZhgehlojsbpPhtiQ4ckUs9u3Ma.jpg"),
-                                        fit: BoxFit.fill),
+                              SizedBox(
+                                height: 85.h,
+                                child: Obx(
+                                  () => ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount:
+                                        homeController.todayDealList.length,
+                                    itemBuilder: (context, index) {
+                                      return Obx(
+                                        () => InkWell(
+                                          child: Container(
+                                            height: 80.h,
+                                            width: 80.h,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 4.w),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: homeController
+                                                            .dealIndex.value ==
+                                                        index
+                                                    ? MyTheme.green
+                                                    : MyTheme.golden_shadow,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                  homeController
+                                                      .todayDealList[index]
+                                                      .thumbnail_image!,
+                                                ),
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            // homeController.dealIndex.value = index;
+                                            _carouselController
+                                                .jumpToPage(index);
+                                          },
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
                             ],
-                          );
-                        });
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.amber_medium,
+                          width: DeviceInfo(context).width,
+                          height: 150.h,
+                          child: Container(
+                            height: 150.h,
+                            width: DeviceInfo(context).width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              image: const DecorationImage(
+                                  image: NetworkImage(
+                                      "https://krishanthmart.com/public/uploads/all/1g3OBsGdgw85JcWqFLRGLJMGfMWjK2UmGRyYoqMz.jpg"),
+                                  fit: BoxFit.fill),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.golden,
+                          width: DeviceInfo(context).width,
+                          height: 255.h,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .best_selling_ucf,
+                                      style: TextStyle(
+                                          color: MyTheme.white,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    InkWell(
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .view_more_ucf,
+                                        style: TextStyle(
+                                            color: MyTheme.white,
+                                            fontSize: 14.sp),
+                                      ),
+                                      onTap: () {},
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 210.h,
+                                child: GetBuilder<HomeController>(
+                                  builder: (homeController) {
+                                    return ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: homeController
+                                          .bestSellingProductList.length,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            child: ProductCard(
+                                              product: homeController
+                                                      .bestSellingProductList[
+                                                  index],
+                                              onTap: () {},
+                                              itemIndex: index,
+                                            ));
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        homeController.flashDealList.isNotEmpty
+                            ? Container(
+                                width: DeviceInfo(context).width,
+                                color: MyTheme.white,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 5.h),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          AppLocalizations.of(context)!
+                                              .flash_deal_ucf,
+                                          style: TextStyle(
+                                              color: MyTheme.black,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.bold)),
+                                      InkWell(
+                                        child: Text(
+                                          AppLocalizations.of(context)!
+                                              .view_more_ucf,
+                                          style: TextStyle(
+                                              color: MyTheme.black,
+                                              fontSize: 14.sp),
+                                        ),
+                                        onTap: () {
+                                          Get.to(() => const FlashDealList());
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                        homeController.flashDealList.isNotEmpty
+                            ? buildFlashDealList(context)
+                            : const SizedBox(),
+                        Container(
+                            color: MyTheme.PrimaryLightColor,
+                            width: DeviceInfo(context).width,
+                            height: 150.h,
+                            child: Container(
+                              height: 150.h,
+                              width: DeviceInfo(context).width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                image: const DecorationImage(
+                                    image: NetworkImage(
+                                        "https://krishanthmart.com/public/uploads/all/E05zNYsRkZTDQwv3YGJvwQe05kY3MoqWKIrxkxFZ.jpg"),
+                                    fit: BoxFit.fill),
+                              ),
+                            )),
+                        Container(
+                          height: 221.h,
+                          width: DeviceInfo(context).width,
+                          color: MyTheme.gigas,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 4.w, right: 4.w, top: 1.h),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!.best_deals,
+                                      style: TextStyle(
+                                          color: MyTheme.white,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    InkWell(
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .view_more_ucf,
+                                        style: TextStyle(
+                                            color: MyTheme.white,
+                                            fontSize: 14.sp),
+                                      ),
+                                      onTap: () {},
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 202.h,
+                                child: GetBuilder<HomeController>(
+                                  builder: (homeController) {
+                                    return ProductLargeCardList(
+                                        productList:
+                                            homeController.todayDealList,
+                                        onTap: () {});
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.dark_purple,
+                          width: DeviceInfo(context).width,
+                          height: 255.h,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                        AppLocalizations.of(context)!
+                                            .featured_products_ucf,
+                                        style: TextStyle(
+                                            color: MyTheme.white,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold)),
+                                    InkWell(
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .view_more_ucf,
+                                        style: TextStyle(
+                                            color: MyTheme.white,
+                                            fontSize: 14.sp),
+                                      ),
+                                      onTap: () {},
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 210.h,
+                                child: GetBuilder<HomeController>(
+                                  builder: (homeController) {
+                                    return ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: homeController
+                                          .featuredProductList.length,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        // productController.itemsIndex.value = index;
+                                        return Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: ProductCard(
+                                            product: homeController
+                                                .featuredProductList[index],
+                                            onTap: () {
+                                              // productController
+                                              //     .isAddToCartFetchedByIndex(
+                                              //         id: homeController
+                                              //             .featuredProductList[
+                                              //                 index]
+                                              //             .id,
+                                              //         index: index);
+                                            },
+                                            itemIndex: index,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.light_purple,
+                          width: DeviceInfo(context).width,
+                          height: 274.h,
+                          child: const BrandCategoryView(),
+                        ),
+                        Container(
+                          height: 182.h,
+                          padding: const EdgeInsets.all(10),
+                          color: homeController
+                              .hexToColor(homeController.couponColor.value),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(homeController.couponTitle.value,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22.sp,
+                                      color: MyTheme.white),
+                                  textAlign: TextAlign.center),
+                              Text(homeController.couponSubTitle.value,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.sp,
+                                      color: MyTheme.white),
+                                  textAlign: TextAlign.center),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const Coupons());
+                                },
+                                child: Container(
+                                  height: 50.h,
+                                  width: 150.w,
+                                  decoration: BoxDecoration(
+                                      color: MyTheme.medium_grey,
+                                      border: Border.all(color: MyTheme.white),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Center(
+                                    child: Text(
+                                      AppLocalizations.of(context)!.view_coupon,
+                                      style: const TextStyle(
+                                          color: MyTheme.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 1.h),
+                              child: Text(
+                                AppLocalizations.of(context)!.offer_zone,
+                                style: TextStyle(
+                                    color: MyTheme.dark_purple,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          color: MyTheme.shimmer_highlighted,
+                          width: DeviceInfo(context).width,
+                          height: 100.h,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 2.h, bottom: 2.h),
+                            width: DeviceInfo(context).width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              image: const DecorationImage(
+                                  image: NetworkImage(
+                                      "https://krishanthmart.com/public/uploads/all/qCVSw6g2WUwPQjRGK1ZMbsYYSX7u7pOCn3RoAa8N.jpg"),
+                                  fit: BoxFit.fill),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.shimmer_highlighted,
+                          width: DeviceInfo(context).width,
+                          height: 100.h,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 5.h, bottom: 2.h),
+                            width: DeviceInfo(context).width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              image: const DecorationImage(
+                                  image: NetworkImage(
+                                      "https://krishanthmart.com/public/uploads/all/oHbGJMp36NWHz6WVkKYKZ49hOkXPM4UH6gSDVELs.jpg"),
+                                  fit: BoxFit.fill),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.shimmer_highlighted,
+                          width: DeviceInfo(context).width,
+                          height: 100.h,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 5.h),
+                            width: DeviceInfo(context).width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              image: const DecorationImage(
+                                  image: NetworkImage(
+                                      "https://krishanthmart.com/public/uploads/all/rfh8dfT69psXS8ZhgehlojsbpPhtiQ4ckUs9u3Ma.jpg"),
+                                  fit: BoxFit.fill),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                    // });
                   },
                 ),
               ),
@@ -1004,91 +983,10 @@ Widget buildFlashDealList(context) {
         } else if (snapshot.hasData) {
           FlashDealResponse flashDealResponse = snapshot.data!;
           return buildFlashDealListItem(flashDealResponse, 0, context);
-          // return ListView.builder(
-          //   itemCount: 1,
-          //   scrollDirection: Axis.vertical,
-          //   physics: const NeverScrollableScrollPhysics(),
-          //   shrinkWrap: true,
-          //   itemBuilder: (context, index) {
-          //     return buildFlashDealListItem(
-          //         flashDealResponse, index, context);
-          //   },
-          // );
         } else {
-          return buildShimmer();
+          return SizedBox();
         }
       });
-}
-
-CustomScrollView buildShimmer() {
-  return CustomScrollView(
-    slivers: [
-      SliverToBoxAdapter(
-        child: ListView.separated(
-          separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 0,
-            );
-          },
-          itemCount: 20,
-          scrollDirection: Axis.vertical,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return buildFlashDealListItemShimmer(context);
-          },
-        ),
-      )
-    ],
-  );
-}
-
-buildFlashDealListItemShimmer(BuildContext context) {
-  return SizedBox(
-    // color: MyTheme.amber,
-    height: 340.h,
-    child: Stack(
-      children: [
-        buildFlashDealBannerShimmer(context),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            width: DeviceInfo(context).width,
-            height: 196.h,
-            margin: const EdgeInsets.symmetric(horizontal: 18),
-            decoration: BoxDecorations.buildBoxDecoration_1(),
-            child: Column(
-              children: [
-                Container(
-                  child: buildTimerRowRowShimmer(context),
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 10),
-                    width: 460.h,
-                    child: Wrap(
-                      //spacing: 10,
-                      runSpacing: 10,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      runAlignment: WrapAlignment.spaceBetween,
-                      alignment: WrapAlignment.start,
-                      children: List.generate(6, (productIndex) {
-                        return buildFlashDealsProductItemShimmer();
-                      }),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
 }
 
 final List<CountdownTimerController> _timerControllerList = [];
@@ -1512,8 +1410,8 @@ Widget buildFlashDealsProductItem(
   return Card(
     child: Container(
       margin: const EdgeInsets.only(left: 10),
-      height: 165,
-      width: 140,
+      height: 140.h,
+      width: 130.w,
       decoration: BoxDecoration(
         color: MyTheme.white,
         borderRadius: BorderRadius.circular(6.0),
@@ -1547,6 +1445,7 @@ Widget buildFlashDealsProductItem(
                   child: Text(
                     flashDealResponse.flashDeals[flashDealIndex].products!
                         .products[productIndex].name,
+                    maxLines: 2,
                     // convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
                     //     .products[productIndex].price),
                     style: TextStyle(
@@ -1563,10 +1462,10 @@ Widget buildFlashDealsProductItem(
             child: Row(
               children: [
                 Text(
-                  flashDealResponse.flashDeals[flashDealIndex].products!
-                      .products[productIndex].price,
-                  // convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
-                  //     .products[productIndex].price),
+                  // flashDealResponse.flashDeals[flashDealIndex].products!
+                  //     .products[productIndex].price,
+                  convertPrice(flashDealResponse.flashDeals[flashDealIndex]
+                      .products!.products[productIndex].price),
                   style: TextStyle(
                       fontSize: 12.sp,
                       color: MyTheme.green,

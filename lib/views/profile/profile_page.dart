@@ -4,9 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/views/address/address_page.dart';
 import 'package:krishanthmart_new/views/profile/profile_edit.dart';
-import 'package:krishanthmart_new/views/top_selling/top_sellers.dart';
 import 'package:krishanthmart_new/views/wishlist/wishlist.dart';
-import 'package:one_context/one_context.dart';
 import 'package:toast/toast.dart';
 import '../../helpers/auth_helpers.dart';
 import '../../repositories/auth_repositories.dart';
@@ -79,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   fetchCounters() async {
     var profileCountersResponse =
-    await ProfileRepository().getProfileCountersResponse();
+        await ProfileRepository().getProfileCountersResponse();
 
     _cartCounter = profileCountersResponse.cart_item_count;
     _wishlistCounter = profileCountersResponse.wishlist_item_count;
@@ -104,8 +102,8 @@ class _ProfilePageState extends State<ProfilePage> {
       Navigator.pop(loadingcontext);
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
-            return MainPage();
-          }), (route) => false);
+        return MainPage();
+      }), (route) => false);
     }
     ToastComponent.showDialog(response.message);
   }
@@ -160,7 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection:
-      app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
+          app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
       child: buildView(context),
     );
   }
@@ -203,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return CustomScrollView(
       controller: _mainScrollController,
       physics:
-      const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       slivers: [
         SliverList(
           delegate: SliverChildListDelegate([
@@ -261,51 +259,41 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: [
           // if (false)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildBottomVerticalCardListItem(
-                    "assets/coupon.png", AppLocalizations.of(context)!.coupons_ucf,
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return const Coupons();
-                      }));
-                    }),
-                Divider(
-                  thickness: 1,
-                  color: MyTheme.light_grey,
-                ),
-                buildBottomVerticalCardListItem("assets/favoriteseller.png",
-                    AppLocalizations.of(context)!.favorite_seller_ucf,
-                    onPressed: () {}),
-                Divider(
-                  thickness: 1,
-                  color: MyTheme.light_grey,
-                ),
-              ],
-            ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildBottomVerticalCardListItem("assets/products.png",
-                  AppLocalizations.of(context)!.top_selling_products_ucf,
-                  onPressed: () {
-                   AIZRoute.push(context, const TopSellingProducts());
-                  }),
+              buildBottomVerticalCardListItem("assets/coupon.png",
+                  AppLocalizations.of(context)!.coupons_ucf, onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const Coupons();
+                }));
+              }),
+              Divider(
+                thickness: 1,
+                color: MyTheme.light_grey,
+              ),
+              buildBottomVerticalCardListItem("assets/favoriteseller.png",
+                  AppLocalizations.of(context)!.favorite_seller_ucf,
+                  onPressed: () {}),
               Divider(
                 thickness: 1,
                 color: MyTheme.light_grey,
               ),
             ],
           ),
-
-          buildBottomVerticalCardListItem("assets/download.png",
-             AppLocalizations.of(context)!.top_sellers_ucf, onPressed: () {
-                Get.to(()=>const TopSellers());
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildBottomVerticalCardListItem("assets/products.png",
+                  AppLocalizations.of(context)!.top_selling_products_ucf,
+                  onPressed: () {
+                AIZRoute.push(context, const TopSellingProducts());
               }),
-          Divider(
-            thickness: 1,
-            color: MyTheme.light_grey,
+              Divider(
+                thickness: 1,
+                color: MyTheme.light_grey,
+              ),
+            ],
           ),
           //
           // buildBottomVerticalCardListItem(
@@ -337,21 +325,6 @@ class _ProfilePageState extends State<ProfilePage> {
           //       ),
           //     ],
           //   ),
-          if (classified_product_status.$)
-            Column(
-              children: [
-                buildBottomVerticalCardListItem("assets/classified_product.png",
-                    AppLocalizations.of(context)!.classified_ads_ucf, onPressed: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      //   return ClassifiedAds();
-                      // }));
-                    }),
-                Divider(
-                  thickness: 1,
-                  color: MyTheme.light_grey,
-                ),
-              ],
-            ),
 
           // this is addon auction product
           // if (false)
@@ -376,8 +349,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   height: _auctionExpand
                       ? is_logged_in.$
-                      ? 140
-                      : 75
+                          ? 140
+                          : 75
                       : 40,
                   alignment: Alignment.topCenter,
                   padding: const EdgeInsets.only(top: 10.0),
@@ -538,57 +511,23 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
-          if (vendor_system.$)
-            Column(
-              children: [
-                buildBottomVerticalCardListItem("assets/shop.png",
-                    AppLocalizations.of(context)!.browse_all_sellers_ucf,
-                    onPressed: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      //   return Filter(
-                      //     selected_filter: "sellers",
-                      //   );
-                      // }));
-                    }),
-                Divider(
-                  thickness: 1,
-                  color: MyTheme.light_grey,
-                ),
-              ],
-            ),
-
-          if (is_logged_in.$ && (vendor_system.$))
-            Column(
-              children: [
-                buildBottomVerticalCardListItem("assets/shop.png",
-                    AppLocalizations.of(context)!.followed_sellers_ucf,
-                    onPressed: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      //   return FollowedSellers();
-                      // }));
-                    }),
-                Divider(
-                  thickness: 1,
-                  color: MyTheme.light_grey,
-                ),
-              ],
-            ),
 
           if (is_logged_in.$)
             Column(
               children: [
                 buildBottomVerticalCardListItem("assets/delete.png",
-                    AppLocalizations.of(context)!.delete_my_account, onPressed: () {
-                      deleteWarningDialog();
+                    AppLocalizations.of(context)!.delete_my_account,
+                    onPressed: () {
+                  deleteWarningDialog();
 
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      //   return Filter(
-                      //     selected_filter: "sellers",
-                      //   );
-                      // }
-                      //)
-                      //);
-                    }),
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   return Filter(
+                  //     selected_filter: "sellers",
+                  //   );
+                  // }
+                  //)
+                  //);
+                }),
                 Divider(
                   thickness: 1,
                   color: MyTheme.light_grey,
@@ -597,9 +536,9 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
 
           // if (false)
-            // buildBottomVerticalCardListItem(
-            //     "assets/blog.png", LangText(context).local!.blogs_ucf,
-            //     onPressed: () {}),
+          // buildBottomVerticalCardListItem(
+          //     "assets/blog.png", LangText(context).local!.blogs_ucf,
+          //     onPressed: () {}),
         ],
       ),
     );
@@ -649,47 +588,44 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           buildHorizontalSettingItem(true, "assets/language.png",
               AppLocalizations.of(context)!.language_ucf, () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return ChangeLanguage();
-                    },
-                  ),
-                );
-              }),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return ChangeLanguage();
+                },
+              ),
+            );
+          }),
           buildHorizontalSettingItem(
               is_logged_in.$,
               "assets/edit.png",
               AppLocalizations.of(context)!.edit_profile_ucf,
               is_logged_in.$
-                  ?
-                  () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                  return ProfileEdit();
-                }));
-              }
-              : () => showLoginWarning()
-              ),
+                  ? () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ProfileEdit();
+                      }));
+                    }
+                  : () => showLoginWarning()),
           buildHorizontalSettingItem(
-              is_logged_in.$,
-              "assets/location.png",
-              AppLocalizations.of(context)!.address_ucf,
-              is_logged_in.$
-                  ?
-                  () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return Address();
-                    },
-                  ),
-                );
-              }
-              : () => showLoginWarning(),
-    ),
+            is_logged_in.$,
+            "assets/location.png",
+            AppLocalizations.of(context)!.address_ucf,
+            is_logged_in.$
+                ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return Address();
+                        },
+                      ),
+                    );
+                  }
+                : () => showLoginWarning(),
+          ),
         ],
       ),
     );
@@ -734,29 +670,31 @@ class _ProfilePageState extends State<ProfilePage> {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(
-            AppLocalizations.of(context)!.delete_account_warning_title,
-            style: TextStyle(fontSize: 15, color: MyTheme.dark_font_grey),
-          ),
-          content: Text(
-            AppLocalizations.of(context)!.delete_account_warning_description,
-            style: TextStyle(fontSize: 13, color: MyTheme.dark_font_grey),
-          ),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(AppLocalizations.of(context)!.no_ucf)),
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  deleteAccountReq();
-                },
-                child: Text(AppLocalizations.of(context)!.yes_ucf))
-          ],
-        ));
+              title: Text(
+                AppLocalizations.of(context)!.delete_account_warning_title,
+                style: TextStyle(fontSize: 15, color: MyTheme.dark_font_grey),
+              ),
+              content: Text(
+                AppLocalizations.of(context)!
+                    .delete_account_warning_description,
+                style: TextStyle(fontSize: 13, color: MyTheme.dark_font_grey),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(AppLocalizations.of(context)!.no_ucf)),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      deleteAccountReq();
+                    },
+                    child: Text(AppLocalizations.of(context)!.yes_ucf))
+              ],
+            ));
   }
+
 /*
   Widget buildSettingAndAddonsHorizontalMenu() {
     return Container(
@@ -895,9 +833,12 @@ class _ProfilePageState extends State<ProfilePage> {
               child: buildSettingAndAddonsHorizontalMenuItem(
                   "assets/wallet.png",
                   AppLocalizations.of(context)!.my_wallet_ucf, () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return Wallet();
-                }));
+                //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+                //     return Wallet();
+                //   }
+                //   )
+                //   );
+                Get.to(() => Wallet());
               }),
             ),
           buildSettingAndAddonsHorizontalMenuItem(
@@ -905,23 +846,24 @@ class _ProfilePageState extends State<ProfilePage> {
               AppLocalizations.of(context)!.orders_ucf,
               is_logged_in.$
                   ? () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                      return OrderList();
-                    }));
-              }
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) {
+                      //       return OrderList();
+                      //     }));
+                      Get.to(() => OrderList());
+                    }
                   : () => null),
           buildSettingAndAddonsHorizontalMenuItem(
               "assets/heart.png",
               AppLocalizations.of(context)!.my_wishlist_ucf,
               is_logged_in.$
                   ? () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) {
-                //       return WishlistPage();
-                //     }));
-                Get.to(()=>WishlistPage());
-              }
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) {
+                      //       return WishlistPage();
+                      //     }));
+                      Get.to(() => WishlistPage());
+                    }
                   : () => null),
           if (refund_addon_installed.$)
             buildSettingAndAddonsHorizontalMenuItem(
@@ -929,23 +871,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 AppLocalizations.of(context)!.refund_requests_ucf,
                 is_logged_in.$
                     ? () {
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) {
-                  //       return RefundRequest();
-                  //     }));
-                }
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //       return RefundRequest();
+                        //     }));
+                      }
                     : () => null),
-
           buildSettingAndAddonsHorizontalMenuItem(
               "assets/download.png",
               AppLocalizations.of(context)!.downloads_ucf,
               is_logged_in.$
                   ? () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) {
-                //       return PurchasedDigitalProducts();
-                //     }));
-              }
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) {
+                      //       return PurchasedDigitalProducts();
+                      //     }));
+                    }
                   : () => null),
         ],
       ),
@@ -962,8 +903,8 @@ class _ProfilePageState extends State<ProfilePage> {
         onTap: is_logged_in.$
             ? onTap
             : () {
-          showLoginWarning();
-        },
+                showLoginWarning();
+              },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -1347,19 +1288,21 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: is_logged_in.$
                   ? ClipRRect(
-                  clipBehavior: Clip.hardEdge,
-                  borderRadius: const BorderRadius.all(Radius.circular(100.0)),
-                  child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/placeholder.png',
-                    image: "${avatar_original.$}",
-                    fit: BoxFit.fill,
-                  ))
+                      clipBehavior: Clip.hardEdge,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(100.0)),
+                      child: FadeInImage.assetNetwork(
+                        placeholder: 'assets/placeholder.png',
+                        image: "${avatar_original.$}",
+                        fit: BoxFit.fill,
+                      ),
+                    )
                   : Image.asset(
-                'assets/profile_placeholder.png',
-                height: 48,
-                width: 48,
-                fit: BoxFit.fitHeight,
-              ),
+                      'assets/profile_placeholder.png',
+                      height: 48,
+                      width: 48,
+                      fit: BoxFit.fitHeight,
+                    ),
             ),
           ),
           buildUserInfo(),
@@ -1399,34 +1342,34 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget buildUserInfo() {
     return is_logged_in.$
         ? Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "${user_name.$}",
-          style: const TextStyle(
-              fontSize: 14,
-              color: MyTheme.white,
-              fontWeight: FontWeight.w600),
-        ),
-        Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Text(
-              //if user email is not available then check user phone if user phone is not available use empty string
-              "${user_email.$ != "" && user_email.$ != null ? user_email.$ : user_phone.$ != "" && user_phone.$ != null ? user_phone.$ : ''}",
-              style: TextStyle(
-                color: MyTheme.light_grey,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "${user_name.$}",
+                style: const TextStyle(
+                    fontSize: 14,
+                    color: MyTheme.white,
+                    fontWeight: FontWeight.w600),
               ),
-            )),
-      ],
-    )
+              Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Text(
+                    //if user email is not available then check user phone if user phone is not available use empty string
+                    "${user_email.$ != "" && user_email.$ != null ? user_email.$ : user_phone.$ != "" && user_phone.$ != null ? user_phone.$ : ''}",
+                    style: TextStyle(
+                      color: MyTheme.light_grey,
+                    ),
+                  )),
+            ],
+          )
         : const Text(
-      "Login/Registration",
-      style: TextStyle(
-          fontSize: 14,
-          color: MyTheme.white,
-          fontWeight: FontWeight.bold),
-    );
+            "Login/Registration",
+            style: TextStyle(
+                fontSize: 14,
+                color: MyTheme.white,
+                fontWeight: FontWeight.bold),
+          );
   }
 
 /*
@@ -1479,14 +1422,14 @@ class _ProfilePageState extends State<ProfilePage> {
           loadingcontext = context;
           return AlertDialog(
               content: Row(
-                children: [
-                  const CircularProgressIndicator(),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text("${AppLocalizations.of(context)!.please_wait_ucf}"),
-                ],
-              ));
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(
+                width: 10,
+              ),
+              Text("${AppLocalizations.of(context)!.please_wait_ucf}"),
+            ],
+          ));
         });
   }
 }

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/cart_controller.dart';
+import 'package:krishanthmart_new/controllers/home_controller.dart';
 import 'package:one_context/one_context.dart';
 import '../../utils/colors.dart';
 import '../../utils/image_directory.dart';
@@ -28,7 +29,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
+  final HomeController homeController = Get.put(HomeController());
   final CartController cartController = Get.put(CartController());
   int _currentIndex = 0;
   var bottomPages = [

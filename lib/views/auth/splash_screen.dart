@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:krishanthmart_new/controllers/cart_controller.dart';
 import 'package:krishanthmart_new/controllers/currency_controller.dart';
 import 'package:krishanthmart_new/controllers/language_controller.dart';
 import 'package:krishanthmart_new/views/mainpage/main_page.dart';
@@ -24,6 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   LanguageController languageController = Get.put(LanguageController());
   CurrencyController currencyController = Get.put(CurrencyController());
+  CartController cartController = Get.put(CartController());
   PackageInfo _packageInfo = PackageInfo(
     appName: AppConfig.app_name,
     packageName: 'Unknown',
@@ -154,6 +156,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await app_language_rtl.load();
     await system_currency.load();
     currencyController.fetchListData();
+    cartController.getCount();
     return app_mobile_language.$;
 
   }

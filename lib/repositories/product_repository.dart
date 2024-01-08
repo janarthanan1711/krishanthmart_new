@@ -9,19 +9,19 @@ import '../utils/app_config.dart';
 import '../utils/shared_value.dart';
 import '../utils/system_config.dart';
 
-class ProductRepository{
+class ProductRepository {
   Future<ProductMiniResponse> getBestSellingProducts() async {
     String url = ("${AppConfig.BASE_URL}/products/best-seller");
-      final response = await ApiRequest.get(url: url, headers: {
-        "App-Language": app_language.$!,
-        // "Currency-Code": SystemConfig.systemCurrency!.code!,
-        // "Currency-Exchange-Rate":
-        // SystemConfig.systemCurrency!.exchangeRate.toString(),
-      });
-      // print("Best Selling Product=========> ${response.body}");
-      return productMiniResponseFromJson(response.body);
-
+    final response = await ApiRequest.get(url: url, headers: {
+      "App-Language": app_language.$!,
+      // "Currency-Code": SystemConfig.systemCurrency!.code!,
+      // "Currency-Exchange-Rate":
+      // SystemConfig.systemCurrency!.exchangeRate.toString(),
+    });
+    // print("Best Selling Product=========> ${response.body}");
+    return productMiniResponseFromJson(response.body);
   }
+
   Future<ProductMiniResponse> getTodaysDealProducts() async {
     String url = ("${AppConfig.BASE_URL}/products/todays-deal");
     final response = await ApiRequest.get(url: url, headers: {
@@ -77,7 +77,7 @@ class ProductRepository{
           "Content-Type": "application/json",
         },
         body: post_body);
-    
+
     print("Variant Price Update ${response.body}");
 
     return variantPriceResponseFromJson(response.body);
@@ -85,13 +85,15 @@ class ProductRepository{
 
   Future<ProductMiniResponse> getCategoryProducts(
       {int? id = 0, name = "", page = 1}) async {
-    String url = ("${AppConfig.BASE_URL}/products/category/$id?page=$page&name=$name");
+    String url =
+        ("${AppConfig.BASE_URL}/products/category/$id?page=$page&name=$name");
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
     print("Category Products Api======>${response.body}");
     return productMiniResponseFromJson(response.body);
   }
+
   Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
     String url = ("${AppConfig.BASE_URL}/products/$id");
     final response = await ApiRequest.get(url: url, headers: {
@@ -101,6 +103,7 @@ class ProductRepository{
 
     return productDetailsResponseFromJson(response.body);
   }
+
   Future<ProductMiniResponse> getRelatedProducts({int? id = 0}) async {
     String url = ("${AppConfig.BASE_URL}/products/related/$id");
     final response = await ApiRequest.get(url: url, headers: {
@@ -111,8 +114,7 @@ class ProductRepository{
 
   Future<ProductMiniResponse> getTopFromThisSellerProducts(
       {int? id = 0}) async {
-    String url =
-    ("${AppConfig.BASE_URL}/products/top-from-seller/$id");
+    String url = ("${AppConfig.BASE_URL}/products/top-from-seller/$id");
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
@@ -129,12 +131,29 @@ class ProductRepository{
 
   Future<ProductMiniResponse> getBrandProducts(
       {int? id = 0, name = "", page = 1}) async {
-    String url = ("${AppConfig.BASE_URL}/products/brand/$id?page=${page}&name=${name}");
+    String url =
+        ("${AppConfig.BASE_URL}/products/brand/$id?page=${page}&name=${name}");
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
-
     });
     return productMiniResponseFromJson(response.body);
   }
 
+  Future<ProductMiniResponse> getFilteredProducts(
+      {name = "",
+      sort_key = "",
+      page = 1,
+      brands = "",
+      categories = "",
+      min = "",
+      max = ""}) async {
+    String url = ("${AppConfig.BASE_URL}/products/search" +
+        "?page=$page&name=$name&sort_key=$sort_key&brands=$brands&categories=$categories&min=$min&max=$max");
+
+    print(url.toString());
+    final response = await ApiRequest.get(url: url, headers: {
+      "App-Language": app_language.$!,
+    });
+    return productMiniResponseFromJson(response.body);
+  }
 }

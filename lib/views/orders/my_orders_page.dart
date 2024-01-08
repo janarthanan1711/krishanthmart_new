@@ -9,6 +9,7 @@ import '../../utils/shared_value.dart';
 import '../../utils/useful_elements.dart';
 import '../mainpage/components/box_decorations.dart';
 import '../mainpage/main_page.dart';
+import 'order_details.dart';
 
 class PaymentStatus {
   String option_key;
@@ -233,8 +234,8 @@ class _OrderListState extends State<OrderList> {
                       alignment: Alignment.bottomCenter,
                       child: buildLoadingContainer())
                 ],
-              )),
-        ));
+              ),),
+        ),);
   }
 
   Container buildLoadingContainer() {
@@ -430,11 +431,11 @@ class _OrderListState extends State<OrderList> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  //   return OrderDetails(
-                  //     id: _orderList[index].id,
-                  //   );
-                  // }));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return OrderDetails(
+                      id: _orderList[index].id,
+                    );
+                  }));
                 },
                 child: buildOrderListItemCard(index),
               );

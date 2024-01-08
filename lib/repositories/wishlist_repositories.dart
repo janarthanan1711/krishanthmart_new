@@ -48,6 +48,7 @@ class WishListRepository {
           "App-Language": app_language.$!,
         },
         middleware: BannedUser());
+    print(response.body);
 
     return wishListChekResponseFromJson(response.body);
   }
