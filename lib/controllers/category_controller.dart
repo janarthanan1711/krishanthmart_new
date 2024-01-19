@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/models/category_model.dart';
 import 'package:krishanthmart_new/models/product_response_model.dart';

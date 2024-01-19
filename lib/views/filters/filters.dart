@@ -383,8 +383,6 @@ class _FilterState extends State<Filter> {
     );
   }
 
-  //--------------------
-
   @override
   Widget build(BuildContext context) {
     return Directionality(

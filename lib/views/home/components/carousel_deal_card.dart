@@ -8,12 +8,14 @@ import '../../../helpers/main_helpers.dart';
 import '../../../models/product_response_model.dart';
 import '../../../utils/colors.dart';
 import '../../product_details/components/product_bottom_sheet.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CarouselDealCard extends StatelessWidget {
   CarouselDealCard({super.key, required this.product});
 
   Product product;
   ProductController productController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,56 +67,85 @@ class CarouselDealCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          convertPrice(product.main_price!),
-                          style: TextStyle(
-                            color: MyTheme.accent_color,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w700,
+                        Container(
+                          height: 31.h,
+                          width: 65.w,
+                          color: MyTheme.shimmer_highlighted,
+                          child: Column(
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.ourPrice,
+                                style: TextStyle(
+                                  color: MyTheme.medium_grey_50,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Text(
+                                convertPrice(product.main_price!),
+                                style: TextStyle(
+                                  color: MyTheme.accent_color,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         if (product.has_discount!)
-                          Text(
-                            convertPrice(product.stroked_price!),
-                            style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              color: MyTheme.medium_grey,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w400,
+                          Container(
+                            height: 31.h,
+                            width: 65.w,
+                            color: MyTheme.shimmer_highlighted,
+                            child: Column(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.mrp,
+                                  style: TextStyle(
+                                    color: MyTheme.medium_grey_50,
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Text(
+                                  convertPrice(product.stroked_price!),
+                                  style: TextStyle(
+                                    decoration: TextDecoration.lineThrough,
+                                    color: MyTheme.medium_grey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                        // Text(
+                        //   convertPrice(product.main_price!),
+                        //   style: TextStyle(
+                        //     color: MyTheme.accent_color,
+                        //     fontSize: 14.sp,
+                        //     fontWeight: FontWeight.w700,
+                        //   ),
+                        // ),
+                        // if (product.has_discount!)
+                        //   Text(
+                        //     convertPrice(product.stroked_price!),
+                        //     style: TextStyle(
+                        //       decoration: TextDecoration.lineThrough,
+                        //       color: MyTheme.medium_grey,
+                        //       fontSize: 12.sp,
+                        //       fontWeight: FontWeight.w400,
+                        //     ),
+                        //   ),
                         ChooseOptionButton(
                           bgColor: MyTheme.green_light,
                           iconColor: MyTheme.black,
-                          onTap: () async{
-                           await variantBottomSheet();
+                          onTap: () {
+                            variantBottomSheet();
                           },
                           width: 130.sp,
                           height: 30.sp,
                         )
-                        // InkWell(
-                        //   onTap: () {},
-                        //   child: Container(
-                        //     decoration: BoxDecoration(
-                        //         color: MyTheme.green,
-                        //         borderRadius: BorderRadius.circular(5)),
-                        //     height: 30.sp,
-                        //     width: 130.sp,
-                        //     child: const Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         Text(
-                        //           "Add",
-                        //           style: TextStyle(color: MyTheme.white),
-                        //         ),
-                        //         Icon(
-                        //           Icons.add,
-                        //           color: MyTheme.white,
-                        //         )
-                        //       ],
-                        //     ),
-                        //   ),
-                        // )
                       ],
                     )
                   ],
@@ -167,12 +198,16 @@ class CarouselDealCard extends StatelessWidget {
       ),
     );
   }
+
   Future variantBottomSheet() async {
     await productController.fetchProductDetailsMain(product.id);
     await Get.bottomSheet(
       isDismissible: false,
       GetBuilder<ProductController>(builder: (productController) {
-        return ProductVariantBottomSheet(product: product,productController: productController,);
+        return ProductVariantBottomSheet(
+          product: product,
+          productController: productController,
+        );
       }),
       backgroundColor: Colors.white,
       elevation: 0,

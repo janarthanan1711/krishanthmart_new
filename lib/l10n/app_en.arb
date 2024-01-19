@@ -17,7 +17,7 @@
    "auction_biding_price_date_range_ucf": "Product Bidding Price + Date Range",
    "auction_starting_bid_price_ucf": "Starting bidding price",
    "auction_date_range_ucf": "Auction Date Range",
-
+  "homekitchenhave": "Home & Kitchen Must Have",
   "auction_will_end": "Auction Will End",
   "starting_bid_ucf": "Starting Bid",
   "highest_bid_ucf": "Highest Bid",
@@ -34,6 +34,9 @@
   "view_coupon": "View All Coupon",
   "address_ucf": "Address",
   "city_ucf": "City",
+  "ourPrice": "Our Price",
+  "continue_shopping": "Continue Shopping",
+  "mrp": "MRP",
   "enter_city_ucf": "Enter City",
   "postal_code_ucf": "Postal Code",
   "enter_postal_code_ucf": "Enter Postal Code",

@@ -60,6 +60,7 @@ dependencies:
   intl_phone_number_input:
   google_sign_in:
   twitter_login:
+  open_file:
   sign_in_with_apple:
   badges:
   crypto:
@@ -75,8 +76,10 @@ dependencies:
   geolocator:
   geocoding:
   expandable:
+  cc_avenue:
   flutter_screenutil:
   flutter_typeahead:
+  razorpay_flutter:
 
 dev_dependencies:
   flutter_test:

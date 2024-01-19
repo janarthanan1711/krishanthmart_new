@@ -14,6 +14,7 @@ import 'package:krishanthmart_new/views/flashdeals/flashdealslist.dart';
 import 'package:krishanthmart_new/views/home/components/banner_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:krishanthmart_new/views/mainpage/components/brand_grid.dart';
+import 'package:krishanthmart_new/views/product_details/all_products.dart';
 import 'package:krishanthmart_new/views/product_details/components/product_large_card_list.dart';
 import 'package:toast/toast.dart';
 import '../../controllers/location_controller.dart';
@@ -28,6 +29,7 @@ import '../category/category_page.dart';
 import '../category/components/category_grid.dart';
 import '../flashdeals/flashdealproducts.dart';
 import '../mainpage/components/box_decorations.dart';
+import '../profile/profile_edit.dart';
 import 'components/carousel_deal_card.dart';
 import 'components/home_carousel.dart';
 import 'package:flutter_countdown_timer/index.dart';
@@ -57,7 +59,6 @@ class _HomePageState extends State<HomePage> {
       ..addListener(() {
         setState(() {});
       });
-    print("World of Langauages=======> ${app_language_rtl.$}");
     cartController.getCount();
   }
 
@@ -71,6 +72,13 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
+  }
+
+  showLoginWarning() {
+    return ToastComponent.showDialog(
+        AppLocalizations.of(context)!.you_need_to_log_in,
+        gravity: Toast.center,
+        duration: Toast.lengthLong);
   }
 
   @override
@@ -142,16 +150,23 @@ class _HomePageState extends State<HomePage> {
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                     ),
-                    child: is_logged_in.$
-                        ? CircleAvatar(
-                            backgroundImage:
-                                NetworkImage("${avatar_original.$}"))
-                        : Image.asset(
-                            'assets/profile_placeholder.png',
-                            height: 48,
-                            width: 48,
-                            fit: BoxFit.fitHeight,
-                          ),
+                    child: InkWell(
+                      onTap: is_logged_in.$
+                          ? () {
+                              Get.to(() => ProfileEdit());
+                            }
+                          : () => showLoginWarning(),
+                      child: is_logged_in.$
+                          ? CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage("${avatar_original.$}"))
+                          : Image.asset(
+                              'assets/profile_placeholder.png',
+                              height: 48,
+                              width: 48,
+                              fit: BoxFit.fitHeight,
+                            ),
+                    ),
                     // child: const CircleAvatar(
                     //   backgroundImage:
                     //   AssetImage(ImageDirectory.profileIconImage),
@@ -307,18 +322,9 @@ class _HomePageState extends State<HomePage> {
                   addRepaintBoundaries: true,
                   childCount: 1,
                   (context, index) {
-                    // return ListView.builder(
-                    //     padding: const EdgeInsets.only(top: 0),
-                    //     clipBehavior: Clip.none,
-                    //     shrinkWrap: true,
-                    //     physics: const NeverScrollableScrollPhysics(),
-                    //     itemCount: 1,
-                    //     itemBuilder: (context, index) {
                     return Column(
-                      // physics: const NeverScrollableScrollPhysics(),
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      // shrinkWrap: true,
                       children: [
                         const CustomCarousel(),
                         SizedBox(
@@ -353,9 +359,10 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           // width: DeviceInfo(context).width,
                           // margin: EdgeInsets.symmetric(horizontal: 6.w),
-                          height: 216.h,
+                          height: 218.h,
                           child: CategoryGridView(
-                              homeController.featuredCategoryList),
+                            homeController.featuredCategoryList,
+                          ),
                         ),
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 4.w),
@@ -372,8 +379,6 @@ class _HomePageState extends State<HomePage> {
                         Container(
                           color: MyTheme.light_blue,
                           width: DeviceInfo(context).width,
-                          // height: 324.h,
-                          height: 618.h,
                           child: Obx(
                             () => ListView.builder(
                                 padding: const EdgeInsets.all(0),
@@ -395,9 +400,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Container(
-                          color: MyTheme.light_brown,
+                          color: MyTheme.mild_green,
                           width: DeviceInfo(context).width,
-                          height: 337.h,
                           child: Column(
                             children: [
                               Padding(
@@ -504,7 +508,13 @@ class _HomePageState extends State<HomePage> {
                                   style: TextStyle(
                                       color: MyTheme.black, fontSize: 14.sp),
                                 ),
-                                onTap: () {},
+                                onTap: () {
+                                  Get.to(
+                                    () => AllProducts(
+                                      selected_products: "todays_offer",
+                                    ),
+                                  );
+                                },
                               )
                             ],
                           ),
@@ -639,7 +649,13 @@ class _HomePageState extends State<HomePage> {
                                             color: MyTheme.white,
                                             fontSize: 14.sp),
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Get.to(
+                                          () => AllProducts(
+                                            selected_products: "best_selling",
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -651,8 +667,7 @@ class _HomePageState extends State<HomePage> {
                                     return ListView.builder(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: homeController
-                                          .bestSellingProductList.length,
+                                      itemCount: 6,
                                       physics: const BouncingScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         return Container(
@@ -755,7 +770,13 @@ class _HomePageState extends State<HomePage> {
                                             color: MyTheme.white,
                                             fontSize: 14.sp),
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Get.to(
+                                          () => AllProducts(
+                                            selected_products: "best_deals",
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -773,83 +794,6 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                        ),
-                        Container(
-                          color: MyTheme.dark_purple,
-                          width: DeviceInfo(context).width,
-                          height: 255.h,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                        AppLocalizations.of(context)!
-                                            .featured_products_ucf,
-                                        style: TextStyle(
-                                            color: MyTheme.white,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold)),
-                                    InkWell(
-                                      child: Text(
-                                        AppLocalizations.of(context)!
-                                            .view_more_ucf,
-                                        style: TextStyle(
-                                            color: MyTheme.white,
-                                            fontSize: 14.sp),
-                                      ),
-                                      onTap: () {},
-                                    )
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 210.h,
-                                child: GetBuilder<HomeController>(
-                                  builder: (homeController) {
-                                    return ListView.builder(
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: homeController
-                                          .featuredProductList.length,
-                                      physics: const BouncingScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        // productController.itemsIndex.value = index;
-                                        return Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          child: ProductCard(
-                                            product: homeController
-                                                .featuredProductList[index],
-                                            onTap: () {
-                                              // productController
-                                              //     .isAddToCartFetchedByIndex(
-                                              //         id: homeController
-                                              //             .featuredProductList[
-                                              //                 index]
-                                              //             .id,
-                                              //         index: index);
-                                            },
-                                            itemIndex: index,
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          color: MyTheme.light_purple,
-                          width: DeviceInfo(context).width,
-                          height: 274.h,
-                          child: const BrandCategoryView(),
                         ),
                         Container(
                           height: 182.h,
@@ -895,6 +839,146 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
+                        Container(
+                          color: MyTheme.dark_purple,
+                          width: DeviceInfo(context).width,
+                          height: 255.h,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                        AppLocalizations.of(context)!
+                                            .featured_products_ucf,
+                                        style: TextStyle(
+                                            color: MyTheme.white,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold)),
+                                    InkWell(
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .view_more_ucf,
+                                        style: TextStyle(
+                                            color: MyTheme.white,
+                                            fontSize: 14.sp),
+                                      ),
+                                      onTap: () {
+                                        Get.to(
+                                          () => AllProducts(
+                                            selected_products:
+                                                "featured_products",
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 210.h,
+                                child: GetBuilder<HomeController>(
+                                  builder: (homeController) {
+                                    return ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: 6,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        // productController.itemsIndex.value = index;
+                                        return Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: ProductCard(
+                                            product: homeController
+                                                .featuredProductList[index],
+                                            onTap: () {},
+                                            itemIndex: index,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.light_purple,
+                          width: DeviceInfo(context).width,
+                          height: 274.h,
+                          child: const BrandCategoryView(),
+                        ),
+                        Container(
+                          color: MyTheme.white,
+                          padding:
+                              EdgeInsets.only(left: 4.w, right: 4.w, top: 1.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.homekitchenhave,
+                                style: TextStyle(
+                                    color: MyTheme.black,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          color: MyTheme.white,
+                          width: DeviceInfo(context).width,
+                          // height: 324.h,
+                          height: 150.h,
+                          child: Obx(
+                            () => ListView.builder(
+                                padding: const EdgeInsets.all(0),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount:
+                                    homeController.bannerSixImageList.length,
+                                itemBuilder: (context, index) {
+                                  String imageUrl =
+                                      homeController.bannerSixImageList[index];
+                                  if (homeController
+                                      .bannerSixImageList.isEmpty) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else {
+                                    return InkWell(
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 2.5.h, horizontal: 5.w),
+                                        // height: 100.h,
+                                        height: 100.h,
+                                        width: 145.w,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: MyTheme.medium_grey),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          image: DecorationImage(
+                                              image: NetworkImage(imageUrl),
+                                              fit: BoxFit.fill),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        Get.to(
+                                          () => CategoryListPages(),
+                                        );
+                                      },
+                                    );
+                                  }
+                                }),
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -911,51 +995,46 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         Container(
-                          color: MyTheme.shimmer_highlighted,
+                          // color: MyTheme.light_blue,
                           width: DeviceInfo(context).width,
-                          height: 100.h,
-                          child: Container(
-                            margin: EdgeInsets.only(top: 2.h, bottom: 2.h),
-                            width: DeviceInfo(context).width,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              image: const DecorationImage(
-                                  image: NetworkImage(
-                                      "https://krishanthmart.com/public/uploads/all/qCVSw6g2WUwPQjRGK1ZMbsYYSX7u7pOCn3RoAa8N.jpg"),
-                                  fit: BoxFit.fill),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          color: MyTheme.shimmer_highlighted,
-                          width: DeviceInfo(context).width,
-                          height: 100.h,
-                          child: Container(
-                            margin: EdgeInsets.only(top: 5.h, bottom: 2.h),
-                            width: DeviceInfo(context).width,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              image: const DecorationImage(
-                                  image: NetworkImage(
-                                      "https://krishanthmart.com/public/uploads/all/oHbGJMp36NWHz6WVkKYKZ49hOkXPM4UH6gSDVELs.jpg"),
-                                  fit: BoxFit.fill),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          color: MyTheme.shimmer_highlighted,
-                          width: DeviceInfo(context).width,
-                          height: 100.h,
-                          child: Container(
-                            margin: EdgeInsets.only(top: 5.h),
-                            width: DeviceInfo(context).width,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              image: const DecorationImage(
-                                  image: NetworkImage(
-                                      "https://krishanthmart.com/public/uploads/all/rfh8dfT69psXS8ZhgehlojsbpPhtiQ4ckUs9u3Ma.jpg"),
-                                  fit: BoxFit.fill),
-                            ),
+                          child: Obx(
+                            () => ListView.builder(
+                                padding: const EdgeInsets.all(0),
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount:
+                                    homeController.bannerFourImageList.length,
+                                itemBuilder: (context, index) {
+                                  String imageUrl =
+                                      homeController.bannerFourImageList[index];
+                                  if (homeController
+                                      .bannerFourImageList.isEmpty) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else {
+                                    return InkWell(
+                                      onTap: () {
+                                        Get.to(
+                                          () => AllProducts(),
+                                        );
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 2.5.h),
+                                        // height: 100.h,
+                                        height: 100.h,
+                                        width: DeviceInfo(context).width,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          image: DecorationImage(
+                                              image: NetworkImage(imageUrl),
+                                              fit: BoxFit.fill),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }),
                           ),
                         ),
                       ],

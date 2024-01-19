@@ -16,7 +16,7 @@ class ProductLargeCardList extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
-      itemCount: productList.length,
+      itemCount: 6,
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         return LargeProductCard(product: productList[index],);

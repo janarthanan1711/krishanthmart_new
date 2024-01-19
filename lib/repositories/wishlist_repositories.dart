@@ -23,20 +23,21 @@ class WishListRepository {
     return wishlistResponseFromJson(response.body);
   }
 
-  Future<dynamic> delete({
-    int? wishlist_id = 0,
-  }) async {
-    String url = ("${AppConfig.BASE_URL}/wishlists/${wishlist_id}");
-    final response = await ApiRequest.delete(
-        url: url,
-        headers: {
-          "Authorization": "Bearer ${access_token.$}",
-          "App-Language": app_language.$!,
-        },
-        middleware: BannedUser());
-    print("wishlist response========>${response.body}");
-    return wishlistDeleteResponseFromJson(response.body);
-  }
+  // Future<dynamic> delete({
+  //   int? wishlist_id = 0,
+  // }) async {
+  //   String url = ("${AppConfig.BASE_URL}/wishlists/${wishlist_id}");
+  //   final response = await ApiRequest.delete(
+  //       url: url,
+  //       headers: {
+  //         "Authorization": "Bearer ${access_token.$}",
+  //         "App-Language": app_language.$!,
+  //       },
+  //       middleware: BannedUser());
+  //   print("wishlist response========>${response.body}");
+  //   print(response.statusCode);
+  //   return wishlistDeleteResponseFromJson(response.body);
+  // }
 
   Future<dynamic> isProductInUserWishList({product_id = 0}) async {
     String url =
@@ -81,6 +82,7 @@ class WishListRepository {
         },
         middleware: BannedUser());
     print("product wishlist response=====================================>${response.body}");
+    print(response.statusCode);
 
     return wishListChekResponseFromJson(response.body);
   }

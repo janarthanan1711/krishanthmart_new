@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:badges/badges.dart' as badges;
@@ -35,7 +34,7 @@ class _MainPageState extends State<MainPage> {
   var bottomPages = [
     HomePage(),
     CategoryListPages(),
-    CartPage(has_bottomnav: true),
+    CartPage(has_bottomnav: true,from_navigation: false),
     const FlashDealList(
       hasBottomNav: true,
     ),

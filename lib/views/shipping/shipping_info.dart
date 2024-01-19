@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../models/delivery_info_response.dart';
@@ -125,7 +126,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
   }
 
   changeShippingOption(ShippingOption option, index) {
-
+    print("kpogjpergjepgjegj${option}");
     if (option.index == 1) {
       if(_deliveryInfoList.first.pickupPoints!.isNotEmpty) {
         _sellerWiseShippingOption[index].shippingId =
@@ -262,7 +263,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
         builder: (context) =>
             IconButton(
               icon: Icon(CupertinoIcons.arrow_left, color: MyTheme.dark_grey),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () =>Get.back()
             ),
       ),
       title: Text(
@@ -759,6 +760,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
       ),
       padding: const EdgeInsets.only(right: 14),
       onPressed: () {
+        print("jfdsogjdogjdgjdg");
         changeShippingOption(ShippingOption.HomeDelivery, sellerIndex);
       },
       child: Container(
@@ -813,6 +815,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
       ),
       padding: const EdgeInsets.only(right: 14),
       onPressed: () {
+        print("jsogjdogjogjeogj");
         changeShippingOption(ShippingOption.Carrier, sellerIndex);
       },
       child: Container(

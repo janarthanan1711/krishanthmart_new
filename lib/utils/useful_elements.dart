@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:krishanthmart_new/utils/shared_value.dart';
-
 import '../views/mainpage/main_page.dart';
 import 'colors.dart';
 
@@ -25,12 +24,12 @@ class UsefulElements {
     return IconButton(
       icon: Icon(CupertinoIcons.arrow_left,
           color: color == 'white' ? Colors.white : MyTheme.dark_font_grey),
-      onPressed: () => Navigator.push(
+      onPressed: () => Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (context) => MainPage(
-                // go_back: go_back,
-              ))),
+                 go_back: go_back,
+              )),(route) => false),
     );
   }
 
@@ -130,6 +129,4 @@ class UsefulElements {
         width: width,
         child: child);
   }
-
-
 }

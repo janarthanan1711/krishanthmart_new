@@ -16,6 +16,7 @@ import 'package:krishanthmart_new/views/flashdeals/flashdealslist.dart';
 import 'package:krishanthmart_new/views/mainpage/main_page.dart';
 import 'package:krishanthmart_new/views/orders/order_details.dart';
 import 'package:krishanthmart_new/views/orders/refund_request.dart';
+import 'package:krishanthmart_new/views/product_details/all_products.dart';
 import 'package:krishanthmart_new/views/product_details/product_details.dart';
 import 'package:krishanthmart_new/views/profile/profile_edit.dart';
 import 'package:krishanthmart_new/views/shipping/shipping_info.dart';
@@ -53,6 +54,7 @@ class Routes {
   static String ordersPage = '/ordersPage';
   static String ordersDetails = '/ordersDetails';
   static String filtersPage = '/filters';
+  static String allProducts = '/allProducts';
 }
 
 List<GetPage<dynamic>>? getPages = [
@@ -159,5 +161,9 @@ List<GetPage<dynamic>>? getPages = [
   GetPage(
     name: Routes.filtersPage,
     page: () => Filter(),
+  ),
+  GetPage(
+    name: Routes.allProducts,
+    page: () => AllProducts(),
   )
 ];

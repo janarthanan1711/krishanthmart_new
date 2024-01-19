@@ -18,7 +18,8 @@
             android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
             android:authorities="${applicationId}.flutter_downloader.provider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            tools:ignore="MissingClass">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
@@ -27,7 +28,8 @@
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
-            tools:node="merge">
+            tools:node="merge"
+            tools:ignore="MissingClass">
             <meta-data
                 android:name="androidx.work.WorkManagerInitializer"
                 android:value="androidx.startup"
@@ -38,7 +40,8 @@
         <provider
             android:name="vn.hunghd.flutterdownloader.FlutterDownloaderInitializer"
             android:authorities="${applicationId}.flutter-downloader-init"
-            android:exported="false">
+            android:exported="false"
+            tools:ignore="MissingClass">
             <!-- changes this number to configure the maximum number of concurrent tasks -->
             <meta-data
                 android:name="vn.hunghd.flutterdownloader.MAX_CONCURRENT_TASKS"

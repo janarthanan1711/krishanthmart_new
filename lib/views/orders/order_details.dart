@@ -27,7 +27,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-
+import 'package:open_file/open_file.dart';
 import 'components/confirm_dialog.dart';
 import 'components/info_dialog.dart';
 
@@ -60,9 +60,9 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   @pragma('vm:entry-point')
   static void downloadCallback(String id, int status, int progress) {
-    final SendPort? send =
+    final SendPort? pSend =
         IsolateNameServer.lookupPortByName('downloader_send_port');
-    send?.send([id, status, progress]);
+    pSend?.send([id, status, progress]);
   }
 
   //init
@@ -85,7 +85,6 @@ class _OrderDetailsState extends State<OrderDetails> {
           ToastComponent.showDialog("File has downloaded successfully.",
               gravity: Toast.center, duration: Toast.lengthLong);
         }
-        setState(() {});
       },
     );
 
@@ -96,54 +95,67 @@ class _OrderDetailsState extends State<OrderDetails> {
     print(widget.id);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  //
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  // }
 
   Future<void> _downloadInvoice(id) async {
     var folder = await createFolder();
     try {
       String? _taskid = await FlutterDownloader.enqueue(
-          url: "${AppConfig.BASE_URL}/invoice/download/$id",
+          url: AppConfig.BASE_URL + "/invoice/download/$id",
           saveInPublicStorage: true,
           savedDir: folder,
-          showNotification: true,
           headers: {
             "Authorization": "Bearer ${access_token.$}",
             "Currency-Code": SystemConfig.systemCurrency!.code!,
             "Currency-Exchange-Rate":
                 SystemConfig.systemCurrency!.exchangeRate.toString(),
             "App-Language": app_language.$!,
-            "System-Key": AppConfig.system_key
-          });
+            // "System-Key": AppConfig.system_key
+          }
+          );
+      // FlutterDownloader.loadTasks();
+      await Future.delayed(Duration(seconds: 1));
+      FlutterDownloader.open(taskId: _taskid!);
     } on Exception catch (e) {
       print("e.toString()");
       print(e.toString());
-      // TODO
     }
   }
 
   Future<String> createFolder() async {
-    var mPath = "storage/emulated/0/Download/";
-    if (Platform.isIOS) {
-      var iosPath = await getApplicationDocumentsDirectory();
-      mPath = iosPath.path;
-    }
-    // print("path = $mPath");
-    final dir = Directory(mPath);
-
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    }
-    if ((await dir.exists())) {
-      return dir.path;
+    final Directory? tempDir = await getExternalStorageDirectory();
+    print("directory path;;;;;;;;;;;;;;;;;;${tempDir!.path}");
+    final filePath = Directory("${tempDir.path}/files");
+    if (await filePath.exists()) {
+      return filePath.path;
     } else {
-      await dir.create();
-      return dir.path;
+      await filePath.create(recursive: true);
+      return filePath.path;
     }
+    // var mPath = "storage/emulated/0/Download/";
+    // if (Platform.isIOS) {
+    //   var iosPath = await getApplicationDocumentsDirectory();
+    //   mPath = iosPath.path;
+    // }
+    // // print("path = $mPath");
+    // final dir = Directory(mPath);
+    //
+    // var status = await Permission.storage.status;
+    // if (!status.isGranted) {
+    //   await Permission.storage.request();
+    // }
+    // if ((await dir.exists())) {
+    //   return dir.path;
+    // } else {
+    //   await dir.create();
+    //   return dir.path;
+    // }
   }
+
 
   fetchAll() {
     fetchOrderDetails();
@@ -514,7 +526,7 @@ class _OrderDetailsState extends State<OrderDetails> {
           // })).then((value) {
           //   onPopped(value);
           // });
-          Get.to(()=>RefundRequest())?.then((value) => onPopped(value));
+          Get.to(() => RefundRequest())?.then((value) => onPopped(value));
         },
         textColor: MyTheme.accent_color,
         disabledTextColor: Colors.grey,
@@ -600,7 +612,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   child: Text(
                                     AppLocalizations.of(context)!
                                         .ordered_product_ucf,
-                                    style: const TextStyle(color: MyTheme.font_grey),
+                                    style: const TextStyle(
+                                        color: MyTheme.font_grey),
                                   ),
                                 )))
                 ])),
@@ -1381,8 +1394,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                           _downloadInvoice(_orderDetails!.id);
                         },
                         child: Container(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(color: MyTheme.medium_grey)),

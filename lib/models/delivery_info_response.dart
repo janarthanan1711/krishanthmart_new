@@ -69,14 +69,17 @@ class Datum {
   bool? freeShipping;
   String? transitPrice;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    name: json["name"],
-    logo: json["logo"],
-    transitTime: json["transit_time"],
-    freeShipping: json["free_shipping"],
-    transitPrice: json["transit_price"],
-  );
+  factory Datum.fromJson(Map<String, dynamic> json) {
+    print( "shipping inf Json==============>  ${json}");
+    return Datum(
+      id: json["id"],
+      name: json["name"],
+      logo: json["logo"],
+      transitTime: json["transit_time"],
+      freeShipping: json["free_shipping"],
+      transitPrice: json["transit_price"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,

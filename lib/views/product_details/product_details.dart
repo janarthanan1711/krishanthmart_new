@@ -10,11 +10,11 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/cart_controller.dart';
+import 'package:krishanthmart_new/views/auth/login.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:social_share/social_share.dart';
 import 'package:toast/toast.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import '../../controllers/product_controller.dart';
 import '../../helpers/color_helper.dart';
 import '../../helpers/main_helpers.dart';
 import '../../models/product_details_model.dart';
@@ -142,15 +142,6 @@ class _ProductDetailsState extends State<ProductDetails>
     super.initState();
   }
 
-  // @override
-  // void dispose() {
-  //   _mainScrollController.dispose();
-  //   _variantScrollController.dispose();
-  //   _imageScrollController.dispose();
-  //   _colorScrollController.dispose();
-  //   _ColorAnimationController.dispose();
-  //   super.dispose();
-  // }
 
   fetchAll() {
     fetchProductDetails();
@@ -160,14 +151,6 @@ class _ProductDetailsState extends State<ProductDetails>
     fetchRelatedProducts();
     fetchTopProducts();
   }
-
-  // fetchVariantPrice() async {
-  //   var response = await ProductRepository()
-  //       .getVariantPrice(id: widget.id, quantity: _quantity);
-  //
-  //   _totalPrice = response.data!.price;
-  //   setState(() {});
-  // }
 
   fetchProductDetails() async {
     var productDetailsResponse =
@@ -212,10 +195,6 @@ class _ProductDetailsState extends State<ProductDetails>
       _productDetails!.choice_options!.forEach((choiceOpiton) {
         _selectedChoices.add(choiceOpiton.options![0]);
       });
-      print("SelectedChoices=======>${_selectedChoices}");
-      // _productDetails!.colors!.forEach((color) {
-      //   _colorList.add(color);
-      // });
 
       setChoiceString();
 
@@ -399,6 +378,7 @@ class _ProductDetailsState extends State<ProductDetails>
           gravity: Toast.center,
           duration: Toast.lengthLong);
       // Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+      Get.to(()=>Login());
       return;
     }
 
@@ -848,55 +828,13 @@ class _ProductDetailsState extends State<ProductDetails>
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return CartPage(has_bottomnav: false);
-                                  })).then((value) {
-                                    onPopped(value);
-                                  });
-                                },
-                                child: Container(
-                                  decoration: BoxDecorations
-                                      .buildCircularButtonDecoration_1(),
-                                  width: 36,
-                                  height: 36,
-                                  padding: const EdgeInsets.all(8),
-                                  child: badges.Badge(
-                                    badgeStyle: badges.BadgeStyle(
-                                      shape: badges.BadgeShape.circle,
-                                      badgeColor: MyTheme.accent_color,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    badgeAnimation:
-                                        const badges.BadgeAnimation.slide(
-                                      toAnimate: true,
-                                    ),
-                                    stackFit: StackFit.loose,
-                                    badgeContent: Obx(
-                                      () => Text(
-                                        "${cartController.cartCounter}",
-                                        style: const TextStyle(
-                                            fontSize: 12, color: Colors.white),
-                                      ),
-                                    ),
-                                    child: Image.asset(
-                                      "assets/cart.png",
-                                      color: MyTheme.dark_font_grey,
-                                      height: 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 6.h),
-                              InkWell(
-                                onTap: () {
                                   onPressShare(context);
                                 },
                                 child: Container(
                                   decoration: BoxDecorations
                                       .buildCircularButtonDecoration_1(),
-                                  width: 36,
-                                  height: 36,
+                                  width: 32.w,
+                                  height: 30.h,
                                   child: Center(
                                     child: Icon(
                                       Icons.share_outlined,
@@ -906,7 +844,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 6.h),
+                              SizedBox(height: 8.h),
                               InkWell(
                                 onTap: () {
                                   onWishTap();
@@ -914,8 +852,8 @@ class _ProductDetailsState extends State<ProductDetails>
                                 child: Container(
                                   decoration: BoxDecorations
                                       .buildCircularButtonDecoration_1(),
-                                  width: 36,
-                                  height: 36,
+                                  width: 32.w,
+                                  height: 30.h,
                                   child: Center(
                                     child: Icon(
                                       Icons.favorite,

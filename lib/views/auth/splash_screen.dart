@@ -5,7 +5,6 @@ import 'package:krishanthmart_new/controllers/currency_controller.dart';
 import 'package:krishanthmart_new/controllers/language_controller.dart';
 import 'package:krishanthmart_new/views/mainpage/main_page.dart';
 import 'package:package_info/package_info.dart';
-import '../../helpers/addons_helpers.dart';
 import '../../helpers/auth_helpers.dart';
 import '../../helpers/business_settings_helpers.dart';
 import '../../utils/app_config.dart';
@@ -48,12 +47,6 @@ class _SplashScreenState extends State<SplashScreen> {
     getSharedValueHelperData().then((value){
       Future.delayed(const Duration(seconds: 3)).then((value) {
         languageController.setLocale(app_mobile_language.$!);
-        // Provider.of<LocaleProvider>(context,listen: false).setLocale(app_mobile_language.$!);
-        // Navigator.pushAndRemoveUntil(context,
-        //   MaterialPageRoute(builder: (context) {
-        //     return const MainPage(go_back: false,);
-        //   },
-        //   ),(route)=>false,);
         Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
             return MainPage(go_back: false,);

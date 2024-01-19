@@ -35,6 +35,7 @@ class MyTheme {
   static Color green_new = const Color(0xFF38761D);
   static Color? green_light = Colors.green[200];
   static Color light_brown = Color(0XFFDAD5BD);
+  static Color mild_green = Color(0xFFD9EAC2);
   static const Color pale = Color(0xFFFAF9DE);
   static Color shimmer_base = Colors.grey.shade50;
   static Color shimmer_highlighted = Colors.grey.shade200;
@@ -48,10 +49,10 @@ class MyTheme {
   static const Color polo_blue = Color.fromRGBO(152, 179, 209, 1);
   static const Color indigo = Colors.indigo;
   static const Color light_blue = Color(0xFFb5def4);
-  //------------
+
   static const Color blue_chill = Color.fromRGBO(71, 148, 147, 1);
   static const Color cruise = Color.fromRGBO(124, 196, 195, 1);
-  //---------------
+  static const Color red = Colors.red;
   static const Color brick_red = Color.fromRGBO(191, 25, 49, 1);
   static const Color cinnabar = Color.fromRGBO(226, 88, 62, 1);
   static const Color tealDark = Color(0xff03331F);

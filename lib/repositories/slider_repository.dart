@@ -53,4 +53,30 @@ class SliderRepository {
     print("sliders");*/
     return sliderResponseFromJson(response.body);
   }
+  Future<SliderResponse> getBannerFourImages() async {
+
+    String url =  ("${AppConfig.BASE_URL}/banners-four");
+    final response =
+    await ApiRequest.get(url: url,
+      headers: {
+        "App-Language": app_language.$!,
+      },);
+    /*print(response.body.toString());
+    print("sliders");*/
+    print("slider four images============>${response.body}");
+    return sliderResponseFromJson(response.body);
+  }
+  Future<SliderResponse> getBannerSixImages() async {
+
+    String url =  ("${AppConfig.BASE_URL}/banners-six");
+    final response =
+    await ApiRequest.get(url: url,
+      headers: {
+        "App-Language": app_language.$!,
+      },);
+    /*print(response.body.toString());
+    print("sliders");*/
+    print("slider six images============>${response.body}");
+    return sliderResponseFromJson(response.body);
+  }
 }

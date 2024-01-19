@@ -23,7 +23,8 @@ class ProductVariantBottomSheet extends StatelessWidget {
     SnackBar _addedToCartSnackbar = SnackBar(
       content: Text(
         AppLocalizations.of(context)!.added_to_cart,
-        style: TextStyle(color: MyTheme.black,fontWeight: FontWeight.bold,fontSize: 18.sp),
+        style: TextStyle(
+            color: MyTheme.black, fontWeight: FontWeight.bold, fontSize: 18.sp),
       ),
       // backgroundColor: MyTheme.soft_accent_color,
       backgroundColor: MyTheme.green_light,
@@ -32,8 +33,8 @@ class ProductVariantBottomSheet extends StatelessWidget {
         label: AppLocalizations.of(context)!.show_cart_all_capital,
         onPressed: () {
           Get.to(() => CartPage(
-            has_bottomnav: false,
-          ));
+                has_bottomnav: false,
+              ));
         },
         textColor: MyTheme.white,
         disabledTextColor: Colors.grey,
@@ -42,7 +43,8 @@ class ProductVariantBottomSheet extends StatelessWidget {
     SnackBar removeFromWislist = SnackBar(
       content: Text(
         "Remove From Wishlist",
-        style: TextStyle(color: MyTheme.black,fontWeight: FontWeight.bold,fontSize: 18.sp),
+        style: TextStyle(
+            color: MyTheme.black, fontWeight: FontWeight.bold, fontSize: 18.sp),
       ),
       backgroundColor: MyTheme.soft_accent_color,
       // backgroundColor: MyTheme.green_light,
@@ -51,10 +53,22 @@ class ProductVariantBottomSheet extends StatelessWidget {
     SnackBar addToWishList = SnackBar(
       content: Text(
         "Added to Wishlist",
-        style: TextStyle(color: MyTheme.black,fontWeight: FontWeight.bold,fontSize: 18.sp),
+        style: TextStyle(
+            color: MyTheme.black, fontWeight: FontWeight.bold, fontSize: 18.sp),
       ),
       // backgroundColor: MyTheme.soft_accent_color,
       backgroundColor: MyTheme.green_light,
+      duration: const Duration(seconds: 3),
+    );
+
+    SnackBar noStocksMessage = SnackBar(
+      content: Text(
+        "No Stocks Available",
+        style: TextStyle(
+            color: MyTheme.black, fontWeight: FontWeight.bold, fontSize: 18.sp),
+      ),
+      // backgroundColor: MyTheme.soft_accent_color,
+      backgroundColor: MyTheme.cinnabar,
       duration: const Duration(seconds: 3),
     );
     return SingleChildScrollView(
@@ -104,18 +118,43 @@ class ProductVariantBottomSheet extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  convertPrice(productController.totalPrice!),
-                                  // SystemConfig.systemCurrency!.code!=null?
-                                  // widget.main_price!.replaceAll(SystemConfig.systemCurrency!.code!, SystemConfig.systemCurrency!.symbol!)
-                                  //     :widget.main_price!,
-                                  textAlign: TextAlign.left,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      color: MyTheme.accent_color,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w700),
+                                Container(
+                                  height: 35.h,
+                                  width: 80.w,
+                                  color: MyTheme.shimmer_highlighted,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)!.ourPrice,
+                                        style:  TextStyle(
+                                          color: MyTheme.medium_grey_50,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      Text(
+                                        convertPrice(productController.totalPrice!),
+                                        style:  TextStyle(
+                                          color: MyTheme.accent_color,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                // Text(
+                                //   convertPrice(productController.totalPrice!),
+                                //   // SystemConfig.systemCurrency!.code!=null?
+                                //   // widget.main_price!.replaceAll(SystemConfig.systemCurrency!.code!, SystemConfig.systemCurrency!.symbol!)
+                                //   //     :widget.main_price!,
+                                //   textAlign: TextAlign.left,
+                                //   maxLines: 1,
+                                //   style: TextStyle(
+                                //       color: MyTheme.accent_color,
+                                //       fontSize: 16.sp,
+                                //       fontWeight: FontWeight.w700),
+                                // ),
                                 SizedBox(
                                   width: 10.w,
                                 ),
@@ -212,10 +251,10 @@ class ProductVariantBottomSheet extends StatelessWidget {
                   padding: EdgeInsets.only(left: 6.w),
                   child: buildQuantityButton(
                       onTapIncrement: () {
-                        productController.incrementQuantityCart(product.id);
+                        productController.incrementQuantityCart(product.id,snackbar: noStocksMessage,context: context);
                       },
                       onTapDecrement: () {
-                        productController.decrementQuantityCart(product.id);
+                        productController.decrementQuantityCart(product.id,snackbar: noStocksMessage,context: context);
                       },
                       quantityText: productController.quantityText.value),
                 )
@@ -235,15 +274,22 @@ class ProductVariantBottomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 iconButton(
-                    onTap: () {
-                      productController.onWishTap(context, product.id,productController.isInWishList ?  removeFromWislist : addToWishList);
-                    },
-                    height: 35.h,
-                    width: 100.w,
-                    icon: Icons.favorite,),
+                  onTap: () {
+                    productController.onWishTap(
+                        context,
+                        product.id,
+                        productController.isInWishList == true
+                            ? removeFromWislist
+                            : addToWishList);
+                  },
+                  height: 35.h,
+                  width: 100.w,
+                  icon: Icons.favorite,
+                ),
                 iconButton(
                   onTap: () {
-                    SocialShare.shareOptions(productController.productDetails!.link!);
+                    SocialShare.shareOptions(
+                        productController.productDetails!.link!);
                   },
                   height: 35.h,
                   width: 100.w,
@@ -251,7 +297,11 @@ class ProductVariantBottomSheet extends StatelessWidget {
                 ),
                 iconButton(
                   onTap: () {
-                    productController.addToCart(id: product.id,mode: "add_to_cart",context: context,snackbar: _addedToCartSnackbar);
+                    productController.addToCart(
+                        id: product.id,
+                        mode: "add_to_cart",
+                        context: context,
+                        snackbar: _addedToCartSnackbar);
                   },
                   height: 35.h,
                   width: 100.w,
@@ -266,10 +316,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
   }
 
   static iconButton(
-      {required onTap,
-      required height,
-      required width,
-      required icon}) {
+      {required onTap, required height, required width, required icon}) {
     return InkWell(
       onTap: onTap,
       child: Container(

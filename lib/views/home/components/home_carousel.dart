@@ -26,7 +26,7 @@ class CustomCarousel extends StatelessWidget {
               }
             },
             options: CarouselOptions(
-              height: 215,
+              height: 180.h,
               autoPlay: true,
               viewportFraction: 1,
               autoPlayInterval: const Duration(seconds: 3),

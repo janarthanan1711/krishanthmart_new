@@ -11,6 +11,8 @@ import '../../utils/toast_component.dart';
 import '../../utils/useful_elements.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../shipping/shipping_info.dart';
+
 
 class SelectAddress extends StatefulWidget {
   int? owner_id;
@@ -124,12 +126,12 @@ class _SelectAddressState extends State<SelectAddress> {
 
     ToastComponent.showDialog(addressUpdateInCartResponse.message,
         gravity: Toast.center, duration: Toast.lengthLong);
-    //
-    // Navigator.push(context, MaterialPageRoute(builder: (context) {
-    //   return ShippingInfo();
-    // })).then((value) {
-    //   onPopped(value);
-    // });
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return ShippingInfo();
+    })).then((value) {
+      onPopped(value);
+    });
     // } else if (_seleted_shipping_pickup_point != 0) {
     //   print("Selected pickup point ");
     // } else {

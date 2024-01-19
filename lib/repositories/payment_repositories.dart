@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import '../helpers/api_helpers.dart';
 import '../helpers/middleware/banned_user.dart';
 import '../models/bkash_begin_pay_response.dart';
@@ -30,6 +30,7 @@ class PaymentRepository {
           "App-Language": app_language.$!,
         },
         middleware: BannedUser());
+    print("Payment Response List=============>${response.body}");
 
     return paymentTypeResponseFromJson(response.body);
   }
@@ -47,6 +48,7 @@ class PaymentRepository {
         },
         body: post_body,
         middleware: BannedUser());
+    print("order Response=============>${response.body}");
 
     return orderCreateResponseFromJson(response.body);
   }
@@ -159,6 +161,8 @@ class PaymentRepository {
           "App-Language": app_language.$!
         },
         body: post_body);
+
+    print("Razorpay payment setup datasssss================>${response.body}");
 
     return razorpayPaymentSuccessResponseFromJson(response.body);
   }
@@ -318,5 +322,41 @@ class PaymentRepository {
         body: post_body);
 
     return nagadPaymentProcessResponseFromJson(response.body);
+  }
+  Future<String> getCCAVenuePaymentUrl() async {
+    // Replace these values with actual data from your app
+    String merchantId = 'YOUR_MERCHANT_ID';
+    String accessCode = 'YOUR_ACCESS_CODE';
+    String orderId = '123456';
+    double amount = 100.0;
+
+    // Construct the payment request
+    var paymentRequest = {
+      'merchant_id': merchantId,
+      'access_code': accessCode,
+      'order_id': orderId,
+      'amount': amount.toString(),
+      // Add other necessary parameters
+    };
+    
+    var response = await http.post(Uri.parse(''), body: paymentRequest);
+
+    // Parse the response to get the payment URL
+    var responseBody = response.body;
+    // Extract the payment URL based on the actual response structure
+    String paymentUrl = parsePaymentUrl(responseBody);
+
+    return paymentUrl;
+  }
+
+  String parsePaymentUrl(String responseBody) {
+    // Replace this with the actual logic to extract the payment URL
+    // from the CCAvenue API response
+    // This might involve parsing JSON or XML depending on the response format
+    // Consult CCAvenue's documentation for the actual structure of the response
+    // Example assuming JSON response: return jsonDecode(responseBody)['payment_url'];
+
+    // Placeholder example
+    return 'https://example.com/payment';
   }
 }

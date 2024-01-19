@@ -3,7 +3,10 @@ var this_year = DateTime.now().year.toString();
 class AppConfig {
   static String copyright_text =
       "@krishanthmart.com " + this_year; //this shows in the splash screen
-  static String app_name = "krishanthmart"; //this shows in the splash screen
+  static String app_name = "krishanthmart";
+
+  static String razorPayKey = 'rzp_test_zc8jGjJQG6oyYw';
+  static String razorPaySecret = 'mXL8TIhBaTCYv0NNevMAPm3U';
 
   static String purchase_code =
       "12EF34"; //enter your purchase code for the app from codecanyon

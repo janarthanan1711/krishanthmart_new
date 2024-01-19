@@ -85,6 +85,7 @@ class CartRepository {
         },
         body: post_body,
         middleware: BannedUser());
+    print("Cart Response data from cart_items ==================>${response.body}");
     return cartProcessResponseFromJson(response.body);
   }
 
@@ -95,7 +96,7 @@ class CartRepository {
       "variant": variant,
       "user_id": "$user_id",
       "quantity": "$quantity",
-      "cost_matrix": AppConfig.purchase_code
+      // "cost_matrix": AppConfig.purchase_code
     });
 
     String url = ("${AppConfig.BASE_URL}/carts/add");
@@ -109,13 +110,14 @@ class CartRepository {
         body: post_body,
         middleware: BannedUser());
     print("cartAdd Response========>${response.body}");
+    print("status code ${response.statusCode}");
+    print("Access Tokennnnnnn =========>${access_token.$}");
 
     return cartAddResponseFromJson(response.body);
   }
 
   Future<dynamic> getCartSummaryResponse() async {
     String url = ("${AppConfig.BASE_URL}/cart-summary");
-    print(" cart summary");
     final response = await ApiRequest.get(
         url: url,
         headers: {

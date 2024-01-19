@@ -54,6 +54,7 @@ class OrderRepository {
           "App-Language": app_language.$!,
         },
         middleware: BannedUser());
+    print("reorder response==============>${response.body}");
     return reOrderResponseFromJson(response.body);
   }
 
@@ -67,6 +68,7 @@ class OrderRepository {
           "App-Language": app_language.$!,
         },
         middleware: BannedUser());
+    print("cancel order response==============>${response.body}");
     return commonResponseFromJson(response.body);
   }
 

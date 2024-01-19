@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:krishanthmart_new/views/payment_method_screen/razorpay_screen_new.dart';
 import 'package:toast/toast.dart';
 import '../../repositories/cart_repositories.dart';
 import '../../repositories/coupon_repositories.dart';
@@ -25,7 +26,6 @@ import '../payment_method_screen/online_pay.dart';
 import '../payment_method_screen/paypal_screen.dart';
 import '../payment_method_screen/paystack_screen.dart';
 import '../payment_method_screen/paytm_screen.dart';
-import '../payment_method_screen/razorpay_screen.dart';
 import '../payment_method_screen/sslcommerz_screen.dart';
 import '../payment_method_screen/stripe_screen.dart';
 
@@ -73,6 +73,7 @@ class _CheckoutState extends State<Checkout> {
   late BuildContext loadingcontext;
   String payment_type = "cart_payment";
   String? _title;
+  var orderId = 0;
 
   @override
   void initState() {
@@ -106,6 +107,19 @@ class _CheckoutState extends State<Checkout> {
         fetchSummary();
       }
     }
+  }
+
+  createOrder() async {
+    var orderCreateResponse = await PaymentRepository()
+        .getOrderCreateResponse(_selected_payment_method);
+    if (orderCreateResponse.result == false) {
+      ToastComponent.showDialog(orderCreateResponse.message,
+          gravity: Toast.center, duration: Toast.lengthLong);
+      Navigator.of(context).pop();
+      return;
+    }
+    orderId = orderCreateResponse.combined_order_id;
+    setState(() {});
   }
 
   fetchList() async {
@@ -161,7 +175,7 @@ class _CheckoutState extends State<Checkout> {
     _shippingCostString = ". . .";
     _discountString = ". . .";
     _used_coupon_code = "";
-    _couponController.text = _used_coupon_code!;
+    _couponController.text = _used_coupon_code;
     _coupon_applied = false;
 
     setState(() {});
@@ -260,8 +274,18 @@ class _CheckoutState extends State<Checkout> {
         onPopped(value);
       });
     } else if (_selected_payment_method == "razorpay") {
+      // Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //   return RazorpayScreen(
+      //     amount: _grandTotalValue,
+      //     payment_type: payment_type,
+      //     payment_method_key: _selected_payment_method_key,
+      //     package_id: widget.packageId.toString(),
+      //   );
+      // })).then((value) {
+      //   onPopped(value);
+      // });
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return RazorpayScreen(
+        return RazorpayScreenNew(
           amount: _grandTotalValue,
           payment_type: payment_type,
           payment_method_key: _selected_payment_method_key,
@@ -553,10 +577,10 @@ class _CheckoutState extends State<Checkout> {
                         const Spacer(),
                         Text(
                           SystemConfig.systemCurrency != null
-                              ? _shippingCostString!.replaceAll(
+                              ? _shippingCostString.replaceAll(
                               SystemConfig.systemCurrency!.code!,
                               SystemConfig.systemCurrency!.symbol!)
-                              : _shippingCostString!,
+                              : _shippingCostString,
                           style: const TextStyle(
                               color: MyTheme.font_grey,
                               fontSize: 14,

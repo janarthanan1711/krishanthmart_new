@@ -17,10 +17,13 @@ class CommonResponse {
   bool result;
   String message;
 
-  factory CommonResponse.fromJson(Map<String, dynamic> json) => CommonResponse(
-    result: json["result"],
-    message: json["message"],
-  );
+  factory CommonResponse.fromJson(Map<String, dynamic> json) {
+    print(json);
+   return  CommonResponse(
+      result: json["result"] ?? false,
+      message: json["message"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "result": result,

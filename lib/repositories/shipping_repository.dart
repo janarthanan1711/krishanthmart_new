@@ -20,7 +20,7 @@ class ShippingRepository{
     );
 
     bool checkResult = ResponseCheck.apply(response.body);
-
+    print("check deliveryResponseeeeeee========>${response.body}");
     if(!checkResult) {
       return responseCheckModelFromJson(response.body);
     }

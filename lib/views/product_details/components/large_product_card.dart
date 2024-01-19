@@ -18,12 +18,13 @@ class LargeProductCard extends StatelessWidget {
 
   Product product;
   ProductController productController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 220.h,
       width: 280.w,
-      margin:  EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+      margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -41,11 +42,15 @@ class LargeProductCard extends StatelessWidget {
                     height: 100.h,
                     width: 100.w,
                   ),
-                  onTap: (){
-                    Get.to(()=>ProductDetails(id: product.id,),);
+                  onTap: () {
+                    Get.to(
+                      () => ProductDetails(
+                        id: product.id,
+                      ),
+                    );
                   },
                 ),
-                 SizedBox(
+                SizedBox(
                   width: 10.w,
                 ),
                 Expanded(
@@ -53,43 +58,90 @@ class LargeProductCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       SizedBox(
+                      SizedBox(
                         height: 10.h,
                       ),
                       Text(
                         product.name!,
-                        style:  TextStyle(fontSize: 16.sp),
-                        maxLines: 2,overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 16.sp),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                       SizedBox(
+                      SizedBox(
                         height: 5.h,
                       ),
-                      // const Row(
-                      //   children: [
-                      //     Text("1kg", style: TextStyle(fontSize: 16)),
-                      //     SizedBox(
-                      //       width: 5,
-                      //     ),
-                      //     Text("610.00/1kg", style: TextStyle(fontSize: 16)),
-                      //   ],
-                      // ),
                       Row(
                         children: [
-                          Text(convertPrice(product.main_price!),
-                              style: TextStyle(fontSize: 14.sp,color: MyTheme.accent_color)),
-                           SizedBox(
-                            width: 10.w,
+                          Container(
+                            height: 31.h,
+                            width: 65.w,
+                            color: MyTheme.shimmer_highlighted,
+                            child: Column(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.ourPrice,
+                                  style: TextStyle(
+                                    color: MyTheme.medium_grey_50,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Text(
+                                  convertPrice(product.main_price!),
+                                  style: TextStyle(
+                                    color: MyTheme.accent_color,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 6.w,
                           ),
                           if (product.has_discount!)
-                            Text(
-                              convertPrice(product.stroked_price!),
-                              style: TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                color: MyTheme.medium_grey,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w400,
+                            Container(
+                              height: 31.h,
+                              width: 65.w,
+                              color: MyTheme.shimmer_highlighted,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.mrp,
+                                    style: TextStyle(
+                                      color: MyTheme.medium_grey_50,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    convertPrice(product.stroked_price!),
+                                    style: TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: MyTheme.medium_grey,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                            )
+                          // Text(convertPrice(product.main_price!),
+                          //     style: TextStyle(fontSize: 14.sp,color: MyTheme.accent_color)),
+                          //  SizedBox(
+                          //   width: 10.w,
+                          // ),
+                          // if (product.has_discount!)
+                          //   Text(
+                          //     convertPrice(product.stroked_price!),
+                          //     style: TextStyle(
+                          //       decoration: TextDecoration.lineThrough,
+                          //       color: MyTheme.medium_grey,
+                          //       fontSize: 14.sp,
+                          //       fontWeight: FontWeight.w400,
+                          //     ),
+                          //   ),
                         ],
                       )
                     ],
@@ -102,7 +154,9 @@ class LargeProductCard extends StatelessWidget {
             height: 57.h,
             decoration: const BoxDecoration(
               color: MyTheme.light_purple,
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10)),
             ),
             padding: const EdgeInsets.all(15),
             child: Row(
@@ -110,9 +164,9 @@ class LargeProductCard extends StatelessWidget {
               children: [
                 product.has_discount!
                     ? Container(
-                        decoration:  const BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: MyTheme.accent_color2,
-                          borderRadius:  BorderRadius.only(
+                          borderRadius: BorderRadius.only(
                             topRight: Radius.circular(6.0),
                             bottomLeft: Radius.circular(6.0),
                             topLeft: Radius.circular(6.0),
@@ -147,11 +201,11 @@ class LargeProductCard extends StatelessWidget {
                 ChooseOptionButton(
                   height: 25.h,
                   width: 140.w,
-                  onTap: () async{
+                  onTap: () async {
                     await variantBottomSheet();
                   },
-                   iconColor: MyTheme.black,
-                   bgColor: MyTheme.green_light,
+                  iconColor: MyTheme.black,
+                  bgColor: MyTheme.green_light,
                 ),
                 // InkWell(
                 //   onTap: () {},
@@ -189,7 +243,10 @@ class LargeProductCard extends StatelessWidget {
     await Get.bottomSheet(
       isDismissible: false,
       GetBuilder<ProductController>(builder: (productController) {
-        return ProductVariantBottomSheet(product: product,productController: productController,);
+        return ProductVariantBottomSheet(
+          product: product,
+          productController: productController,
+        );
       }),
       backgroundColor: Colors.white,
       elevation: 0,
@@ -199,5 +256,3 @@ class LargeProductCard extends StatelessWidget {
     );
   }
 }
-
-

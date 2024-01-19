@@ -81,24 +81,58 @@ class _ProductCardState extends State<ProductCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            convertPrice(widget.product.main_price!),
-                            style: const TextStyle(
-                              color: MyTheme.accent_color,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                          Container(
+                            height: 31.h,
+                            width: 68.w,
+                            color: MyTheme.shimmer_highlighted,
+                            child: Column(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.ourPrice,
+                                  style:  TextStyle(
+                                    color: MyTheme.medium_grey_50,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Text(
+                                  convertPrice(widget.product.main_price!),
+                                  style:  TextStyle(
+                                    color: MyTheme.accent_color,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           if (widget.product.has_discount!)
-                            Text(
-                              convertPrice(widget.product.stroked_price!),
-                              style: TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                color: MyTheme.medium_grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                            Container(
+                              height: 31.h,
+                              width: 65.w,
+                              color: MyTheme.shimmer_highlighted,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.mrp,
+                                    style:  TextStyle(
+                                      color: MyTheme.medium_grey_50,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    convertPrice(widget.product.stroked_price!),
+                                    style: TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: MyTheme.medium_grey,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                            )
                         ],
                       ),
                       Text(

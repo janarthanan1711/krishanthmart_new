@@ -74,9 +74,9 @@ class _ListProductCardState extends State<ListProductCard> {
                         height: 1.6,
                         fontWeight: FontWeight.w400),
                   ),
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.spaceBetween,
+                  Row(
+                    // crossAxisAlignment: WrapCrossAlignment.center,
+                    // alignment: WrapAlignment.spaceBetween,
                     children: [
                       Text(
                         convertPrice(widget.main_price!),
@@ -90,9 +90,10 @@ class _ListProductCardState extends State<ListProductCard> {
                             fontSize: 16,
                             fontWeight: FontWeight.w700),
                       ),
+                      SizedBox(width: 10,),
                       widget.has_discount!
                           ? Text(
-                              widget.stroked_price!,
+                              convertPrice(widget.stroked_price!),
                               // SystemConfig.systemCurrency!.code!=null?
                               // widget.stroked_price!.replaceAll(SystemConfig.systemCurrency!.code!, SystemConfig.systemCurrency!.symbol!)
                               //     :widget.stroked_price!,

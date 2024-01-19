@@ -59,7 +59,7 @@ class _CommonWebviewScreenState extends State<CommonWebviewScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: MyTheme.white,
       centerTitle: true,
       leading: Builder(
         builder: (context) => IconButton(

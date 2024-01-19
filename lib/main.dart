@@ -6,28 +6,23 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/helpers/auth_helpers.dart';
+import 'package:krishanthmart_new/utils/other_config.dart';
+import 'package:krishanthmart_new/utils/push_notification_service.dart';
 import 'package:krishanthmart_new/utils/routes.dart';
 import 'package:krishanthmart_new/utils/shared_value.dart';
 import 'package:krishanthmart_new/utils/themes.dart';
 import 'package:krishanthmart_new/views/auth/splash_screen.dart';
-import 'package:krishanthmart_new/views/mainpage/main_page.dart';
 import 'package:one_context/one_context.dart';
 import 'package:shared_value/shared_value.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'firebase_options.dart';
 import 'helpers/business_settings_helpers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await FlutterDownloader.initialize(
-      debug: true,
-      // optional: set to false to disable printing logs to console (default: true)
-      ignoreSsl:
-      true // option: set to false to disable working with http links (default: false)
-  );
+  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -37,7 +32,6 @@ void main() async {
   app_language.load();
   app_mobile_language.load();
   app_language_rtl.load();
-  //
 
   access_token.load().whenComplete(() {
     AuthHelper().fetch_and_set();
@@ -49,17 +43,39 @@ void main() async {
   runApp(SharedValue.wrapApp(const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration.zero).then(
+      (value) async {
+        Firebase.initializeApp().then((value) {
+          if (OtherConfig.USE_PUSH_NOTIFICATION) {
+            Future.delayed(Duration(milliseconds: 10), () async {
+              PushNotificationService().initialise();
+            });
+          }
+        });
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_,child){
+      builder: (_, child) {
         return GetMaterialApp(
             title: 'KrishanthMart',
             builder: OneContext().builder,
@@ -79,11 +95,8 @@ class MyApp extends StatelessWidget {
             ],
             initialRoute: Routes.mainPage,
             getPages: getPages,
-            home: const SplashScreen()
-        );
+            home: const SplashScreen());
       },
     );
   }
 }
-
-

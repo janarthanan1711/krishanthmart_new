@@ -12,7 +12,6 @@ import '../utils/shared_value.dart';
 import '../utils/toast_component.dart';
 import '../views/auth/login.dart';
 import '../views/cart/cart_page.dart';
-import '../views/product_details/product_details.dart';
 
 class ProductController extends GetxController {
   CartController cartController = Get.put(CartController());
@@ -37,11 +36,6 @@ class ProductController extends GetxController {
 
 
   @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
   void onClose() {
     clearAll();
     super.onClose();
@@ -50,17 +44,13 @@ class ProductController extends GetxController {
   // ProductDetails productDetailz = ProductDetails();
 
   setProductDetailValues() async {
-    print("productDetailsCalled");
     if (productDetails != null) {
       // fetchVariantPrice();
       stock = productDetails!.current_stock;
       selectedChoices.clear();
       productDetails!.choice_options!.forEach((choiceOpiton) {
         selectedChoices.add(choiceOpiton.options![0]);
-        print("choice Options ${choiceOpiton.options![0]}");
       });
-      print("product Choices ${productDetails!.choice_options!}");
-      print("iiiiiiiiiiiiiiiiiiii=======> ${selectedChoices}");
       setChoiceString();
       update();
     }
@@ -68,18 +58,16 @@ class ProductController extends GetxController {
 
   setChoiceString() {
     _choiceString = selectedChoices.join(",").toString();
-    print("ChoiceString=========> ${_choiceString}");
     update();
   }
 
   fetchProductDetailsMain(id) async {
     var productDetailsResponse =
         await ProductRepository().getProductDetails(id: id);
-    // if (productDetailsResponse.detailed_products!.isNotEmpty) {
     productDetails = productDetailsResponse.detailed_products![0];
     setProductDetailValues();
     getVariantData(id);
-    // cartController.isCartAdded.value = true;
+    fetchWishListCheckInfo(id);
     update();
   }
 
@@ -92,17 +80,9 @@ class ProductController extends GetxController {
     var colorString = productNewColorList.isNotEmpty
         ? productNewColorList[selectedColorIndex].toString().replaceAll("#", "")
         : "";
-    print("varianrt id ${id}");
-    print("varianrt choiceString ${_choiceString}");
-    print("varianrt colorString ${colorString}");
-    print("varianrt qty ${quantity}");
-
-    // await ProductRepository().getVariantWiseInfo(id: id, color: colorString, variants: _choiceString, qty: quantity);
 
     var variantResponse = await ProductRepository().getVariantWiseInfo(
         id: id, color: colorString, variants: _choiceString, qty: quantity);
-    print("varianrt stock ${variantResponse.variantData!.price}");
-    print("Variant Response=============>${variantResponse.variantData}");
     if (variantResponse.variantData != null) {
       stock = variantResponse.variantData!.stock;
       stock_txt = variantResponse.variantData!.stockTxt;
@@ -111,7 +91,6 @@ class ProductController extends GetxController {
       }
       variant = variantResponse.variantData!.variant;
       totalPrice = variantResponse.variantData!.price;
-      print("variant price ${totalPrice}");
       setQuantity(quantity);
       update();
     } else {
@@ -120,17 +99,21 @@ class ProductController extends GetxController {
     }
   }
 
-  incrementQuantityCart(id) {
+  incrementQuantityCart(id, {snackbar, context}) {
     if (quantity! < stock!) {
       quantity = (quantity!) + 1;
       quantityText.value = quantity.toString();
       //fetchVariantPrice();
       getVariantData(id);
       update();
+    }else if(quantity! < 1){
+      if(snackbar != null && context != null){
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      }
     }
   }
 
-  decrementQuantityCart(id) {
+  decrementQuantityCart(id, {snackbar, context}) {
     if (quantity! > 1) {
       quantity = quantity! - 1;
       quantityText.value = quantity.toString();
@@ -138,6 +121,13 @@ class ProductController extends GetxController {
       // fetchVariantPrice();
       getVariantData(id);
       update();
+    }else if(quantity == 1){
+      print("No Stocks Available");
+    }
+    else{
+      if(snackbar != null && context != null){
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      }
     }
   }
 
@@ -150,6 +140,7 @@ class ProductController extends GetxController {
     }
     var cartAddResponse = await CartRepository()
         .getCartAddResponse(id, variant, user_id.$, quantity);
+
     if (cartAddResponse.result == false) {
       ToastComponent.showDialog(cartAddResponse.message,
           gravity: Toast.center, duration: Toast.lengthLong);
@@ -159,7 +150,6 @@ class ProductController extends GetxController {
       cartController.getCount();
       if (mode == "add_to_cart") {
         if (snackbar != null && context != null) {
-          print("getted");
           ScaffoldMessenger.of(context).showSnackBar(snackbar);
         }
         // reset();
@@ -178,7 +168,6 @@ class ProductController extends GetxController {
     await WishListRepository().isProductInUserWishList(
       product_id: id,
     );
-
     //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
     isInWishList = wishListCheckResponse.is_in_wishlist;
     update();
@@ -234,5 +223,7 @@ class ProductController extends GetxController {
     variant = "";
     selectedColorIndex = 0;
     quantity = 1;
+    isInWishList = false;
+    getProductId.value = 0;
   }
 }

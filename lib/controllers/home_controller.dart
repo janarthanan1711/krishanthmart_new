@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/cart_controller.dart';
+import 'package:krishanthmart_new/controllers/category_controller.dart';
+import 'package:krishanthmart_new/controllers/sub_category_controller.dart';
 import 'package:krishanthmart_new/models/brand_model.dart';
 import 'package:krishanthmart_new/models/business_data_response.dart';
 import 'package:krishanthmart_new/models/flash_deal_model.dart';
@@ -22,6 +24,8 @@ import '../repositories/slider_repository.dart';
 class HomeController extends GetxController {
   var carouselImageList = [].obs;
   var bannerTwoImageList = [].obs;
+  var bannerFourImageList = [].obs;
+  var bannerSixImageList = [].obs;
   var flashDealList = <FlashDealResponseDatum>[].obs;
   List<Category> featuredCategoryList = [];
   List<Category> topCategoryList = [];
@@ -51,6 +55,8 @@ class HomeController extends GetxController {
   var couponTitle = "".obs;
   var couponSubTitle = "".obs;
   Color? hexColorCoupon;
+
+  CategoryController categoryController = Get.put(CategoryController());
 
   // var isExpanded = false.obs;
 
@@ -224,12 +230,26 @@ class HomeController extends GetxController {
     update();
   }
 
+  fetchBannerFourImages() async {
+    var bannerTwoResponse = await SliderRepository().getBannerFourImages();
+    for (var slider in bannerTwoResponse.sliders!) {
+      bannerFourImageList.add(slider.photo);
+    }
+    update();
+  }
   fetchBannerTwoImages() async {
     var bannerTwoResponse = await SliderRepository().getBannerTwoImages();
     for (var slider in bannerTwoResponse.sliders!) {
       bannerTwoImageList.add(slider.photo);
     }
     isBannerTwoInitial = false;
+    update();
+  }
+  fetchBannerSixImages() async {
+    var bannerTwoResponse = await SliderRepository().getBannerSixImages();
+    for (var slider in bannerTwoResponse.sliders!) {
+      bannerSixImageList.add(slider.photo);
+    }
     update();
   }
   openWhatsApp(context) async{
@@ -261,6 +281,8 @@ class HomeController extends GetxController {
     fetchCarouselImages();
     fetchFeaturedCategories();
     fetchBannerTwoImages();
+    fetchBannerFourImages();
+    fetchBannerSixImages();
     fetchBestSellingProducts();
     fetchTodaysDealproducts();
     fetchBrandsData();
@@ -281,6 +303,8 @@ class HomeController extends GetxController {
     featuredProductList.clear();
     brandProductList.clear();
     topBrandsList.clear();
+    bannerFourImageList.clear();
+    bannerSixImageList.clear();
     isCarouselInitial = true;
     isBannerOneInitial = true;
     isBannerTwoInitial = true;

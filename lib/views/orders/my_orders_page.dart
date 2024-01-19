@@ -61,7 +61,7 @@ class _OrderListState extends State<OrderList> {
 
   List<PaymentStatus> _paymentStatusList = PaymentStatus.getPaymentStatusList();
   List<DeliveryStatus> _deliveryStatusList =
-  DeliveryStatus.getDeliveryStatusList();
+      DeliveryStatus.getDeliveryStatusList();
 
   PaymentStatus? _selectedPaymentStatus;
   DeliveryStatus? _selectedDeliveryStatus;
@@ -196,7 +196,7 @@ class _OrderListState extends State<OrderList> {
       List _deliveryStatusList) {
     List<DropdownMenuItem<DeliveryStatus>> items = [];
     for (DeliveryStatus item
-    in _deliveryStatusList as Iterable<DeliveryStatus>) {
+        in _deliveryStatusList as Iterable<DeliveryStatus>) {
       items.add(
         DropdownMenuItem(
           value: item,
@@ -210,32 +210,34 @@ class _OrderListState extends State<OrderList> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () {
-          if (widget.from_checkout) {
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (context) {
-                  return MainPage();
-                }), (reute) => false);
-            return Future<bool>.value(false);
-          } else {
-            return Future<bool>.value(true);
-          }
-        },
-        child: Directionality(
-          textDirection:
-          app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
-          child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: buildAppBar(context),
-              body: Stack(
-                children: [
-                  buildOrderListList(),
-                  Align(
-                      alignment: Alignment.bottomCenter,
-                      child: buildLoadingContainer())
-                ],
-              ),),
-        ),);
+      onWillPop: () {
+        if (widget.from_checkout) {
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (context) {
+            return MainPage();
+          }), (reute) => false);
+          return Future<bool>.value(false);
+        } else {
+          return Future<bool>.value(true);
+        }
+      },
+      child: Directionality(
+        textDirection:
+            app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: buildAppBar(context),
+          body: Stack(
+            children: [
+              buildOrderListList(),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: buildLoadingContainer())
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Container buildLoadingContainer() {
@@ -340,7 +342,7 @@ class _OrderListState extends State<OrderList> {
               children: [
                 Padding(
                   padding: MediaQuery.of(context).viewPadding.top >
-                      30 //MediaQuery.of(context).viewPadding.top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
+                          30 //MediaQuery.of(context).viewPadding.top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
                       ? const EdgeInsets.only(top: 36.0)
                       : const EdgeInsets.only(top: 14.0),
                   child: buildTopAppBarContainer(),
@@ -362,9 +364,15 @@ class _OrderListState extends State<OrderList> {
               icon: UsefulElements.backIcon(context),
               onPressed: () {
                 if (widget.from_checkout) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return MainPage();
-                  }));
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return MainPage();
+                    }),
+                    (route) {
+                      return false;
+                    },
+                  );
                 } else {
                   return Navigator.of(context).pop();
                 }
@@ -387,27 +395,27 @@ class _OrderListState extends State<OrderList> {
     if (_isInitial && _orderList.length == 0) {
       return SingleChildScrollView(
           child: ListView.builder(
-            controller: _scrollController,
-            itemCount: 10,
-            scrollDirection: Axis.vertical,
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding:
+        controller: _scrollController,
+        itemCount: 10,
+        scrollDirection: Axis.vertical,
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding:
                 const EdgeInsets.symmetric(horizontal: 18.0, vertical: 14.0),
-                child: Shimmer.fromColors(
-                  baseColor: MyTheme.shimmer_base,
-                  highlightColor: MyTheme.shimmer_highlighted,
-                  child: Container(
-                    height: 75,
-                    width: double.infinity,
-                    color: Colors.white,
-                  ),
-                ),
-              );
-            },
-          ));
+            child: Shimmer.fromColors(
+              baseColor: MyTheme.shimmer_base,
+              highlightColor: MyTheme.shimmer_highlighted,
+              child: Container(
+                height: 75,
+                width: double.infinity,
+                color: Colors.white,
+              ),
+            ),
+          );
+        },
+      ));
     } else if (_orderList.length > 0) {
       return RefreshIndicator(
         color: MyTheme.accent_color,
@@ -423,7 +431,7 @@ class _OrderListState extends State<OrderList> {
               height: 14,
             ),
             padding:
-            const EdgeInsets.only(left: 18, right: 18, top: 0, bottom: 0),
+                const EdgeInsets.only(left: 18, right: 18, top: 0, bottom: 0),
             itemCount: _orderList.length,
             scrollDirection: Axis.vertical,
             physics: const NeverScrollableScrollPhysics(),
@@ -431,11 +439,16 @@ class _OrderListState extends State<OrderList> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return OrderDetails(
-                      id: _orderList[index].id,
-                    );
-                  }));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return OrderDetails(
+                          id: _orderList[index].id,
+                        );
+                      },
+                    ),
+                  );
                 },
                 child: buildOrderListItemCard(index),
               );
@@ -494,7 +507,7 @@ class _OrderListState extends State<OrderList> {
                   Text(
                     "${AppLocalizations.of(context)!.payment_status_ucf} - ",
                     style:
-                    TextStyle(color: MyTheme.dark_font_grey, fontSize: 12),
+                        TextStyle(color: MyTheme.dark_font_grey, fontSize: 12),
                   ),
                   Text(
                     _orderList[index].payment_status_string,
@@ -544,4 +557,3 @@ class _OrderListState extends State<OrderList> {
     );
   }
 }
-

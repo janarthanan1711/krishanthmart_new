@@ -5,7 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:toast/toast.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
 import '../../helpers/main_helpers.dart';
 import '../../repositories/payment_repositories.dart';
 import '../../utils/colors.dart';

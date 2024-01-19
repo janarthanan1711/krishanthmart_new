@@ -5,12 +5,15 @@ import 'package:krishanthmart_new/utils/shimmer_utils.dart';
 import '../../../models/category_model.dart';
 import 'package:flutter/material.dart';
 
+import '../category_page.dart';
 import 'category_card.dart';
 
 class CategoryGridView extends StatelessWidget {
   final List<Category> categoryList;
+  final void Function()? onTap;
 
-  const CategoryGridView(this.categoryList, {Key? key}) : super(key: key);
+  const CategoryGridView(this.categoryList, {Key? key, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,11 @@ class CategoryGridView extends StatelessWidget {
             return ShimmerHelper().buildProductGridShimmer();
           } else {
             return InkWell(
-              onTap: () {},
+              onTap: () {
+                Get.to(
+                  () => CategoryListPages(),
+                );
+              },
               child: ProductCategoryCard(
                 category: categoryList[index],
               ),

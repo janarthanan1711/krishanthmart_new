@@ -122,21 +122,26 @@ class _RazorpayScreenState extends State<RazorpayScreen> {
         .runJavaScriptReturningResult("document.body.innerText")
         .then((data) {
       // var decodedJSON = jsonDecode(data);
-      var responseJSON = jsonDecode(data as String);
-      if (responseJSON.runtimeType == String) {
-        responseJSON = jsonDecode(responseJSON);
-      }
-      //print(responseJSON.toString());
-      if (responseJSON["result"] == false) {
-        Toast.show(responseJSON["message"],
-            duration: Toast.lengthLong, gravity: Toast.center);
+      try{
+        var responseJSON = jsonDecode(data as String);
+        if (responseJSON.runtimeType == String) {
+          responseJSON = jsonDecode(responseJSON);
+        }
+        //print(responseJSON.toString());
+        if (responseJSON["result"] == false) {
+          Toast.show(responseJSON["message"],
+              duration: Toast.lengthLong, gravity: Toast.center);
 
-        Navigator.pop(context);
-      } else if (responseJSON["result"] == true) {
-        print("a");
-        payment_details = responseJSON['payment_details'];
-        onPaymentSuccess(payment_details);
+          Navigator.pop(context);
+        } else if (responseJSON["result"] == true) {
+          print("a");
+          payment_details = responseJSON['payment_details'];
+          onPaymentSuccess(payment_details);
+        }
+      }catch(e){
+        print('Failed to parse JSON: $e');
       }
+
     });
   }
 

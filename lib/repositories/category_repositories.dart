@@ -13,7 +13,7 @@ class CategoryRepository {
       "App-Language": app_language.$!,
     });
     // print("${AppConfig.BASE_URL}/categories?parent_id=${parent_id}");
-    // print("Get Categories ${response.body.toString()}");
+    print("Get Categories ${response.body.toString()}");
     return categoryResponseFromJson(response.body);
   }
 

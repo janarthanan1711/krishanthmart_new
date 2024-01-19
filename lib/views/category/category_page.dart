@@ -101,21 +101,11 @@ class _CategoryListPagesState extends State<CategoryListPages> {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
-      leading: widget.is_base_category
-          ? Builder(
-              builder: (context) => Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-                child: UsefulElements.backToMain(context,
-                    go_back: false, color: "black"),
-              ),
-            )
-          : Builder(
-              builder: (context) => IconButton(
-                icon: Icon(CupertinoIcons.arrow_left, color: MyTheme.black),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
+        leading: Builder(
+        builder: (context) => widget.is_base_category == false
+        ? UsefulElements.backToMain(context, go_back: true)
+        : UsefulElements.backButton(context),
+    ),
       title: Text(
         getAppBarTitle(),
         style: TextStyle(
@@ -384,25 +374,5 @@ class _CategoryListPagesState extends State<CategoryListPages> {
         )
       ],
     );
-    // return GridView.builder(
-    //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    //     mainAxisSpacing: 14,
-    //     crossAxisSpacing: 14,
-    //     childAspectRatio: 1,
-    //     crossAxisCount: 2,
-    //   ),
-    //   itemCount: 10,
-    //   padding: EdgeInsets.only(
-    //       left: 18, right: 18, bottom: widget.is_base_category ? 30 : 0),
-    //   scrollDirection: Axis.vertical,
-    //   physics: const NeverScrollableScrollPhysics(),
-    //   shrinkWrap: true,
-    //   itemBuilder: (context, index) {
-    //     return Container(
-    //       decoration: BoxDecorations.buildBoxDecoration_1(),
-    //       child: ShimmerHelper().buildBasicShimmer(),
-    //     );
-    //   },
-    // );
   }
 }

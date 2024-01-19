@@ -58,14 +58,17 @@ class _WishlistPageState extends State<WishlistPage> {
   }
 
   Future<void> _onPressRemove(index) async {
-    var wishlist_id = _wishlistItems[index].id;
+    var wishlist_id = _wishlistItems[index].product.id;
     _wishlistItems.removeAt(index);
     setState(() {});
 
     var wishlistDeleteResponse =
-        await WishListRepository().delete(wishlist_id: wishlist_id);
+        await WishListRepository().remove(product_id: wishlist_id);
 
     if (wishlistDeleteResponse.result == true) {
+      ToastComponent.showDialog(wishlistDeleteResponse.message,
+          gravity: Toast.top, duration: Toast.lengthShort);
+    }else{
       ToastComponent.showDialog(wishlistDeleteResponse.message,
           gravity: Toast.top, duration: Toast.lengthShort);
     }
