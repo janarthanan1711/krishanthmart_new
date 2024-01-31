@@ -29,14 +29,18 @@ class CategoryListPages extends StatefulWidget {
       this.parent_category_name = "",
       this.is_base_category = false,
       this.is_top_category = false,
-      this.bottomAppbarIndex})
+      this.bottomAppbarIndex,
+      this.is_viewMore = false,
+      this.category_id = 0})
       : super(key: key);
 
   final int parent_category_id;
   final String parent_category_name;
   final bool is_base_category;
   final bool is_top_category;
+  final bool is_viewMore;
   final BottomAppbarIndex? bottomAppbarIndex;
+  final int category_id;
 
   @override
   _CategoryListPagesState createState() => _CategoryListPagesState();
@@ -48,7 +52,19 @@ class _CategoryListPagesState extends State<CategoryListPages> {
   @override
   void initState() {
     super.initState();
-    categoryController.getCategories(widget.parent_category_id);
+    // categoryController.getCategories(widget.parent_category_id);
+    gettingCategoryName();
+    print(
+        "main Category Names ==========> ${categoryController.mainCategoryNames.value}");
+    print("category ids========>${widget.category_id}");
+    print(widget.is_viewMore);
+    print(widget.parent_category_id);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    categoryController.categoryList!.clear();
     Future.delayed(const Duration(seconds: 1), () {
       categoryController.assignCategoryNames(0);
       categoryController
@@ -56,14 +72,16 @@ class _CategoryListPagesState extends State<CategoryListPages> {
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    Future.delayed(const Duration(seconds: 1), () {
+  gettingCategoryName() async {
+    if (widget.is_viewMore == true) {
+      await categoryController.getCategories(widget.parent_category_id);
       categoryController.assignCategoryNames(0);
-      categoryController
+      await categoryController
           .getChildSubCategories(categoryController.categoryList![0].id!);
-    });
+    } else {
+      categoryController.mainCategoryNames.value = widget.parent_category_name;
+      await categoryController.getChildSubCategories(widget.category_id);
+    }
   }
 
   int selectedIndex = 0;
@@ -75,39 +93,44 @@ class _CategoryListPagesState extends State<CategoryListPages> {
       textDirection:
           app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: PreferredSize(
-              preferredSize: Size(
-                DeviceInfo(context).width!,
-                30,
-              ),
-              child: buildAppBar(context)),
-          body: buildBody()),
+        backgroundColor: Colors.transparent,
+        appBar: PreferredSize(
+          preferredSize: Size(
+            DeviceInfo(context).width!,
+            50,
+          ),
+          child: buildAppBar(context),
+        ),
+        body: buildBody(),
+      ),
     );
+  }
+  Widget buildBody(){
+    return buildCategoryList();
   }
 
-  Widget buildBody() {
-    return CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      slivers: [
-        SliverList(
-            delegate: SliverChildListDelegate([
-          buildCategoryList(),
-        ]))
-      ],
-    );
-  }
+  // Widget buildBody() {
+  //   return CustomScrollView(
+  //     physics: const AlwaysScrollableScrollPhysics(),
+  //     slivers: [
+  //       SliverList(
+  //           delegate: SliverChildListDelegate([
+  //         buildCategoryList(),
+  //       ]))
+  //     ],
+  //   );
+  // }
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
-        leading: Builder(
+      leading: Builder(
         builder: (context) => widget.is_base_category == false
-        ? UsefulElements.backToMain(context, go_back: true)
-        : UsefulElements.backButton(context),
-    ),
+            ? UsefulElements.backToMain(context, go_back: true)
+            : UsefulElements.backButton(context),
+      ),
       title: Text(
-        getAppBarTitle(),
+        AppLocalizations.of(context)!.categories_ucf,
         style: TextStyle(
             fontSize: 25, color: MyTheme.black, fontWeight: FontWeight.bold),
       ),
@@ -116,20 +139,9 @@ class _CategoryListPagesState extends State<CategoryListPages> {
     );
   }
 
-  String getAppBarTitle() {
-    String name = widget.parent_category_name == ""
-        ? (widget.is_top_category
-            ? AppLocalizations.of(context)!.top_categories_ucf
-            : AppLocalizations.of(context)!.categories_ucf)
-        : widget.parent_category_name;
-    return name;
-  }
-
   buildCategoryList() {
-    var data = widget.is_top_category
-        ? CategoryRepository().getTopCategories()
-        : CategoryRepository()
-            .getCategories(parent_id: widget.parent_category_id);
+    var data = CategoryRepository()
+        .getCategories(parent_id: widget.parent_category_id);
     return FutureBuilder(
         future: data,
         builder: (context, AsyncSnapshot<CategoryResponse> snapshot) {
@@ -154,10 +166,13 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                     itemCount: snapshot.data!.categories!.length,
                     itemBuilder: (context, index) {
                       return InkWell(
-                          onTap: () {
-                            categoryController.getChildSubCategories(
+                          onTap: () async {
+                            await categoryController.getChildSubCategories(
                                 snapshot.data!.categories![index].id!);
-                            categoryController.assignCategoryNames(index);
+                            widget.is_viewMore == false
+                                ? categoryController.mainCategoryNames.value =
+                                    snapshot.data!.categories![index].name!
+                                : categoryController.assignCategoryNames(index);
                           },
                           child: buildCategoryItemCard(snapshot.data, index));
                     },
@@ -165,44 +180,46 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                 ),
                 Container(
                   width: 1,
-                  height: 710.h,
+                  height: 750.h,
                   color: MyTheme.medium_grey,
                   margin: const EdgeInsets.only(left: 2, right: 5),
                 ),
-                Column(
-                  children: [
-                     SizedBox(
-                      height: 25.h,
-                    ),
-                    GetBuilder<CategoryController>(
-                      builder: (categoryControllers) => Row(
-                        children: List<Widget>.generate(
-                          1,
-                          (index) => Container(
-                            padding: const EdgeInsets.all(10),
-                            margin: const EdgeInsets.only(top: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: MyTheme.green),
-                            ),
-                            child: Text(
-                              categoryControllers.mainCategoryNames.value,
-                              style: TextStyle(
-                                  color: MyTheme.green,
-                                  fontWeight: FontWeight.bold),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 25.h,
+                      ),
+                      GetBuilder<CategoryController>(
+                        builder: (categoryControllers) => Row(
+                          children: List<Widget>.generate(
+                            1,
+                            (index) => Container(
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.only(top: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: MyTheme.green),
+                              ),
+                              child: Text(
+                                categoryControllers.mainCategoryNames.value,
+                                style: TextStyle(
+                                    color: MyTheme.green,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    SizedBox(
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      SizedBox(
                         height: DeviceInfo(context).height,
                         width: DeviceInfo(context).width! / 1.6,
                         child: Obx(
                           () => GridView.builder(
+                            physics: NeverScrollableScrollPhysics(),
                               itemCount:
                                   categoryController.subChildCategories.length,
                               gridDelegate:
@@ -227,8 +244,7 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                                                   top: Radius.circular(8.0)),
                                           child: Image.network(
                                             categoryController
-                                                .subChildCategories[index]
-                                                .banner,
+                                                .subChildCategories[index].banner,
                                             height: 64.0,
                                             width: double.maxFinite,
                                             fit: BoxFit.fill,
@@ -258,13 +274,17 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                                             .mainCategoryNames.value,
                                         subCategoryId: categoryController
                                             .subChildCategories[index].id,
+                                        selectedIndexes: categoryController
+                                            .subChildCategories[index].id,
                                       ),
                                     );
                                   },
                                 );
                               }),
-                        ),),
-                  ],
+                        ),
+                      ),
+                    ],
+                  ),
                 )
               ],
             );

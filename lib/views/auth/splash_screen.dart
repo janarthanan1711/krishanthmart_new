@@ -148,6 +148,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await app_mobile_language.load();
     await app_language_rtl.load();
     await system_currency.load();
+    // await is_logged_in.load();
     currencyController.fetchListData();
     cartController.getCount();
     return app_mobile_language.$;

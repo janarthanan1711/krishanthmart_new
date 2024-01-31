@@ -3,7 +3,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/models/product_response_model.dart';
+import 'package:krishanthmart_new/models/product_details_model.dart';
 import 'package:krishanthmart_new/utils/common_btn_options.dart';
+import 'package:krishanthmart_new/views/product_details/product_details.dart';
 import '../../../controllers/product_controller.dart';
 import '../../../helpers/main_helpers.dart';
 import '../../../utils/colors.dart';
@@ -28,15 +30,23 @@ class ProductCategoryCardLarge extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              height: 110.h,
-              width: 105.w,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(product.thumbnail_image!),
+            InkWell(
+                child: Container(
+                  height: 110.h,
+                  width: 105.w,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(product.thumbnail_image!),
+                    ),
+                  ),
                 ),
-              ),
-            ),
+                onTap: () {
+                  Get.to(
+                    () => ProductDetails(
+                      id: product.id,
+                    ),
+                  );
+                }),
             // Image.network(
             //   product.thumbnail_image!,
             //   height: 110.h,

@@ -24,8 +24,7 @@ class SliderRepository {
       headers: {
         "App-Language": app_language.$!,
       },);
-    print(response.body.toString());
-    print("sliders");
+    print("slider one images============>${response.body}");
     return sliderResponseFromJson(response.body);
   }
 
@@ -51,6 +50,7 @@ class SliderRepository {
       },);
     /*print(response.body.toString());
     print("sliders");*/
+    print("slider three images============>${response.body}");
     return sliderResponseFromJson(response.body);
   }
   Future<SliderResponse> getBannerFourImages() async {
@@ -64,6 +64,19 @@ class SliderRepository {
     /*print(response.body.toString());
     print("sliders");*/
     print("slider four images============>${response.body}");
+    return sliderResponseFromJson(response.body);
+  }
+  Future<SliderResponse> getBannerFiveImages() async {
+
+    String url =  ("${AppConfig.BASE_URL}/banners-five");
+    final response =
+    await ApiRequest.get(url: url,
+      headers: {
+        "App-Language": app_language.$!,
+      },);
+    /*print(response.body.toString());
+    print("sliders");*/
+    print("slider five images============>${response.body}");
     return sliderResponseFromJson(response.body);
   }
   Future<SliderResponse> getBannerSixImages() async {

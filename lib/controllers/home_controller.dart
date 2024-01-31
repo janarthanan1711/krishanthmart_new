@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/cart_controller.dart';
@@ -12,7 +11,6 @@ import 'package:krishanthmart_new/models/flash_deal_model.dart';
 import 'package:krishanthmart_new/repositories/brand_repository.dart';
 import 'package:krishanthmart_new/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../models/category_model.dart';
 import '../models/product_response_model.dart';
 import '../repositories/business_repositories.dart';
@@ -26,9 +24,12 @@ class HomeController extends GetxController {
   var bannerTwoImageList = [].obs;
   var bannerFourImageList = [].obs;
   var bannerSixImageList = [].obs;
+  var bannerOneImageList = [].obs;
+  var bannerThreeImageList = [].obs;
   var flashDealList = <FlashDealResponseDatum>[].obs;
   List<Category> featuredCategoryList = [];
   List<Category> topCategoryList = [];
+  var subChildCategoriesHome = [].obs;
   var todayDealList = <Product>[].obs;
   List<Product> bestSellingProductList = [];
   List<Product> featuredProductList = [];
@@ -142,22 +143,18 @@ class HomeController extends GetxController {
   fetchBusinessResponse() async {
     var businessResponse =
         await BusinessSettingRepository().getBusinessResponse();
-    print("Getted Business Response =======>${businessResponse[0].value}");
     if (businessResponse.isNotEmpty) {
       businessResponseDataList.addAll(businessResponse);
       for (Datum businessType in businessResponseDataList) {
         switch (businessType.type) {
           case "cupon_background_color":
             couponColor.value = businessType.value;
-            print("Coupon Background Color: ${couponColor}");
             break;
           case "cupon_title":
             couponTitle.value = businessType.value;
-            print("Coupon Title: ${couponTitle}");
             break;
           case "cupon_subtitle":
             couponSubTitle.value = businessType.value;
-            print("Coupon Subtitle: ${couponSubTitle}");
             break;
           default:
             // Handle other types if needed
@@ -230,6 +227,33 @@ class HomeController extends GetxController {
     update();
   }
 
+  getChildSubCategories(int subChildCategory) async {
+    // subChildCategoriesHome.clear();
+    var subChildCategoriesRes = await CategoryRepository().getSubChildCategories(categoryId: subChildCategory);
+    subChildCategoriesHome.addAll(subChildCategoriesRes.subChildCategory);
+    update();
+  }
+
+  fetchSliderImages()async{
+    await SliderRepository().getBannerOneImages();
+    // await SliderRepository().getBannerThreeImages();
+    await SliderRepository().getBannerFiveImages();
+  }
+
+  fetchBannerOneImages() async {
+    var bannerOneImages = await SliderRepository().getBannerOneImages();
+     for (var slider in bannerOneImages.sliders!){
+       bannerOneImageList.add(slider.photo);
+     }
+     update();
+  }
+  fetchBannerThreeImages() async {
+    var bannerOneImages = await SliderRepository().getBannerThreeImages();
+    for (var slider in bannerOneImages.sliders!){
+      bannerThreeImageList.add(slider.photo);
+    }
+    update();
+  }
   fetchBannerFourImages() async {
     var bannerTwoResponse = await SliderRepository().getBannerFourImages();
     for (var slider in bannerTwoResponse.sliders!) {
@@ -276,12 +300,13 @@ class HomeController extends GetxController {
   }
 
   fetchAll() {
-    // hexColorCoupon = hexToColor(couponColor.value);
     fetchFlashDealData();
     fetchCarouselImages();
     fetchFeaturedCategories();
+    fetchBannerOneImages();
     fetchBannerTwoImages();
     fetchBannerFourImages();
+    fetchBannerThreeImages();
     fetchBannerSixImages();
     fetchBestSellingProducts();
     fetchTodaysDealproducts();
@@ -289,6 +314,7 @@ class HomeController extends GetxController {
     fetchTopBrandsData();
     fetchFeaturedProducts();
     fetchBusinessResponse();
+    fetchSliderImages();
     update();
   }
 
@@ -305,6 +331,8 @@ class HomeController extends GetxController {
     topBrandsList.clear();
     bannerFourImageList.clear();
     bannerSixImageList.clear();
+    bannerOneImageList.clear();
+    subChildCategoriesHome.clear();
     isCarouselInitial = true;
     isBannerOneInitial = true;
     isBannerTwoInitial = true;

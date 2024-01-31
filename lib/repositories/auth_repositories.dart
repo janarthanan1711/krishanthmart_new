@@ -232,7 +232,7 @@ class AuthRepository {
             "App-Language": app_language.$!,
           },
           body: post_body);
-
+      print("auth Info -------${response.body}");
       return loginResponseFromJson(response.body);
     }
     return LoginResponse();

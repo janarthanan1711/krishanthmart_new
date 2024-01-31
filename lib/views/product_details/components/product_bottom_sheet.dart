@@ -120,21 +120,22 @@ class ProductVariantBottomSheet extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 35.h,
-                                  width: 80.w,
+                                  width: 85.w,
                                   color: MyTheme.shimmer_highlighted,
                                   child: Column(
                                     children: [
                                       Text(
                                         AppLocalizations.of(context)!.ourPrice,
-                                        style:  TextStyle(
+                                        style: TextStyle(
                                           color: MyTheme.medium_grey_50,
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
                                       Text(
-                                        convertPrice(productController.totalPrice!),
-                                        style:  TextStyle(
+                                        convertPrice(
+                                            productController.totalPrice!),
+                                        style: TextStyle(
                                           color: MyTheme.accent_color,
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w700,
@@ -143,21 +144,37 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                // Text(
-                                //   convertPrice(productController.totalPrice!),
-                                //   // SystemConfig.systemCurrency!.code!=null?
-                                //   // widget.main_price!.replaceAll(SystemConfig.systemCurrency!.code!, SystemConfig.systemCurrency!.symbol!)
-                                //   //     :widget.main_price!,
-                                //   textAlign: TextAlign.left,
-                                //   maxLines: 1,
-                                //   style: TextStyle(
-                                //       color: MyTheme.accent_color,
-                                //       fontSize: 16.sp,
-                                //       fontWeight: FontWeight.w700),
+                                if (product.has_discount!)
+                                  Container(
+                                    height: 35.h,
+                                    width: 85.w,
+                                    color: MyTheme.shimmer_highlighted,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          AppLocalizations.of(context)!.mrp,
+                                          style: TextStyle(
+                                            color: MyTheme.medium_grey_50,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        Text(
+                                          convertPrice(product.stroked_price!),
+                                          style: TextStyle(
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            color: MyTheme.medium_grey,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                // SizedBox(
+                                //   width: 10.w,
                                 // ),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
                                 product.has_discount!
                                     ? Container(
                                         padding: const EdgeInsets.symmetric(
@@ -251,10 +268,12 @@ class ProductVariantBottomSheet extends StatelessWidget {
                   padding: EdgeInsets.only(left: 6.w),
                   child: buildQuantityButton(
                       onTapIncrement: () {
-                        productController.incrementQuantityCart(product.id,snackbar: noStocksMessage,context: context);
+                        productController.incrementQuantityCart(product.id,
+                            snackbar: noStocksMessage, context: context);
                       },
                       onTapDecrement: () {
-                        productController.decrementQuantityCart(product.id,snackbar: noStocksMessage,context: context);
+                        productController.decrementQuantityCart(product.id,
+                            snackbar: noStocksMessage, context: context);
                       },
                       quantityText: productController.quantityText.value),
                 )
@@ -369,7 +388,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                 ? const EdgeInsets.only(left: 8.0)
                 : const EdgeInsets.only(right: 8.0),
             child: SizedBox(
-              // width: 80.w,
+              // width: 60.w,
               child: Text(
                 choiceOptions[choiceOptionsIndex].title,
                 style: const TextStyle(
@@ -380,19 +399,21 @@ class ProductVariantBottomSheet extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(left: 6.w),
-            // width: 250.w,
             child: Scrollbar(
               thumbVisibility: false,
-              child: Wrap(
-                children: List.generate(
-                  choiceOptions[choiceOptionsIndex].options.length,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: buildChoiceItem(
-                        choiceOptions[choiceOptionsIndex].options[index],
-                        choiceOptionsIndex,
-                        index,
-                        mainPrice),
+              child: SizedBox(
+                width: 300.w,
+                child: Wrap(
+                  children: List.generate(
+                    choiceOptions[choiceOptionsIndex].options.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: buildChoiceItem(
+                          choiceOptions[choiceOptionsIndex].options[index],
+                          choiceOptionsIndex,
+                          index,
+                          mainPrice),
+                    ),
                   ),
                 ),
               ),
@@ -462,7 +483,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                 option
                             ? MyTheme.accent_color2
                             : const Color.fromRGBO(224, 224, 225, 1),
-                    fontSize: 12.sp,
+                    fontSize: 10.sp,
                     fontWeight: FontWeight.w600),
               ),
             ),

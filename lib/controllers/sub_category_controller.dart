@@ -72,6 +72,14 @@ class SubCategoryController extends GetxController {
     update();
   }
 
+  // assignSelectedIndexes(index,id) {
+  //   print("before==========>${subCategoryList[index].id} ${id}");
+  //   // subCategoryList[index].id = id;
+  //   id = subCategoryList[index].id;
+  //   print("after==========>${subCategoryList[index].id} ${id}");
+  // }
+
+
   clearAll() {
     subChildCategories.clear();
     categoryProductList.clear();

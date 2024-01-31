@@ -104,7 +104,6 @@ class BusinessSettingHelper {
           break;
         case 'google_recaptcha':
           {
-            print("element captcha called or not=============> ${element.type.toString()}");
             print(element.value.toString());
             if (element.value.toString() == "1") {
               google_recaptcha.$ = true;

@@ -90,7 +90,7 @@ class ProductRepository {
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    // print("Category Products Api======>${response.body}");
+    print("Category Products Api======>${response.body}");
     return productMiniResponseFromJson(response.body);
   }
 
@@ -99,7 +99,7 @@ class ProductRepository {
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    // print("Get Product Response========>${response.body}");
+    print("Get Product Response========>${response.body}");
 
     return productDetailsResponseFromJson(response.body);
   }

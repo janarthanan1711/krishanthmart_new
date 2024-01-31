@@ -35,7 +35,13 @@ class CategoryGridView extends StatelessWidget {
             return InkWell(
               onTap: () {
                 Get.to(
-                  () => CategoryListPages(),
+                  () => CategoryListPages(
+                    parent_category_name:
+                        controller.featuredCategoryList[index].name!,
+                    is_viewMore: false,
+                    category_id:
+                        controller.featuredCategoryList[index].id!,
+                  ),
                 );
               },
               child: ProductCategoryCard(

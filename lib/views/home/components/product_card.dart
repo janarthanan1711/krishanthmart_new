@@ -51,7 +51,7 @@ class _ProductCardState extends State<ProductCard> {
           child: Container(
             padding: const EdgeInsets.all(5),
             height: 250,
-            width: 160,
+            width: 160.w,
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: Column(

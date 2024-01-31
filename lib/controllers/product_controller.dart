@@ -48,8 +48,8 @@ class ProductController extends GetxController {
       // fetchVariantPrice();
       stock = productDetails!.current_stock;
       selectedChoices.clear();
-      productDetails!.choice_options!.forEach((choiceOpiton) {
-        selectedChoices.add(choiceOpiton.options![0]);
+      productDetails!.choice_options!.forEach((choiceOption) {
+        selectedChoices.add(choiceOption.options![0]);
       });
       setChoiceString();
       update();

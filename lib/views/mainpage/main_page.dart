@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
   var bottomPages = [
     HomePage(),
-    CategoryListPages(),
+    CategoryListPages(is_viewMore: true),
     CartPage(has_bottomnav: true,from_navigation: false),
     const FlashDealList(
       hasBottomNav: true,

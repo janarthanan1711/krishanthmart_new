@@ -12,11 +12,16 @@ import 'components/products_category_card.dart';
 
 class SubCategoryPage extends StatefulWidget {
   SubCategoryPage(
-      {super.key, this.categoryName, this.categoryId, this.subCategoryId});
+      {super.key,
+      this.categoryName,
+      this.categoryId,
+      this.subCategoryId,
+      this.selectedIndexes});
 
   String? categoryName;
   int? categoryId;
   int? subCategoryId;
+  int? selectedIndexes;
 
   @override
   State<SubCategoryPage> createState() => _SubCategoryPageState();
@@ -38,28 +43,21 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
   @override
   void initState() {
     getAll();
-    // subCategoryController.selectedIndex.value = widget.categoryId!;
+    // subCategoryController.selectedIndex.value = widget.selectedIndexes!;
     // print("cehckn sub Category Index =======>${subCategoryController.selectedIndex.value}");
     print(widget.subCategoryId);
     //to assign the subcategory id to selected index in subcategory list
     subCategoryController.subCategoryIndex.value = widget.subCategoryId!;
     xcrollController.addListener(() {
+      print("calling scroll");
       if (xcrollController.position.pixels ==
           xcrollController.position.maxScrollExtent) {
         setState(() {
           // page++;
-          // print("Page Coubnts Increases======> ${page}");
+          // print(page);
+          // print(subCategoryController.getCategoryProducts(page: page,categoryId: widget.categoryId));
         });
         subCategoryController.showLoadingContainer = true;
-        // if (subCategoryController.setWidgetVisible.value == false) {
-        //   subCategoryController.getCategoryProducts(
-        //       categoryId: widget.categoryId, page: page, searchKey: searchKey);
-        // } else {
-        //   subCategoryController.getCategoryProducts(
-        //       categoryId: widget.subCategoryId,
-        //       page: page,
-        //       searchKey: searchKey);
-        // }
       }
     });
     super.initState();
@@ -104,32 +102,20 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                           //to generate subcategory list
                           subCategoryController.subCategoryList.length,
                           growable: true,
-                          (index) => InkWell(
-                            child: Container(
-                              height: 35.h,
-                              decoration: BoxDecoration(
-                                color:
-                                    subCategoryController.selectedIndex.value ==
-                                            index
-                                        ? Colors.green
-                                        : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
+                          (index) {
+                            // subCategoryController.assignSelectedIndexes(
+                            //     index, widget.selectedIndexes);
+                            return InkWell(
+                              child: Container(
+                                height: 35.h,
+                                decoration: BoxDecoration(
                                   color: subCategoryController
                                               .selectedIndex.value ==
                                           index
-                                      ? Colors.black
-                                      : MyTheme.green,
-                                ),
-                              ),
-                              margin: const EdgeInsets.symmetric(horizontal: 5),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Center(
-                                child: Text(
-                                  subCategoryController
-                                      .subCategoryList[index].name!,
-                                  style: TextStyle(
+                                      ? Colors.green
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
                                     color: subCategoryController
                                                 .selectedIndex.value ==
                                             index
@@ -137,31 +123,49 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                         : MyTheme.green,
                                   ),
                                 ),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Center(
+                                  child: Text(
+                                    subCategoryController
+                                        .subCategoryList[index].name!,
+                                    style: TextStyle(
+                                      color: subCategoryController
+                                                  .selectedIndex.value ==
+                                              index
+                                          ? Colors.black
+                                          : MyTheme.green,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                            onTap: () async {
-                              //to get the all category products need to make it true to generate updated list
-                              subCategoryController.showAllProducts.value =
-                                  true;
-                              //for coloring
-                              subCategoryController.selectedIndex.value = index;
-                              //Assign to get the all products when all method is clicked check (aLL FUNCTIONS)
-                              subCategoryController.subCategoryIndex.value =
-                                  subCategoryController.selectedIndex.value;
-                              // subCategoryController.categoryProductList.clear();
-                              //TO GET THE SUBCATEGORY LIST
-                              await subCategoryController.getSubChildCategories(
-                                  subCategoryController
-                                      .subCategoryList[index].id!);
-                              //GET ALL PRODUCTS
-                              await subCategoryController
-                                  .getAllCategoryProducts(
-                                      categoryId: subCategoryController
-                                          .subCategoryList[index].id,
-                                      page: page,
-                                      searchKey: searchKey);
-                            },
-                          ),
+                              onTap: () async {
+                                //to get the all category products need to make it true to generate updated list
+                                subCategoryController.showAllProducts.value =
+                                    true;
+                                //for coloring
+                                subCategoryController.selectedIndex.value =
+                                    index;
+                                //Assign to get the all products when all method is clicked check (aLL FUNCTIONS)
+                                subCategoryController.subCategoryIndex.value =
+                                    subCategoryController.selectedIndex.value;
+                                // subCategoryController.categoryProductList.clear();
+                                //TO GET THE SUBCATEGORY LIST
+                                await subCategoryController
+                                    .getSubChildCategories(subCategoryController
+                                        .subCategoryList[index].id!);
+                                //GET ALL PRODUCTS
+                                await subCategoryController
+                                    .getAllCategoryProducts(
+                                        categoryId: subCategoryController
+                                            .subCategoryList[index].id,
+                                        page: page,
+                                        searchKey: searchKey);
+                              },
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -391,7 +395,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             height: 900.h,
             child: subCategoryController.isLoading.value == false
                 ? Obx(
-              //THERE TWO DIFFERENT LIST ONE IS (ALL) OTHER IS (SUBCHILD) WILL FETCH BASED ON CONDITION
+                    //THERE TWO DIFFERENT LIST ONE IS (ALL) OTHER IS (SUBCHILD) WILL FETCH BASED ON CONDITION
                     () => ListView.builder(
                       physics: const BouncingScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics()),
@@ -488,18 +492,14 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
           clearAll();
           // getAll();
           subCategoryController.getCategoryProducts(
-              categoryId: widget.categoryId,
-              page: page,
-              searchKey: searchKey);
+              categoryId: widget.categoryId, page: page, searchKey: searchKey);
         },
         onSubmitted: (txt) {
           searchKey = txt;
           clearAll();
           // getAll();
           subCategoryController.getCategoryProducts(
-              categoryId: widget.categoryId,
-              page: page,
-              searchKey: searchKey);
+              categoryId: widget.categoryId, page: page, searchKey: searchKey);
         },
         autofocus: false,
         decoration: InputDecoration(
@@ -538,6 +538,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
         categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
     subCategoryController.getSubCategory(widget.categoryId!);
     subCategoryController.getSubChildCategories(widget.subCategoryId!);
+    // assignSelectedIndexes(index: 0);
   }
 
   clearAll() {

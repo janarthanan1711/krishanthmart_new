@@ -32,6 +32,7 @@ void main() async {
   app_language.load();
   app_mobile_language.load();
   app_language_rtl.load();
+  is_logged_in.load();
 
   access_token.load().whenComplete(() {
     AuthHelper().fetch_and_set();
@@ -72,9 +73,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(360, 690),
-      minTextAdapt: true,
-      splitScreenMode: true,
+      // designSize: const Size(360, 690),
+      // minTextAdapt: true,
+      // splitScreenMode: true,
+      // ensureScreenSize: true,
       builder: (_, child) {
         return GetMaterialApp(
             title: 'KrishanthMart',

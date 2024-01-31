@@ -96,7 +96,7 @@ class CartRepository {
       "variant": variant,
       "user_id": "$user_id",
       "quantity": "$quantity",
-      // "cost_matrix": AppConfig.purchase_code
+      "cost_matrix": AppConfig.purchase_code
     });
 
     String url = ("${AppConfig.BASE_URL}/carts/add");

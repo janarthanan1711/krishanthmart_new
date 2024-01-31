@@ -51,7 +51,7 @@ class CouponRepository {
   Future<CouponListResponse> getCouponResponseList({page = 1}) async {
     Map<String, String> header = commonHeader;
     header.addAll(currencyHeader);
-    String url = ("${AppConfig.BASE_URL}/coupon-list?page=$page");
+    String url = ("${AppConfig.BASE_URL}/coupon/all");
     final response = await ApiRequest.get(url: url, headers: header);
     print("response body");
     print("${response.body}");

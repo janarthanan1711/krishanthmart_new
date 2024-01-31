@@ -10,31 +10,17 @@ class CategoryController extends GetxController{
   var mainCategoryList = [];
   var childSubId = 0.obs;
   var isLoading = true.obs;
-  // var selectedMainCategoryTitle = "".obs;
-  // var mainNameChanged = false.obs;
   var subChildCategories = [].obs;
   var subCategoryList = [].obs;
-  var subCategoryChild = [].obs;
   var mainCategoryNames = "".obs;
   var mainCategoryId = 0.obs;
 
-  @override
-  void onInit() {
-    // getTopCategories();
-    super.onInit();
-  }
   @override
   void onClose(){
     clearAll();
     super.onClose();
   }
 
-  getSubCategory(int? categoryId) async {
-    var res =
-    await CategoryRepository().getCategories(parent_id: categoryId);
-    subCategoryList.addAll(res.categories!);
-    update();
-  }
 
 
   getChildSubCategories(int subChildCategory) async {
@@ -45,11 +31,14 @@ class CategoryController extends GetxController{
   }
 
   assignCategoryNames(int index){
+    print(mainCategoryNames.value);
     mainCategoryNames.value = categoryList![index].name!;
     mainCategoryId.value = categoryList![index].id!;
+    update();
     // print("mainCategoryID=========>${mainCategoryId.value}");
   }
   getCategories(int? id) async {
+    categoryList!.clear();
     var categoriesAll = await CategoryRepository().getCategories(parent_id: id);
     categoryList!.addAll(categoriesAll.categories! ?? []);
     update();
@@ -77,6 +66,8 @@ class CategoryController extends GetxController{
     mainCategoryList.clear();
     categoryList!.clear();
     subChildCategories.clear();
+    mainCategoryNames.value = "";
+    mainCategoryId.value = 0;
     update();
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:krishanthmart_new/utils/app_config.dart';
 import 'package:krishanthmart_new/views/coupons/coupon_products.dart';
 import 'package:toast/toast.dart';
 import '../../helpers/main_helpers.dart';
@@ -42,8 +43,8 @@ class _CouponsState extends State<Coupons> {
 
   fetchData() async {
     var couponRes = await CouponRepository().getCouponResponseList(page: _page);
-    _couponsList.addAll(couponRes.data!);
-    _totalData = couponRes.meta?.total;
+    _couponsList.addAll(couponRes.data);
+    // _totalData = couponRes.meta?.total;
     _dataFetch = true;
     _showLoadingContainer = false;
     setState(() {});
@@ -92,7 +93,7 @@ class _CouponsState extends State<Coupons> {
       textDirection:
           app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: MyTheme.shimmer_highlighted,
         appBar: buildAppBar(context),
         body: Stack(
           children: [
@@ -170,44 +171,15 @@ class _CouponsState extends State<Coupons> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${_couponsList[index].shopName}',
+                                  AppConfig.app_name,
                                   style: const TextStyle(
                                     color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 const SizedBox(
                                   width: 5,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // print(_couponsList[index].userType);
-                                    // print(_couponsList[index].shopId);
-
-                                    if (_couponsList[index].userType ==
-                                        'seller') {
-                                      // Navigator.push(context,
-                                      //     MaterialPageRoute(builder: (context) {
-                                      //       return SellerDetails(
-                                      //           id: _couponsList[index].shopId);
-                                      //     }));
-                                    } else {
-                                      // Navigator.push(context,
-                                      //     MaterialPageRoute(builder: (context) {
-                                      //       return InhouseProducts();
-                                      //     }));
-                                    }
-                                  },
-                                  child: Text(
-                                    AppLocalizations.of(context)!
-                                        .visit_store_ucf,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),
@@ -241,19 +213,11 @@ class _CouponsState extends State<Coupons> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12.0),
                               child: _couponsList[index]
-                                          .couponDiscountDetails !=
+                                          .details !=
                                       null
                                   ? richText(context, index)
                                   : GestureDetector(
                                       onTap: () {
-                                        // Navigator.push(context,
-                                        //     MaterialPageRoute(
-                                        //         builder: (context) {
-                                        //           return CouponProducts(
-                                        //               code: _couponsList[index].code!,
-                                        //               id: _couponsList[index].id!
-                                        //               );
-                                        //         }));
                                         Get.to(
                                           () => CouponProducts(
                                               code: _couponsList[index].code!,
@@ -359,7 +323,7 @@ class _CouponsState extends State<Coupons> {
         children: [
           TextSpan(
             text:
-                '${convertPrice(_couponsList[index].couponDiscountDetails!.minBuy)}',
+                '${convertPrice(_couponsList[index].details!)}',
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12,
@@ -372,7 +336,7 @@ class _CouponsState extends State<Coupons> {
             ),
           ),
           TextSpan(
-            text: ' ${_couponsList[index].shopName}',
+            text: ' Krishanthmart',
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 12,
@@ -412,7 +376,7 @@ class _CouponsState extends State<Coupons> {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
-      centerTitle: false,
+      centerTitle: true,
       leading: UsefulElements.backButton(context),
       title: Text(
         AppLocalizations.of(context)!.coupons_ucf,
