@@ -1,11 +1,8 @@
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/models/category_model.dart';
-import 'package:krishanthmart_new/models/product_response_model.dart';
 import '../repositories/category_repositories.dart';
-import '../repositories/product_repository.dart';
 
 class CategoryController extends GetxController{
-
   List<Category>? categoryList = [];
   var mainCategoryList = [];
   var childSubId = 0.obs;
@@ -14,13 +11,19 @@ class CategoryController extends GetxController{
   var subCategoryList = [].obs;
   var mainCategoryNames = "".obs;
   var mainCategoryId = 0.obs;
+  var featuredCategoryList = <Category>[].obs;
 
   @override
   void onClose(){
     clearAll();
     super.onClose();
   }
-
+  @override
+  void onInit() {
+    // fetchFeaturedCategories();
+    // print("Controller called");
+    super.onInit();
+  }
 
 
   getChildSubCategories(int subChildCategory) async {
@@ -32,10 +35,20 @@ class CategoryController extends GetxController{
 
   assignCategoryNames(int index){
     print(mainCategoryNames.value);
-    mainCategoryNames.value = categoryList![index].name!;
-    mainCategoryId.value = categoryList![index].id!;
+    mainCategoryNames.value = featuredCategoryList[index].name!;
+    mainCategoryId.value = featuredCategoryList[index].id!;
     update();
     // print("mainCategoryID=========>${mainCategoryId.value}");
+  }
+
+  fetchFeaturedCategories() async {
+    try {
+      var categoryResponse = await CategoryRepository().getFeaturedCategories();
+      featuredCategoryList.addAll(categoryResponse.categories ?? []);
+    } catch (e) {
+      print("Error fetching Categories: $e");
+    }
+    update();
   }
   getCategories(int? id) async {
     categoryList!.clear();
@@ -66,8 +79,9 @@ class CategoryController extends GetxController{
     mainCategoryList.clear();
     categoryList!.clear();
     subChildCategories.clear();
+    featuredCategoryList.clear();
     mainCategoryNames.value = "";
-    mainCategoryId.value = 0;
+    // mainCategoryId.value = 0;
     update();
   }
 }

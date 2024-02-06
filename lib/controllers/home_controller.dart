@@ -1,10 +1,7 @@
 import 'dart:io';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:krishanthmart_new/controllers/cart_controller.dart';
 import 'package:krishanthmart_new/controllers/category_controller.dart';
-import 'package:krishanthmart_new/controllers/sub_category_controller.dart';
 import 'package:krishanthmart_new/models/brand_model.dart';
 import 'package:krishanthmart_new/models/business_data_response.dart';
 import 'package:krishanthmart_new/models/flash_deal_model.dart';
@@ -210,6 +207,7 @@ class HomeController extends GetxController {
       var categoryResponse = await CategoryRepository().getFeaturedCategories();
       featuredCategoryList.addAll(categoryResponse.categories ?? []);
       isCategoryInitial = false;
+      print("length feature ${featuredCategoryList.length}");
     } catch (e) {
       print("Error fetching Categories: $e");
     }

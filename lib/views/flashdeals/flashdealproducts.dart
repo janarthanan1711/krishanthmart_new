@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/index.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -43,17 +42,15 @@ class _FlashDealProductsState extends State<FlashDealProducts> {
   String timeText(String txt, {default_length = 3}) {
     var blank_zeros = default_length == 3 ? "000" : "00";
     var leading_zeros = "";
-    if (txt != null) {
-      if (default_length == 3 && txt.length == 1) {
-        leading_zeros = "00";
-      } else if (default_length == 3 && txt.length == 2) {
-        leading_zeros = "0";
-      } else if (default_length == 2 && txt.length == 1) {
-        leading_zeros = "0";
-      }
+    if (default_length == 3 && txt.length == 1) {
+      leading_zeros = "00";
+    } else if (default_length == 3 && txt.length == 2) {
+      leading_zeros = "0";
+    } else if (default_length == 2 && txt.length == 1) {
+      leading_zeros = "0";
     }
 
-    var newtxt = (txt == null || txt == "" || txt == null.toString())
+    var newtxt = (txt == "" || txt == null.toString())
         ? blank_zeros
         : txt;
 

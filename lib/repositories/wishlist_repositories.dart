@@ -2,7 +2,6 @@ import '../helpers/api_helpers.dart';
 import '../helpers/main_helpers.dart';
 import '../helpers/middleware/banned_user.dart';
 import '../models/wishlist_check_response_model.dart';
-import '../models/wishlist_delete_response_model.dart';
 import '../models/wishlist_response_model.dart';
 import '../utils/app_config.dart';
 import '../utils/shared_value.dart';

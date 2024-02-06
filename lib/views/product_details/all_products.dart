@@ -7,7 +7,6 @@ import 'package:krishanthmart_new/controllers/home_controller.dart';
 import '../../models/product_response_model.dart';
 import '../../repositories/product_repository.dart';
 import '../../utils/colors.dart';
-import '../../utils/reg_ex_input_formatters.dart';
 import '../../utils/shared_value.dart';
 import '../../utils/shimmer_utils.dart';
 import '../../utils/useful_elements.dart';

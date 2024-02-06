@@ -8,9 +8,6 @@ import '../../../controllers/product_controller.dart';
 import '../../../helpers/main_helpers.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/common_btn_options.dart';
-import '../../../utils/shared_value.dart';
-import '../../home/components/product_card.dart';
-import '../../mainpage/components/box_decorations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LargeProductCard extends StatelessWidget {
@@ -75,7 +72,7 @@ class LargeProductCard extends StatelessWidget {
                           Container(
                             height: 31.h,
                             width: 65.w,
-                            color: MyTheme.shimmer_highlighted,
+                            color: MyTheme.green.withOpacity(0.300),
                             child: Column(
                               children: [
                                 Text(

@@ -9,7 +9,6 @@ import 'package:krishanthmart_new/views/wishlist/wishlist.dart';
 import 'package:toast/toast.dart';
 import '../../helpers/auth_helpers.dart';
 import '../../repositories/auth_repositories.dart';
-import '../../repositories/chat_repositories.dart';
 import '../../repositories/profile_repositories.dart';
 import '../../utils/aiz_routes.dart';
 import '../../utils/btn_elements.dart';
@@ -19,7 +18,6 @@ import '../../utils/shared_value.dart';
 import '../../utils/toast_component.dart';
 import '../auth/login.dart';
 import '../change_language/change_language.dart';
-import '../chat/chat_page.dart';
 import '../coupons/coupon.dart';
 import '../mainpage/components/box_decorations.dart';
 import '../mainpage/main_page.dart';
@@ -114,17 +112,15 @@ class _ProfilePageState extends State<ProfilePage> {
   String counterText(String txt, {default_length = 3}) {
     var blank_zeros = default_length == 3 ? "000" : "00";
     var leading_zeros = "";
-    if (txt != null) {
-      if (default_length == 3 && txt.length == 1) {
-        leading_zeros = "00";
-      } else if (default_length == 3 && txt.length == 2) {
-        leading_zeros = "0";
-      } else if (default_length == 2 && txt.length == 1) {
-        leading_zeros = "0";
-      }
+    if (default_length == 3 && txt.length == 1) {
+      leading_zeros = "00";
+    } else if (default_length == 3 && txt.length == 2) {
+      leading_zeros = "0";
+    } else if (default_length == 2 && txt.length == 1) {
+      leading_zeros = "0";
     }
 
-    var newtxt = (txt == null || txt == "" || txt == null.toString())
+    var newtxt = (txt == "" || txt == null.toString())
         ? blank_zeros
         : txt;
 
@@ -1315,7 +1311,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.only(top: 4.0),
                   child: Text(
                     //if user email is not available then check user phone if user phone is not available use empty string
-                    "${user_email.$ != "" && user_email.$ != null ? user_email.$ : user_phone.$ != "" && user_phone.$ != null ? user_phone.$ : ''}",
+                    "${user_email.$ != "" ? user_email.$ : user_phone.$ != "" ? user_phone.$ : ''}",
                     style: TextStyle(
                       color: MyTheme.light_grey,
                     ),

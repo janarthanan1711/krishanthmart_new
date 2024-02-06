@@ -4,18 +4,58 @@ import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:krishanthmart_new/repositories/location_repository.dart';
+import '../models/pincode_response_model.dart';
 
 class LocationController extends GetxController {
   var currentLocation = "".obs;
   Position? position;
   var locationId = "";
   var isAddressSelected = false.obs;
+  var pincodeList = <Data>[].obs;
+  // RxList<Map<String, dynamic>> pincodeList = <Map<String, dynamic>>[].obs;
 
   @override
   void onInit() {
     getUserLocation();
+    fetchPincodeData();
     super.onInit();
   }
+  @override
+  void onClose() {
+    pincodeList.clear();
+    super.onClose();
+  }
+
+  Future<void> fetchPincodeData() async {
+    try {
+      var pincodeResponse = await LocationRepository().getPincodeData();
+      pincodeList.addAll(pincodeResponse.data ?? []);
+      update();
+    } catch (e) {
+      print("Error fetching pincode data: $e");
+    }
+  }
+
+
+  // Future<void> fetchPincodeData() async {
+  //   try {
+  //     final pincodeResponse = await LocationRepository().getPincodeData();
+  //     if (pincodeResponse.success == true) {
+  //       print(pincodeList);
+  //       pincodeList.assignAll(pincodeResponse.data!.map((pincode) => pincode.name!));
+  //     }
+  //   } catch (e) {
+  //     // Handle error
+  //     print("Error fetching pincode data: $e");
+  //   }
+  // }
+
+
+//   getPincodeFromServer() async {
+//     var pincodeResponse = await LocationRepository().getPincodeData();
+//     pincodeList.add(pincodeResponse.data!);
+// }
 
   Future<void> getUserLocation() async {
     print("Calling location Function");
@@ -37,11 +77,11 @@ class LocationController extends GetxController {
 
         if (position != null) {
           isAddressSelected.value = true;
-          getAddressFromLatLng();
+          await getAddressFromLatLng();
 
           double latitude = position!.latitude;
           double longitude = position!.longitude;
-          getLocationId(latitude, longitude);
+          await getLocationId(latitude, longitude);
         } else {
           print('Error: Unable to get current position');
         }
@@ -87,6 +127,7 @@ class LocationController extends GetxController {
         Placemark place = placemarks[0];
         currentLocation.value =
             "${place.subAdministrativeArea} ${place.street}, ${place.locality},${place.country}";
+        print("pincode======>${place.postalCode}");
         print(currentLocation.value);
       }
     } catch (e) {

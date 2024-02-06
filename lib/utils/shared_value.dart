@@ -140,3 +140,7 @@ final SharedValue<bool> classified_product_status = SharedValue(
   value: false, // initial value
   key: "classified_product", // disk storage key for shared_preferences
 );
+// final SharedValue<bool> user_city = SharedValue(
+//   value: false, // initial value
+//   key: "user_city", // disk storage key for shared_preferences
+// );

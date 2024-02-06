@@ -10,8 +10,7 @@ class CustomGreenButton extends StatelessWidget {
     return ElevatedButton(
       // Define the button style
       style: ElevatedButton.styleFrom(
-        primary: MyTheme.accent_color2, // Set the button color to green
-        onPrimary: Colors.white, // Set the text color to white
+        foregroundColor: Colors.white, backgroundColor: MyTheme.accent_color2, // Set the text color to white
         padding: const EdgeInsets.symmetric(horizontal: 16.0), // Adjust padding
       ),
       // Define the onPressed callback

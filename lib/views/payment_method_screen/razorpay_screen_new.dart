@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/utils/app_config.dart';
 import 'package:krishanthmart_new/utils/colors.dart';
-import 'package:krishanthmart_new/views/home/home_page.dart';
 import 'package:krishanthmart_new/views/mainpage/main_page.dart';
 import 'package:krishanthmart_new/views/orders/my_orders_page.dart';
-import 'package:krishanthmart_new/views/orders/order_details.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';

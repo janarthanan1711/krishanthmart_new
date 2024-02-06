@@ -10,7 +10,7 @@ class ProductLargeCardList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (productList == null || productList.isEmpty) {
+    if (productList.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
     return ListView.builder(

@@ -36,7 +36,7 @@ InputDecorationTheme inputDecorationTheme() {
 
 TextTheme textTheme() {
   return const TextTheme(
-    bodyText1: TextStyle(color: MyTheme.SecondaryColorDark),
-    bodyText2: TextStyle(color: MyTheme.SecondaryColorDark),
+    bodyLarge: TextStyle(color: MyTheme.SecondaryColorDark),
+    bodyMedium: TextStyle(color: MyTheme.SecondaryColorDark),
   );
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -74,12 +73,13 @@ class _CategoryListPagesState extends State<CategoryListPages> {
 
   gettingCategoryName() async {
     if (widget.is_viewMore == true) {
-      await categoryController.getCategories(widget.parent_category_id);
+      await categoryController.fetchFeaturedCategories();
       categoryController.assignCategoryNames(0);
       await categoryController
           .getChildSubCategories(categoryController.categoryList![0].id!);
     } else {
       categoryController.mainCategoryNames.value = widget.parent_category_name;
+      categoryController.mainCategoryId.value = widget.category_id;
       await categoryController.getChildSubCategories(widget.category_id);
     }
   }
@@ -105,7 +105,8 @@ class _CategoryListPagesState extends State<CategoryListPages> {
       ),
     );
   }
-  Widget buildBody(){
+
+  Widget buildBody() {
     return buildCategoryList();
   }
 
@@ -141,7 +142,9 @@ class _CategoryListPagesState extends State<CategoryListPages> {
 
   buildCategoryList() {
     var data = CategoryRepository()
-        .getCategories(parent_id: widget.parent_category_id);
+        .getFeaturedCategories();
+    // var data = CategoryRepository()
+    //     .getCategories(parent_id: widget.parent_category_id);
     return FutureBuilder(
         future: data,
         builder: (context, AsyncSnapshot<CategoryResponse> snapshot) {
@@ -218,69 +221,80 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                         height: DeviceInfo(context).height,
                         width: DeviceInfo(context).width! / 1.6,
                         child: Obx(
-                          () => GridView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                              itemCount:
-                                  categoryController.subChildCategories.length,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 8.0,
-                                mainAxisSpacing: 8.0,
-                              ),
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  child: Card(
-                                    elevation: 3.0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    child: Column(
-                                      // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              const BorderRadius.vertical(
-                                                  top: Radius.circular(8.0)),
-                                          child: Image.network(
-                                            categoryController
-                                                .subChildCategories[index].banner,
-                                            height: 64.0,
-                                            width: double.maxFinite,
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 15,
-                                        ),
-                                        Text(
-                                          categoryController
-                                              .subChildCategories[index].name,
-                                          style: const TextStyle(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
+                          () => categoryController.subChildCategories.length ==
+                                  0
+                              ? Padding(
+                                padding: EdgeInsets.only(top: 210.h,left: 70.w),
+                                child: Text(AppLocalizations.of(context)!
+                                    .no_category_found),
+                              )
+                              : GridView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: categoryController
+                                      .subChildCategories.length,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 8.0,
+                                    mainAxisSpacing: 8.0,
                                   ),
-                                  onTap: () {
-                                    Get.to(
-                                      () => SubCategoryPage(
-                                        categoryId: categoryController
-                                            .mainCategoryId.value,
-                                        categoryName: categoryController
-                                            .mainCategoryNames.value,
-                                        subCategoryId: categoryController
-                                            .subChildCategories[index].id,
-                                        selectedIndexes: categoryController
-                                            .subChildCategories[index].id,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      child: Card(
+                                        elevation: 3.0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
+                                        child: Column(
+                                          // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.vertical(
+                                                      top:
+                                                          Radius.circular(8.0)),
+                                              child: Image.network(
+                                                categoryController
+                                                    .subChildCategories[index]
+                                                    .banner,
+                                                height: 64.0,
+                                                width: double.maxFinite,
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            Text(
+                                              categoryController
+                                                  .subChildCategories[index]
+                                                  .name,
+                                              style: const TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        ),
                                       ),
+                                      onTap: () {
+                                        Get.to(
+                                          () => SubCategoryPage(
+                                            categoryId: categoryController
+                                                .mainCategoryId.value,
+                                            categoryName: categoryController
+                                                .mainCategoryNames.value,
+                                            subCategoryId: categoryController
+                                                .subChildCategories[index].id,
+                                            selectedIndexes: categoryController
+                                                .subChildCategories[index].id,
+                                          ),
+                                        );
+                                      },
                                     );
-                                  },
-                                );
-                              }),
+                                  }),
                         ),
                       ),
                     ],

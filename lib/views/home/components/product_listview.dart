@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:krishanthmart_new/utils/colors.dart';
 import 'package:krishanthmart_new/views/home/components/product_card.dart';
 
 import '../../../models/product_response_model.dart';
-import '../../../utils/device_info.dart';
 class ProductCardList extends StatelessWidget {
   const ProductCardList({super.key, required this.productList, required this.onTap});
 
@@ -13,7 +10,7 @@ class ProductCardList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (productList == null || productList.isEmpty) {
+    if (productList.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
     return ListView.builder(

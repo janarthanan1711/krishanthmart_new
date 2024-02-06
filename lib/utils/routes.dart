@@ -13,7 +13,6 @@ import 'package:krishanthmart_new/views/coupons/coupon_products.dart';
 import 'package:krishanthmart_new/views/filters/filters.dart';
 import 'package:krishanthmart_new/views/flashdeals/flashdealproducts.dart';
 import 'package:krishanthmart_new/views/flashdeals/flashdealslist.dart';
-import 'package:krishanthmart_new/views/mainpage/main_page.dart';
 import 'package:krishanthmart_new/views/orders/order_details.dart';
 import 'package:krishanthmart_new/views/orders/refund_request.dart';
 import 'package:krishanthmart_new/views/product_details/all_products.dart';

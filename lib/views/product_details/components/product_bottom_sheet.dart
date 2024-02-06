@@ -121,7 +121,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                 Container(
                                   height: 35.h,
                                   width: 85.w,
-                                  color: MyTheme.shimmer_highlighted,
+                                  color: MyTheme.green.withOpacity(0.300),
                                   child: Column(
                                     children: [
                                       Text(
@@ -461,7 +461,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                               option
                           ? MyTheme.accent_color2
                           : MyTheme.noColor,
-                  width: 1.5),
+                  width: 2),
               borderRadius: BorderRadius.circular(3.0),
               color: MyTheme.white,
               boxShadow: [
@@ -484,7 +484,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                             ? MyTheme.accent_color2
                             : const Color.fromRGBO(224, 224, 225, 1),
                     fontSize: 10.sp,
-                    fontWeight: FontWeight.w600),
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),

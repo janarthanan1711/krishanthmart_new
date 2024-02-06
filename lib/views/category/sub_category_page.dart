@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/sub_category_controller.dart';
@@ -36,6 +35,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   int page = 1;
   String searchKey = "";
+  int? selectedIndex;
 
   // bool showLoadingContainer = false;
   bool showSearchBar = false;
@@ -49,18 +49,44 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
     //to assign the subcategory id to selected index in subcategory list
     subCategoryController.subCategoryIndex.value = widget.subCategoryId!;
     xcrollController.addListener(() {
-      print("calling scroll");
       if (xcrollController.position.pixels ==
           xcrollController.position.maxScrollExtent) {
-        setState(() {
-          // page++;
-          // print(page);
-          // print(subCategoryController.getCategoryProducts(page: page,categoryId: widget.categoryId));
-        });
+        // setState((){
+        //   page++;
+        // });
+
+        if (subCategoryController.categoryProductList.length > 7) {
+          page++;
+          setState(() {});
+        } else {
+          page = 1;
+          setState(() {});
+        }
+
+        print("page count while Scrolling=================> ${page}");
+        print(subCategoryController.getCategoryProducts(
+            page: page, categoryId: widget.categoryId));
+
         subCategoryController.showLoadingContainer = true;
       }
     });
     super.initState();
+  }
+
+  subCategoryIndexSelection() {
+    if (subCategoryController.subCategoryList.isNotEmpty) {
+     setState(() {
+       // Find the index of the selected subcategory ID in the subCategoryList
+       selectedIndex = subCategoryController.subCategoryList
+           .indexWhere((subcategory) => subcategory.id == widget.subCategoryId);
+
+       // Check if the selected subcategory ID exists in the list
+
+       // Set the selectedIndex in the controller
+
+       subCategoryController.selectedIndex.value = selectedIndex!;
+     });;
+    }
   }
 
   @override
@@ -310,6 +336,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                   false;
                               subCategoryController.subSelectedIndex.value =
                                   index;
+                              subCategoryController.isInitial.value = true;
                               // subCategoryController.categoryProductList.clear();
                               // subCategoryController.isLoading.value = true;
                               // print(
@@ -343,19 +370,25 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             child: Stack(
               children: [
                 Obx(() {
-                  if (subCategoryController.isInitial.value == true &&
-                          subCategoryController.categoryProductList.isEmpty ||
+                  if (subCategoryController.categoryProductList.isEmpty ||
                       subCategoryController.allCategoryProductList.isEmpty) {
-                    return SingleChildScrollView(
-                        child: ShimmerHelper().buildListShimmer());
+                    return subCategoryController.isInitial.value == true
+                        ?
+                        // return Text("No Products");
+                        SingleChildScrollView(
+                            child: ShimmerHelper().buildListShimmer(),
+                          )
+                        : Center(
+                            child: Text(AppLocalizations.of(context)!
+                                .no_product_is_available));
                   } else if (subCategoryController
                           .categoryProductList.isNotEmpty ||
                       subCategoryController.allCategoryProductList.isNotEmpty) {
                     return buildProductList();
-                  } else if (subCategoryController.totalData == 0) {
+                  } else if (subCategoryController.totalData.value == 0) {
                     return Center(
                         child: Text(AppLocalizations.of(context)!
-                            .no_data_is_available));
+                            .no_product_is_available),);
                   } else {
                     return const SizedBox();
                   }
@@ -538,6 +571,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
         categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
     subCategoryController.getSubCategory(widget.categoryId!);
     subCategoryController.getSubChildCategories(widget.subCategoryId!);
+    subCategoryController.showAllProducts.value = true;
+    subCategoryIndexSelection();
     // assignSelectedIndexes(index: 0);
   }
 
@@ -550,7 +585,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
     widget.categoryId = 0;
     widget.categoryName = "";
     subCategoryController.isInitial.value = true;
-    subCategoryController.totalData = 0;
+    subCategoryController.totalData.value = 0;
     page = 1;
     searchKey = '';
     subCategoryController.showLoadingContainer = false;

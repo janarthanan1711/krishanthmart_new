@@ -17,7 +17,6 @@ import '../../utils/other_config.dart';
 import '../../utils/shared_value.dart';
 import '../../utils/toast_component.dart';
 import '../mainpage/components/input_decorations.dart';
-import '../mainpage/main_page.dart';
 import '../webview/common_webview_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';

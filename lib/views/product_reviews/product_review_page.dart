@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'package:badges/badges.dart' as badges;
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -16,7 +13,6 @@ import '../../utils/shared_value.dart';
 import '../../utils/shimmer_utils.dart';
 import '../../utils/toast_component.dart';
 import 'dart:ui';
-import 'package:flutter/painting.dart';
 
 class ProductReviews extends StatefulWidget {
   int? id;

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:badges/badges.dart' as badges;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -1707,7 +1706,7 @@ class _ProductDetailsState extends State<ProductDetails>
             width: MediaQuery.of(context).size.width - (107 + 50),
             child: Scrollbar(
               controller: _variantScrollController,
-              isAlwaysShown: false,
+              thumbVisibility: false,
               child: Wrap(
                 children: List.generate(
                     choiceOptions[choiceOptionsIndex].options.length,
@@ -2600,7 +2599,7 @@ class _ProductDetailsState extends State<ProductDetails>
             width: 64,
             child: Scrollbar(
               controller: _imageScrollController,
-              isAlwaysShown: false,
+              thumbVisibility: false,
               thickness: 4.0,
               child: Padding(
                 padding: app_language_rtl.$!

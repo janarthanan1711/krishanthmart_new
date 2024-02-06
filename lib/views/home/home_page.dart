@@ -20,6 +20,7 @@ import 'package:toast/toast.dart';
 import '../../controllers/location_controller.dart';
 import '../../helpers/main_helpers.dart';
 import '../../models/flash_deal_model.dart';
+import '../../models/pincode_response_model.dart';
 import '../../repositories/flashdeal_repositories.dart';
 import '../../utils/device_info.dart';
 import '../../utils/shared_value.dart';
@@ -64,7 +65,7 @@ class _HomePageState extends State<HomePage> {
 
   bool get _isSliverAppBarExpanded {
     return _scrollController.hasClients &&
-        _scrollController.offset > (82.h - kToolbarHeight);
+        _scrollController.offset > (85.h - kToolbarHeight);
   }
 
   @override
@@ -109,7 +110,7 @@ class _HomePageState extends State<HomePage> {
               pinned: true,
               snap: false,
               floating: false,
-              expandedHeight: 135.h,
+              expandedHeight: 155.h,
               flexibleSpace: Container(
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.vertical(
@@ -182,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                           Get.to(() => Filter());
                         },
                         child: Container(
-                          // color: Colors.black,
+                           // color: Colors.black,
                           height: 70.h,
                           alignment: Alignment.centerLeft,
                           child: Padding(
@@ -209,24 +210,30 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(left: 16.w),
-                            child: Obx(
-                              () => InkWell(
-                                onTap: () {
-                                  locationController.getUserLocation();
-                                },
-                                child: Row(
-                                  children: [
-                                    Text(locationController
-                                                .isAddressSelected.value ==
-                                            false
-                                        ? AppLocalizations.of(context)!
-                                            .delivery_location
-                                        : locationController
-                                            .currentLocation.value),
-                                    const Icon(Icons.arrow_drop_down_outlined)
-                                  ],
-                                ),
-                              ),
+                            child: Row(
+                              children: [
+                                Obx(() {
+                                  // Obx will rebuild when pincodeList changes
+                                  return DropdownButton<Data>(
+                                    value: locationController
+                                            .pincodeList.isNotEmpty
+                                        ? locationController.pincodeList[0]
+                                        : null,
+                                    items: locationController.pincodeList
+                                        .map((Data item) {
+                                      return DropdownMenuItem<Data>(
+                                        value: item,
+                                        child: Text(item.name ?? ''),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      // Handle dropdown item change
+                                      print("Selected Pincode: ${value?.name}");
+                                    },
+                                    hint: Text('Select a Pincode'),
+                                  );
+                                }),
+                              ],
                             ),
                           ),
                           InkWell(
@@ -241,15 +248,17 @@ class _HomePageState extends State<HomePage> {
                               child: TextField(
                                 enabled: false,
                                 decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    hintText: 'Search....',
-                                    suffixIcon: IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          Icons.search,
-                                          color: MyTheme.black,
-                                        ))),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  hintText: 'Search....',
+                                  suffixIcon: IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.search,
+                                      color: MyTheme.black,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -361,7 +370,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         SizedBox(
-                          height: 218.h,
+                          // height: 218.h,
+                          height: MediaQuery.of(context).size.height > 690
+                              ? ScreenUtil().setHeight(326)
+                              : ScreenUtil().setHeight(330),
                           child: CategoryGridView(
                             homeController.featuredCategoryList,
                           ),
@@ -847,9 +859,9 @@ class _HomePageState extends State<HomePage> {
                                       width: DeviceInfo(context).width,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
-                                        image:  DecorationImage(
-                                            image: NetworkImage(
-                                                homeController.bannerThreeImageList[index]),
+                                        image: DecorationImage(
+                                            image: NetworkImage(homeController
+                                                .bannerThreeImageList[index]),
                                             fit: BoxFit.fill),
                                       ),
                                     );
@@ -1450,18 +1462,16 @@ Widget buildTimerRowRow(CurrentRemainingTime time) {
 String timeText(String txt, {default_length = 3}) {
   var blank_zeros = default_length == 3 ? "000" : "00";
   var leading_zeros = "";
-  if (txt != null) {
-    if (default_length == 3 && txt.length == 1) {
-      leading_zeros = "00";
-    } else if (default_length == 3 && txt.length == 2) {
-      leading_zeros = "0";
-    } else if (default_length == 2 && txt.length == 1) {
-      leading_zeros = "0";
-    }
+  if (default_length == 3 && txt.length == 1) {
+    leading_zeros = "00";
+  } else if (default_length == 3 && txt.length == 2) {
+    leading_zeros = "0";
+  } else if (default_length == 2 && txt.length == 1) {
+    leading_zeros = "0";
   }
 
   var newtxt =
-      (txt == null || txt == "" || txt == null.toString()) ? blank_zeros : txt;
+      (txt == "" || txt == null.toString()) ? blank_zeros : txt;
 
   // print(txt + " " + default_length.toString());
   // print(newtxt);

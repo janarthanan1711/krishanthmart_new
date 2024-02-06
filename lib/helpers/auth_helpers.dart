@@ -6,7 +6,6 @@ import 'package:krishanthmart_new/utils/system_config.dart';
 class AuthHelper{
   setUserData(LoginResponse loginResponse) {
     if (loginResponse.result == true) {
-      print(loginResponse.result);
       SystemConfig.systemUser= loginResponse.user;
       is_logged_in.$ = true;
       is_logged_in.save();
@@ -49,11 +48,21 @@ class AuthHelper{
   fetch_and_set() async {
     print("Fetch and Set Caleed");
     var userByTokenResponse = await AuthRepository().getUserByTokenResponse();
+    print('It is True==========>${userByTokenResponse.user?.avatar_original}');
+    print('It is True==========>${userByTokenResponse.user?.name}');
+    print('It is True==========>${userByTokenResponse.user?.email ?? ''}');
+    print('It is True==========>${userByTokenResponse.user?.phone ?? ''}');
+    print("token Response result======> ${userByTokenResponse.result}");
     if (userByTokenResponse.result == true) {
-      print('It is True==========>${userByTokenResponse.result}');
-      setUserData(userByTokenResponse);
+      // setUserData(userByTokenResponse);
+      SystemConfig.systemUser= userByTokenResponse.user;
+       is_logged_in.$ = true;
+       user_id.$ = userByTokenResponse.user!.id;
+       user_name.$ = userByTokenResponse.user!.name;
+       user_email.$ = userByTokenResponse.user!.email!;
+       user_phone.$ = userByTokenResponse.user!.phone!;
+       avatar_original.$ = userByTokenResponse.user!.avatar_original;
     }else{
-      print('Nah It is false==========>${userByTokenResponse.result}');
       clearUserData();
     }
   }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:krishanthmart_new/helpers/api_helpers.dart';
 import 'package:krishanthmart_new/models/login_model.dart';
@@ -223,7 +222,7 @@ class AuthRepository {
     var post_body = jsonEncode(
         {"access_token": "${access_token != null ? access_token.$ : ''}"});
 
-    String url = ("${AppConfig.BASE_URL}/auth/info");
+    String url = ("${AppConfig.BASE_URL}/get-user-by-access_token");
     if (access_token.$!.isNotEmpty) {
       final response = await ApiRequest.post(
           url: url,

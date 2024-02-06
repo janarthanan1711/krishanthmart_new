@@ -7,7 +7,6 @@ import 'package:krishanthmart_new/views/brands/all_brands.dart';
 import 'package:krishanthmart_new/views/mainpage/components/brand_category_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../utils/colors.dart';
-import '../../../utils/device_info.dart';
 
 class BrandCategoryView extends StatelessWidget {
   const BrandCategoryView({super.key});

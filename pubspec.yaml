@@ -59,6 +59,7 @@ dependencies:
   flutter_screenutil:
   flutter_typeahead:
   razorpay_flutter:
+  dropdown_button2:
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:krishanthmart_new/utils/colors.dart';
 
 class CustomSearchContainer extends StatelessWidget {
   const CustomSearchContainer({super.key});

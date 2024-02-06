@@ -21,14 +21,18 @@ class LoginResponse {
   DateTime? expires_at;
   Users? user;
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
-    result: json["result"],
-    message: json["message"],
-    access_token: json["access_token"] == null ? null : json["access_token"],
-    token_type: json["token_type"] == null ? null : json["token_type"],
-    expires_at: json["expires_at"] == null ? null : DateTime.parse(json["expires_at"]),
-    user: json["user"] == null ? null : Users.fromJson(json["user"]),
-  );
+  factory LoginResponse.fromJson(Map<String, dynamic> json) {
+    print("Login Response datassssssssss================>${json}");
+    return LoginResponse(
+      result: json["result"],
+      message: json["message"],
+      access_token: json["access_token"] == null ? null : json["access_token"],
+      token_type: json["token_type"] == null ? null : json["token_type"],
+      expires_at: json["expires_at"] == null ? null : DateTime.parse(
+          json["expires_at"]),
+      user: json["user"] == null ? null : Users.fromJson(json["user"]),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "result": result,
@@ -66,7 +70,7 @@ class Users {
     type: json["type"],
     name: json["name"],
     email: json["email"],
-    avatar: json["avatar"],
+    avatar: json["avatar"] ?? '',
     avatar_original: json["avatar_original"],
     phone: json["phone"],
     emailVerified: json["email_verified"],

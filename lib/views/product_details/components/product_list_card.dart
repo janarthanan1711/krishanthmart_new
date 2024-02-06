@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:krishanthmart_new/helpers/main_helpers.dart';
 import '../../../utils/colors.dart';
-import '../../../utils/system_config.dart';
 import '../../mainpage/components/box_decorations.dart';
 import '../product_details.dart';
 

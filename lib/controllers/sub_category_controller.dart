@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../models/category_model.dart';
 import '../models/product_response_model.dart';
 import '../models/sub_child_model.dart';
 import '../repositories/category_repositories.dart';
@@ -14,7 +12,7 @@ class SubCategoryController extends GetxController {
   var subCategoryList = [].obs;
   var mainCategoryList = [].obs;
   var mainCategoryListSheet = [].obs;
-  int? totalData = 0;
+  var totalData = 0.obs;
   var subCategoryIndex = 0.obs;
   bool showLoadingContainer = false;
   RxBool isInitial = true.obs;
@@ -33,9 +31,13 @@ class SubCategoryController extends GetxController {
     update();
   }
 
+
   getSubCategory(int? categoryId) async {
-    var res = await CategoryRepository().getCategories(parent_id: categoryId);
-    subCategoryList.addAll(res.categories!);
+    // var res = await CategoryRepository().getCategories(parent_id: categoryId);
+    // subCategoryList.addAll(res.categories!);
+    //if any problems change above code
+    var res = await CategoryRepository().getSubChildCategories(categoryId: categoryId);
+    subCategoryList.addAll(res.subChildCategory);
     update();
   }
 
@@ -49,7 +51,7 @@ class SubCategoryController extends GetxController {
     categoryProductList.addAll(productResponse.products!);
     // print("Check is Empty ${categoryProductList.isEmpty}");
     // print("closed $page");
-    totalData = productResponse.meta!.total;
+    totalData.value = productResponse.meta!.total!;
     isLoading(false);
     isInitial.value = false;
     showLoadingContainer = false;
@@ -62,8 +64,9 @@ class SubCategoryController extends GetxController {
     var allProductResponse = await ProductRepository()
         .getCategoryProducts(id: categoryId, page: page, name: searchKey);
     allCategoryProductList.addAll(allProductResponse.products!);
-    totalData = allProductResponse.meta!.total;
+    totalData.value = allProductResponse.meta!.total!;
     isLoading(false);
+    update();
   }
 
   getMainCategories(int? id) async {
@@ -88,7 +91,7 @@ class SubCategoryController extends GetxController {
     allCategoryProductList.clear();
     // page = 1;
     // searchKey = "";
-    totalData = 0;
+    totalData.value = 0;
     subCategoryIndex.value = 0;
     showLoadingContainer = false;
     isInitial.value = true;

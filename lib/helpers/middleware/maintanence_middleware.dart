@@ -42,7 +42,7 @@ class MaintenanceMiddleware extends Middleware {
           return false;
         }
       }
-    } on Exception catch (e) {
+    } on Exception {
       // TODO
     }
     return true;

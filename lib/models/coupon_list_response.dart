@@ -61,12 +61,12 @@ class CouponListResponse {
 
   Map<String, dynamic> toJson() => {
         "current_page": currentPage,
-        "data": data.map((x) => x?.toJson()).toList(),
+        "data": data.map((x) => x.toJson()).toList(),
         "first_page_url": firstPageUrl,
         "from": from,
         "last_page": lastPage,
         "last_page_url": lastPageUrl,
-        "links": links.map((x) => x?.toJson()).toList(),
+        "links": links.map((x) => x.toJson()).toList(),
         "next_page_url": nextPageUrl,
         "path": path,
         "per_page": perPage,

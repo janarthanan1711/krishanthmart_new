@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:krishanthmart_new/helpers/main_helpers.dart';
-import 'package:krishanthmart_new/models/wishlist_response_model.dart';
 import 'package:toast/toast.dart';
 import '../../repositories/wishlist_repositories.dart';
 import '../../utils/colors.dart';

@@ -7,7 +7,6 @@ import '../models/variant_model.dart';
 import '../models/variant_price_model.dart';
 import '../utils/app_config.dart';
 import '../utils/shared_value.dart';
-import '../utils/system_config.dart';
 
 class ProductRepository {
   Future<ProductMiniResponse> getBestSellingProducts() async {
@@ -84,7 +83,8 @@ class ProductRepository {
   }
 
   Future<ProductMiniResponse> getCategoryProducts(
-      {int? id = 0, name = "", page = 1}) async {
+      {int? id = 0, name = "", page}) async {
+    print("pAGES FROM cATEGORIES============>$page");
     String url =
         ("${AppConfig.BASE_URL}/products/category/$id?page=$page&name=$name");
     final response = await ApiRequest.get(url: url, headers: {

@@ -1,10 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/home_controller.dart';
 import 'package:krishanthmart_new/utils/shimmer_utils.dart';
 
 import '../../../models/category_model.dart';
-import 'package:flutter/material.dart';
-
 import '../category_page.dart';
 import 'category_card.dart';
 
@@ -27,7 +26,7 @@ class CategoryGridView extends StatelessWidget {
           crossAxisSpacing: 5,
           mainAxisSpacing: 5,
         ),
-        itemCount: 6,
+        itemCount: categoryList.length,
         itemBuilder: (context, index) {
           if (categoryList.isEmpty) {
             return ShimmerHelper().buildProductGridShimmer();
@@ -39,8 +38,7 @@ class CategoryGridView extends StatelessWidget {
                     parent_category_name:
                         controller.featuredCategoryList[index].name!,
                     is_viewMore: false,
-                    category_id:
-                        controller.featuredCategoryList[index].id!,
+                    category_id: controller.featuredCategoryList[index].id!,
                   ),
                 );
               },

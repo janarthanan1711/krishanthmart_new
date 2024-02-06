@@ -27,7 +27,7 @@ class ChooseOptionButton extends StatelessWidget {
           children: [
             Text(
               AppLocalizations.of(context)!.choose_option,
-              style: const TextStyle(color: MyTheme.font_grey),
+              style: TextStyle(color: MyTheme.black,fontWeight: FontWeight.w700),
             ),
             Icon(
               Icons.arrow_drop_down_outlined,
