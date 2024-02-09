@@ -8,6 +8,7 @@ import '../models/flutterwave_url_response.dart';
 import '../models/iyzico_pay_response.dart';
 import '../models/nagad_begin_response.dart';
 import '../models/nagad_pay_response.dart';
+import '../models/delivery_slot_model.dart';
 import '../models/order_create_response.dart';
 import '../models/payment_type_response.dart';
 import '../models/paypal_pay_response.dart';
@@ -20,7 +21,7 @@ import '../utils/shared_value.dart';
 class PaymentRepository {
   Future<dynamic> getPaymentResponseList({mode = "", list = "both"}) async {
     String url =
-    ("${AppConfig.BASE_URL}/payment-types?mode=${mode}&list=${list}");
+        ("${AppConfig.BASE_URL}/payment-types?mode=${mode}&list=${list}");
 
     final response = await ApiRequest.get(
         url: url,
@@ -56,7 +57,7 @@ class PaymentRepository {
   Future<PaypalUrlResponse> getPaypalUrlResponse(String payment_type,
       int? combined_order_id, var package_id, double? amount) async {
     String url =
-    ("${AppConfig.BASE_URL}/paypal/payment/url?payment_type=${payment_type}&combined_order_id=${combined_order_id}&amount=${amount}&user_id=${user_id.$}&package_id=$package_id");
+        ("${AppConfig.BASE_URL}/paypal/payment/url?payment_type=${payment_type}&combined_order_id=${combined_order_id}&amount=${amount}&user_id=${user_id.$}&package_id=$package_id");
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
@@ -66,7 +67,7 @@ class PaymentRepository {
   Future<FlutterwaveUrlResponse> getFlutterwaveUrlResponse(String payment_type,
       int? combined_order_id, var package_id, double? amount) async {
     String url =
-    ("${AppConfig.BASE_URL}/flutterwave/payment/url?payment_type=${payment_type}&combined_order_id=${combined_order_id}&amount=${amount}&user_id=${user_id.$}&package_id=$package_id");
+        ("${AppConfig.BASE_URL}/flutterwave/payment/url?payment_type=${payment_type}&combined_order_id=${combined_order_id}&amount=${amount}&user_id=${user_id.$}&package_id=$package_id");
 
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
@@ -220,7 +221,7 @@ class PaymentRepository {
   Future<BkashBeginResponse> getBkashBeginResponse(String payment_type,
       int? combined_order_id, var package_id, double? amount) async {
     String url =
-    ("${AppConfig.BASE_URL}/bkash/begin?payment_type=${payment_type}&combined_order_id=${combined_order_id}&amount=${amount}&user_id=${user_id.$}&package_id=${package_id}");
+        ("${AppConfig.BASE_URL}/bkash/begin?payment_type=${payment_type}&combined_order_id=${combined_order_id}&amount=${amount}&user_id=${user_id.$}&package_id=${package_id}");
 
     print(url.toString());
     final response = await ApiRequest.get(
@@ -268,7 +269,7 @@ class PaymentRepository {
       var package_id,
       double? amount) async {
     String url =
-    ("${AppConfig.BASE_URL}/sslcommerz/begin?payment_type=${payment_type}&combined_order_id=${combined_order_id}&amount=${amount}&user_id=${user_id.$}&package_id=$package_id");
+        ("${AppConfig.BASE_URL}/sslcommerz/begin?payment_type=${payment_type}&combined_order_id=${combined_order_id}&amount=${amount}&user_id=${user_id.$}&package_id=$package_id");
 
     final response = await ApiRequest.get(
       url: url,
@@ -284,7 +285,7 @@ class PaymentRepository {
   Future<NagadBeginResponse> getNagadBeginResponse(String payment_type,
       int? combined_order_id, var package_id, double? amount) async {
     String url =
-    ("${AppConfig.BASE_URL}/nagad/begin?payment_type=${payment_type}&combined_order_id=${combined_order_id}&amount=${amount}&user_id=${user_id.$}&package_id=$package_id");
+        ("${AppConfig.BASE_URL}/nagad/begin?payment_type=${payment_type}&combined_order_id=${combined_order_id}&amount=${amount}&user_id=${user_id.$}&package_id=$package_id");
 
     final response = await ApiRequest.get(
       url: url,
@@ -323,6 +324,7 @@ class PaymentRepository {
 
     return nagadPaymentProcessResponseFromJson(response.body);
   }
+
   Future<String> getCCAVenuePaymentUrl() async {
     // Replace these values with actual data from your app
     String merchantId = 'YOUR_MERCHANT_ID';
@@ -338,7 +340,7 @@ class PaymentRepository {
       'amount': amount.toString(),
       // Add other necessary parameters
     };
-    
+
     var response = await http.post(Uri.parse(''), body: paymentRequest);
 
     // Parse the response to get the payment URL
@@ -358,5 +360,19 @@ class PaymentRepository {
 
     // Placeholder example
     return 'https://example.com/payment';
+  }
+
+  Future deliverySlotRepository() async {
+    String url = ("${AppConfig.BASE_URL}/get-time-based-delivery");
+
+    final response = await ApiRequest.get(
+      url: url,
+      headers: {"App-Language": app_language.$!},
+    );
+    // print("delivery response========>${response.body}");
+    List<TimeDelivery> timeDeliveries = (json.decode(response.body)['data'] as List)
+        .map((item) => TimeDelivery.fromJson(item))
+        .toList();
+    return timeDeliveries;
   }
 }

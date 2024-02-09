@@ -648,7 +648,7 @@ class _CartPageState extends State<CartPage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      onPressDelete(
+                      (
                           _shopList[sellerIndex].cartItems[itemIndex].id);
                     },
                     child: Container(

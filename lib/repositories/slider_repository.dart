@@ -1,7 +1,6 @@
 import '../helpers/api_helpers.dart';
 import '../models/slider_model.dart';
 import 'package:http/http.dart' as http;
-
 import '../utils/app_config.dart';
 import '../utils/shared_value.dart';
 
@@ -14,6 +13,7 @@ class SliderRepository {
         "App-Language": app_language.$!,
       },
     );
+    print("slidersssssssssss images============>${response.body}");
     return sliderResponseFromJson(response.body);
   }
   Future<SliderResponse> getBannerOneImages() async {
@@ -31,6 +31,18 @@ class SliderRepository {
   Future<SliderResponse> getBannerTwoImages() async {
 
     String url =  ("${AppConfig.BASE_URL}/banners-two");
+    print(url.toString());
+    final response =
+    await ApiRequest.get(url: url,
+      headers: {
+        "App-Language": app_language.$!,
+      },);
+    print("bannners two images============>${response.body}");
+    return sliderResponseFromJson(response.body);
+  }
+  Future<SliderResponse> getNewSliderImages() async {
+
+    String url =  ("${AppConfig.BASE_URL}/sliders/products");
     print(url.toString());
     final response =
     await ApiRequest.get(url: url,

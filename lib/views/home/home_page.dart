@@ -16,11 +16,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:krishanthmart_new/views/mainpage/components/brand_grid.dart';
 import 'package:krishanthmart_new/views/product_details/all_products.dart';
 import 'package:krishanthmart_new/views/product_details/components/product_large_card_list.dart';
+import 'package:krishanthmart_new/views/product_details/product_details.dart';
 import 'package:toast/toast.dart';
 import '../../controllers/location_controller.dart';
 import '../../helpers/main_helpers.dart';
 import '../../models/flash_deal_model.dart';
 import '../../models/pincode_response_model.dart';
+import '../../models/slider_model.dart';
 import '../../repositories/flashdeal_repositories.dart';
 import '../../utils/device_info.dart';
 import '../../utils/shared_value.dart';
@@ -50,6 +52,7 @@ class _HomePageState extends State<HomePage> {
   final CartController cartController = Get.put(CartController());
   late CarouselController _carouselController;
   late ScrollController _scrollController;
+  late final SliderResponse sliderResponse;
 
   @override
   void initState() {
@@ -183,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                           Get.to(() => Filter());
                         },
                         child: Container(
-                           // color: Colors.black,
+                          // color: Colors.black,
                           height: 70.h,
                           alignment: Alignment.centerLeft,
                           child: Padding(
@@ -403,12 +406,17 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   String imageUrl =
                                       homeController.bannerTwoImageList[index];
+                                  String productId =
+                                      homeController.bannerTwoIdList[index];
                                   if (homeController
                                       .bannerTwoImageList.isEmpty) {
                                     return const Center(
                                         child: CircularProgressIndicator());
                                   } else {
-                                    return BannersHomeList(imageUrl: imageUrl);
+                                    return BannersHomeList(
+                                      imageUrl: imageUrl,
+                                      productId: productId,
+                                    );
                                   }
                                 }),
                           ),
@@ -467,13 +475,23 @@ class _HomePageState extends State<HomePage> {
                                   itemCount:
                                       homeController.bannerSixImageList.length,
                                   itemBuilder: (context, index) {
+                                    String productId =
+                                        homeController.bannerSixIdList[index];
                                     if (homeController
                                         .bannerSixImageList.isEmpty) {
                                       return ShimmerHelper()
                                           .buildProductGridShimmer();
                                     } else {
                                       return InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          Get.to(
+                                            () => ProductDetails(
+                                              id: int.parse(
+                                                productId,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         child: Container(
                                           height: ScreenUtil().setHeight(50),
                                           decoration: BoxDecoration(
@@ -503,21 +521,32 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index, realIndex) {
                                   final imageUrl =
                                       homeController.bannerOneImageList[index];
+                                  final productId =
+                                      homeController.bannerOneIdList[index];
                                   if (homeController
                                       .bannerOneImageList.isEmpty) {
                                     return const Center(
                                       child: CircularProgressIndicator(),
                                     );
                                   } else {
-                                    return Container(
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 2.5.h),
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: NetworkImage(imageUrl),
-                                              fit: BoxFit.fill),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
+                                    return InkWell(
+                                      onTap: () {
+                                        Get.to(
+                                          () => ProductDetails(
+                                            id: int.parse(productId),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 2.5.h),
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage(imageUrl),
+                                                fit: BoxFit.fill),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                      ),
                                     );
                                   }
                                 },
@@ -850,19 +879,31 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   String imageUrl = homeController
                                       .bannerThreeImageList[index];
+                                  final productId =
+                                      homeController.bannerThreeIdList[index];
                                   if (homeController
                                       .bannerThreeImageList.isEmpty) {
                                     return const SizedBox();
                                   } else {
-                                    return Container(
-                                      height: 150.h,
-                                      width: DeviceInfo(context).width,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        image: DecorationImage(
-                                            image: NetworkImage(homeController
-                                                .bannerThreeImageList[index]),
-                                            fit: BoxFit.fill),
+                                    return InkWell(
+                                      onTap: () {
+                                        Get.to(
+                                          () => ProductDetails(
+                                            id: int.parse(productId),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 150.h,
+                                        width: DeviceInfo(context).width,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          image: DecorationImage(
+                                              image: NetworkImage(homeController
+                                                  .bannerThreeImageList[index]),
+                                              fit: BoxFit.fill),
+                                        ),
                                       ),
                                     );
                                   }
@@ -1037,6 +1078,7 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   String imageUrl =
                                       homeController.bannerSixImageList[index];
+                                  String productId = homeController.bannerSixIdList[index];
                                   if (homeController
                                       .bannerSixImageList.isEmpty) {
                                     return const Center(
@@ -1097,6 +1139,7 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   String imageUrl =
                                       homeController.bannerFourImageList[index];
+                                  final productIds = homeController.bannerFourIdList[index];
                                   if (homeController
                                       .bannerFourImageList.isEmpty) {
                                     return const Center(
@@ -1470,8 +1513,7 @@ String timeText(String txt, {default_length = 3}) {
     leading_zeros = "0";
   }
 
-  var newtxt =
-      (txt == "" || txt == null.toString()) ? blank_zeros : txt;
+  var newtxt = (txt == "" || txt == null.toString()) ? blank_zeros : txt;
 
   // print(txt + " " + default_length.toString());
   // print(newtxt);

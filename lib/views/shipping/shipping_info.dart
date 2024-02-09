@@ -19,6 +19,7 @@ import '../../utils/useful_elements.dart';
 import '../checkout/checkout_page.dart';
 import '../mainpage/components/box_decorations.dart';
 import 'components/fade_image_network.dart';
+import 'package:krishanthmart_new/controllers/delivery_slot_controller.dart';
 
 class ShippingInfo extends StatefulWidget {
 
@@ -32,6 +33,7 @@ class ShippingInfo extends StatefulWidget {
 class _ShippingInfoState extends State<ShippingInfo> {
   ScrollController _mainScrollController = ScrollController();
 
+
   List<SellerWithShipping> _sellerWiseShippingOption = [];
 
   List<DeliveryInfoResponse> _deliveryInfoList = [];
@@ -41,8 +43,6 @@ class _ShippingInfoState extends State<ShippingInfo> {
 
   // Boolean variables
   bool _isFetchDeliveryInfo = false;
-
-
 
 
   //double variables
@@ -126,7 +126,6 @@ class _ShippingInfoState extends State<ShippingInfo> {
   }
 
   changeShippingOption(ShippingOption option, index) {
-    print("kpogjpergjepgjegj${option}");
     if (option.index == 1) {
       if(_deliveryInfoList.first.pickupPoints!.isNotEmpty) {
         _sellerWiseShippingOption[index].shippingId =
@@ -177,7 +176,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
 
     shippingCostResponse =
     await AddressRepository().getShippingCostResponse(
-        shipping_type: _sellerWiseShippingOption);
+        shipping_type: deliverySlotController.deliveryData.value);
 
     if (shippingCostResponse.result == false) {
       ToastComponent.showDialog(AppLocalizations
@@ -197,6 +196,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
       onPopped(value);
     });
   }
+  DeliverySlotController deliverySlotController = Get.put(DeliverySlotController());
 
   @override
   void initState() {
@@ -815,7 +815,6 @@ class _ShippingInfoState extends State<ShippingInfo> {
       ),
       padding: const EdgeInsets.only(right: 14),
       onPressed: () {
-        print("jsogjdogjogjeogj");
         changeShippingOption(ShippingOption.Carrier, sellerIndex);
       },
       child: Container(
@@ -936,7 +935,6 @@ class _ShippingInfoState extends State<ShippingInfo> {
               Padding(
                 padding: const EdgeInsets.only(top: 18.0),
                 child: Text(
-
                   AppLocalizations
                       .of(context)!
                       .choose_delivery_ucf,
@@ -956,7 +954,61 @@ class _ShippingInfoState extends State<ShippingInfo> {
               buildShippingListBody(index),
             ],
           ),
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5.0),
+              child: Text(
+                "Delivery Time Slot",
+                style: TextStyle(
+                    color: MyTheme.dark_font_grey,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Container(
+              height: 60,
+              color: MyTheme.white,
+              padding: EdgeInsets.symmetric(vertical: 5),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: deliverySlotController.deliveryTimeSlot.length,
+                  itemBuilder: (context,index){
+                   return deliverySlotContainer(index);
+                  },
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
       ],
+    );
+  }
+
+
+  InkWell deliverySlotContainer(index){
+    return InkWell(
+      child: Obx(()=>
+         Container(
+          height: 40,
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: MyTheme.white,
+            border: Border.all(color: deliverySlotController.deliveryIndex == index ?  MyTheme.accent_color : MyTheme.medium_grey),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(child: Text(deliverySlotController.deliveryTimeSlot[index].transitTime!,style: TextStyle(color: deliverySlotController.deliveryIndex == index ?  MyTheme.accent_color : MyTheme.medium_grey,fontWeight: deliverySlotController.deliveryIndex == index ? FontWeight.bold : FontWeight.w500),),),
+        ),
+      ),
+      onTap: (){
+        deliverySlotController.storeValuestoApi(index);
+      },
     );
   }
 

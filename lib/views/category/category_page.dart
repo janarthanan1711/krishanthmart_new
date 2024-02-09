@@ -68,6 +68,7 @@ class _CategoryListPagesState extends State<CategoryListPages> {
       categoryController.assignCategoryNames(0);
       categoryController
           .getChildSubCategories(categoryController.categoryList![0].id!);
+      // categoryController.mainCategoryId.value = 0;
     });
   }
 
@@ -76,7 +77,7 @@ class _CategoryListPagesState extends State<CategoryListPages> {
       await categoryController.fetchFeaturedCategories();
       categoryController.assignCategoryNames(0);
       await categoryController
-          .getChildSubCategories(categoryController.categoryList![0].id!);
+          .getChildSubCategories(4);
     } else {
       categoryController.mainCategoryNames.value = widget.parent_category_name;
       categoryController.mainCategoryId.value = widget.category_id;
@@ -109,18 +110,6 @@ class _CategoryListPagesState extends State<CategoryListPages> {
   Widget buildBody() {
     return buildCategoryList();
   }
-
-  // Widget buildBody() {
-  //   return CustomScrollView(
-  //     physics: const AlwaysScrollableScrollPhysics(),
-  //     slivers: [
-  //       SliverList(
-  //           delegate: SliverChildListDelegate([
-  //         buildCategoryList(),
-  //       ]))
-  //     ],
-  //   );
-  // }
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
@@ -172,7 +161,7 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                           onTap: () async {
                             await categoryController.getChildSubCategories(
                                 snapshot.data!.categories![index].id!);
-                            widget.is_viewMore == false
+                            widget.is_viewMore == true
                                 ? categoryController.mainCategoryNames.value =
                                     snapshot.data!.categories![index].name!
                                 : categoryController.assignCategoryNames(index);

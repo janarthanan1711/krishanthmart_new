@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/sub_category_controller.dart';
 import 'package:krishanthmart_new/utils/device_info.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../utils/colors.dart';
+import '../../utils/shared_value.dart';
 import '../../utils/shimmer_utils.dart';
 import '../../utils/useful_elements.dart';
 import 'components/products_category_card.dart';
@@ -35,7 +38,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   int page = 1;
   String searchKey = "";
-  int? selectedIndex;
+
+  // int? selectedIndex;
 
   // bool showLoadingContainer = false;
   bool showSearchBar = false;
@@ -43,51 +47,40 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
   @override
   void initState() {
     getAll();
-    // subCategoryController.selectedIndex.value = widget.selectedIndexes!;
-    // print("cehckn sub Category Index =======>${subCategoryController.selectedIndex.value}");
-    print(widget.subCategoryId);
-    //to assign the subcategory id to selected index in subcategory list
-    subCategoryController.subCategoryIndex.value = widget.subCategoryId!;
+    // subCategoryIndexSelection();
     xcrollController.addListener(() {
       if (xcrollController.position.pixels ==
           xcrollController.position.maxScrollExtent) {
-        // setState((){
-        //   page++;
-        // });
-
-        if (subCategoryController.categoryProductList.length > 7) {
+        setState(() {
           page++;
-          setState(() {});
+        });
+        // subCategoryController.pageScrollingFetchingDatas(page: page,searchKey: searchKey);
+        if (subCategoryController.showAllProducts.value == true) {
+          subCategoryController.getAllCategoryProducts(
+              categoryId: subCategoryController.allCategoryProductId.value,
+              page: page,
+              searchKey: searchKey);
         } else {
-          page = 1;
-          setState(() {});
+          subCategoryController.getCategoryProducts(
+              categoryId: subCategoryController.categoryProductId.value,
+              page: page,
+              searchKey: searchKey);
         }
-
-        print("page count while Scrolling=================> ${page}");
-        print(subCategoryController.getCategoryProducts(
-            page: page, categoryId: widget.categoryId));
-
         subCategoryController.showLoadingContainer = true;
+
+        // _onRefresh();
       }
     });
     super.initState();
   }
 
-  subCategoryIndexSelection() {
-    if (subCategoryController.subCategoryList.isNotEmpty) {
-     setState(() {
-       // Find the index of the selected subcategory ID in the subCategoryList
-       selectedIndex = subCategoryController.subCategoryList
-           .indexWhere((subcategory) => subcategory.id == widget.subCategoryId);
-
-       // Check if the selected subcategory ID exists in the list
-
-       // Set the selectedIndex in the controller
-
-       subCategoryController.selectedIndex.value = selectedIndex!;
-     });;
-    }
-  }
+  // subCategoryIndexSelection() {
+  //     int selectedIndexes = subCategoryController.subCategoryList
+  //         .indexWhere((subcategory) => subcategory.id == widget.subCategoryId);
+  //     subCategoryController.selectedIndex.value = selectedIndexes;
+  //     setState(() {});
+  //     print("subcategory list id======>${widget.subCategoryId}");
+  // }
 
   @override
   void dispose() {
@@ -110,6 +103,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
         title: buildAppBarTitle(context),
         backgroundColor: MyTheme.shimmer_base,
         foregroundColor: MyTheme.black,
+        automaticallyImplyLeading: false,
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(45.0),
@@ -171,6 +165,9 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                 //to get the all category products need to make it true to generate updated list
                                 subCategoryController.showAllProducts.value =
                                     true;
+                                setState(() {
+                                  page = 1;
+                                });
                                 //for coloring
                                 subCategoryController.selectedIndex.value =
                                     index;
@@ -188,7 +185,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                         categoryId: subCategoryController
                                             .subCategoryList[index].id,
                                         page: page,
-                                        searchKey: searchKey);
+                                        searchKey: searchKey,
+                                        index: index);
                               },
                             );
                           },
@@ -249,7 +247,9 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                           try {
                             subCategoryController.showAllProducts.value = true;
                             subCategoryController.isLoading.value = true;
-
+                            setState(() {
+                              page = 1;
+                            });
                             // print(
                             //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
                             // print(
@@ -263,13 +263,19 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
                             //hERE ASSIGNED THE SUBCATEGORY INDEX VALUE TO FETCH ALL PRODUCTS
                             await subCategoryController.getAllCategoryProducts(
-                              categoryId: subCategoryController
-                                  .subCategoryList[subCategoryController
-                                      .subCategoryIndex.value]
-                                  .id,
-                              page: page,
-                              searchKey: searchKey,
-                            );
+                                categoryId: subCategoryController
+                                    .subCategoryList[subCategoryController
+                                        .subCategoryIndex.value]
+                                    .id,
+                                page: page,
+                                searchKey: searchKey,
+                                index: subCategoryController
+                                    .subCategoryIndex.value);
+                            // subCategoryController.categoryProductId.value =
+                            //     subCategoryController
+                            //         .subCategoryList[subCategoryController
+                            //             .subCategoryIndex.value]
+                            //         .id;
                             // print(
                             //     "All Part set index ${subCategoryController.subCategoryIndex.value}");
                             //
@@ -331,23 +337,30 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                               ),
                             ),
                             onTap: () async {
+                              setState(() {
+                                page = 1;
+                              });
                               // print("Calling");
                               subCategoryController.showAllProducts.value =
                                   false;
                               subCategoryController.subSelectedIndex.value =
                                   index;
                               subCategoryController.isInitial.value = true;
+                              print(
+                                  "Show All Products========>${subCategoryController.showAllProducts.value}");
                               // subCategoryController.categoryProductList.clear();
                               // subCategoryController.isLoading.value = true;
                               // print(
                               //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
                               // print(
                               //     "subChildCategory Value ${subCategoryController.categoryProductList[index].name}");
+
                               await subCategoryController.getCategoryProducts(
                                   categoryId: subCategoryController
                                       .subChildCategories[index].id!,
                                   page: page,
-                                  searchKey: searchKey);
+                                  searchKey: searchKey,
+                                  index: index);
                               // print(
                               //     "Passing Ids =====>${subCategoryController.subChildCategories[index].id}");
                               // print(
@@ -369,30 +382,33 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
           Expanded(
             child: Stack(
               children: [
-                Obx(() {
-                  if (subCategoryController.categoryProductList.isEmpty ||
-                      subCategoryController.allCategoryProductList.isEmpty) {
-                    return subCategoryController.isInitial.value == true
-                        ?
-                        // return Text("No Products");
-                        SingleChildScrollView(
-                            child: ShimmerHelper().buildListShimmer(),
-                          )
-                        : Center(
-                            child: Text(AppLocalizations.of(context)!
-                                .no_product_is_available));
-                  } else if (subCategoryController
-                          .categoryProductList.isNotEmpty ||
-                      subCategoryController.allCategoryProductList.isNotEmpty) {
-                    return buildProductList();
-                  } else if (subCategoryController.totalData.value == 0) {
-                    return Center(
-                        child: Text(AppLocalizations.of(context)!
-                            .no_product_is_available),);
-                  } else {
-                    return const SizedBox();
-                  }
-                }),
+                buildProductList(),
+                // Obx(() {
+                //   if (subCategoryController.categoryProductList.isEmpty ||
+                //       subCategoryController.allCategoryProductList.isEmpty) {
+                //     return subCategoryController.isInitial.value == true
+                //         ?
+                //         // return Text("No Products");
+                //         SingleChildScrollView(
+                //             child: ShimmerHelper().buildListShimmer(),
+                //           )
+                //         : Center(
+                //             child: CircularProgressIndicator(
+                //             color: MyTheme.green,
+                //           ),);
+                //   } else if (subCategoryController
+                //           .categoryProductList.isNotEmpty ||
+                //       subCategoryController.allCategoryProductList.isNotEmpty) {
+                //     return buildProductList();
+                //   } else if (subCategoryController.totalData.value == 0) {
+                //     return Center(
+                //       child: Text(AppLocalizations.of(context)!
+                //           .no_product_is_available),
+                //     );
+                //   } else {
+                //     return const SizedBox();
+                //   }
+                // }),
                 Align(
                     alignment: Alignment.bottomCenter,
                     child: buildLoadingContainer())
@@ -410,10 +426,13 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
       width: double.infinity,
       color: MyTheme.white,
       child: Center(
-        child: Text(subCategoryController.totalData ==
-                subCategoryController.categoryProductList.length
-            ? AppLocalizations.of(context)!.no_more_products_ucf
-            : AppLocalizations.of(context)!.loading_more_products_ucf),
+        child: Obx(
+          () => Text(
+            subCategoryController.totalData.value == 0
+                ? AppLocalizations.of(context)!.no_more_products_ucf
+                : AppLocalizations.of(context)!.loading_more_products_ucf,
+          ),
+        ),
       ),
     );
   }
@@ -421,41 +440,52 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
   buildProductList() {
     return GetBuilder<SubCategoryController>(
       builder: (subCategoryController) {
-        return RefreshIndicator(
-          onRefresh: _onRefresh,
-          child: SizedBox(
-            // height: Get.height / 1.259,
-            height: 900.h,
-            child: subCategoryController.isLoading.value == false
-                ? Obx(
-                    //THERE TWO DIFFERENT LIST ONE IS (ALL) OTHER IS (SUBCHILD) WILL FETCH BASED ON CONDITION
-                    () => ListView.builder(
-                      physics: const BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics()),
-                      controller: xcrollController,
-                      shrinkWrap: true,
-                      itemCount: subCategoryController.showAllProducts.value ==
-                              true
-                          ? subCategoryController.allCategoryProductList.length
-                          : subCategoryController.categoryProductList.length,
-                      itemBuilder: (context, index) {
-                        return Obx(
-                          () => ProductCategoryCardLarge(
-                            product:
-                                subCategoryController.showAllProducts.value ==
-                                        true
-                                    ? subCategoryController
-                                        .allCategoryProductList[index]
-                                    : subCategoryController
-                                        .categoryProductList[index],
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                : Center(
-                    child: ShimmerHelper().buildListShimmer(),
+        return SizedBox(
+          // height: Get.height / 1.259,
+          height: 900.h,
+          child: Obx(
+            //THERE TWO DIFFERENT LIST ONE IS (ALL) OTHER IS (SUBCHILD) WILL FETCH BASED ON CONDITION
+            () {
+              if (subCategoryController.isInitial.value &&
+                      subCategoryController.categoryProductList.length == 0 ||
+                  subCategoryController.allCategoryProductList.length == 0) {
+                return Center(
+                  child: Text(
+                      AppLocalizations.of(context)!.no_product_is_available),
+                );
+              } else if (subCategoryController.categoryProductList.length > 0 ||
+                  subCategoryController.allCategoryProductList.length > 0) {
+                return ListView.builder(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  controller: xcrollController,
+                  shrinkWrap: true,
+                  itemCount: subCategoryController.showAllProducts.value == true
+                      ? subCategoryController.allCategoryProductList.length
+                      : subCategoryController.categoryProductList.length,
+                  itemBuilder: (context, index) {
+                    return Obx(
+                      () => ProductCategoryCardLarge(
+                        product: subCategoryController.showAllProducts.value ==
+                                true
+                            ? subCategoryController
+                                .allCategoryProductList[index]
+                            : subCategoryController.categoryProductList[index],
+                      ),
+                    );
+                  },
+                );
+              } else if (subCategoryController.totalData.value == 0) {
+                return Obx(
+                  () => Center(
+                    child: Text(
+                        AppLocalizations.of(context)!.no_product_is_available),
                   ),
+                );
+              } else {
+                return SizedBox();
+              }
+            },
           ),
         );
       },
@@ -476,15 +506,26 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   Container buildAppBarTitleOption(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
           SizedBox(
             width: 20,
-            child: UsefulElements.backButton(context, color: "white"),
+            child: IconButton(
+                padding: EdgeInsets.zero,
+                icon: Icon(
+                    app_language_rtl.$!
+                        ? CupertinoIcons.arrow_right
+                        : CupertinoIcons.arrow_left,
+                    color: MyTheme.black),
+                onPressed: () {
+                  // clearAll();
+                  Get.back();
+                }),
+            // child: UsefulElements.backButton(context, color: "white"),
           ),
           Container(
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 15),
             width: DeviceInfo(context).width! / 2,
             child: Text(
               widget.categoryName!,
@@ -564,34 +605,41 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
   }
 
   getAll() {
-    subCategoryController.getMainCategories(widget.categoryId);
-    subCategoryController.getCategoryProducts(
-        categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
-    subCategoryController.getAllCategoryProducts(
-        categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
-    subCategoryController.getSubCategory(widget.categoryId!);
-    subCategoryController.getSubChildCategories(widget.subCategoryId!);
-    subCategoryController.showAllProducts.value = true;
-    subCategoryIndexSelection();
+    setState(() {
+      subCategoryController.getMainCategories(widget.categoryId);
+      subCategoryController.getCategoryProducts(
+          categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
+      subCategoryController.getAllCategoryProducts(
+          categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
+      subCategoryController.getSubCategory(widget.categoryId!);
+      subCategoryController.getSubChildCategories(widget.subCategoryId!);
+      subCategoryController.subCategoryIndexSelection(widget.subCategoryId);
+      subCategoryController.showAllProducts.value = true;
+    });
+    // subCategoryIndexSelection();
     // assignSelectedIndexes(index: 0);
   }
 
   clearAll() {
-    subCategoryController.subChildCategories.clear();
-    subCategoryController.categoryProductList.clear();
-    subCategoryController.subCategoryList.clear();
-    subCategoryController.mainCategoryList.clear();
-    subCategoryController.allCategoryProductList.clear();
-    widget.categoryId = 0;
-    widget.categoryName = "";
-    subCategoryController.isInitial.value = true;
-    subCategoryController.totalData.value = 0;
-    page = 1;
-    searchKey = '';
-    subCategoryController.showLoadingContainer = false;
-    subCategoryController.showAllProducts.value = false;
-    subCategoryController.selectedIndex.value = 0;
-    subCategoryController.subSelectedIndex.value = 0;
-    subCategoryController.subCategoryIndex.value = 0;
+    setState(() {
+      subCategoryController.subChildCategories.clear();
+      subCategoryController.categoryProductList.clear();
+      subCategoryController.subCategoryList.clear();
+      subCategoryController.mainCategoryList.clear();
+      subCategoryController.allCategoryProductList.clear();
+      widget.categoryId = 0;
+      widget.categoryName = "";
+      subCategoryController.isInitial.value = true;
+      subCategoryController.totalData.value = 0;
+      page = 1;
+      searchKey = '';
+      subCategoryController.showLoadingContainer = false;
+      subCategoryController.showAllProducts.value = false;
+      subCategoryController.selectedIndex.value = 0;
+      subCategoryController.subSelectedIndex.value = 0;
+      subCategoryController.subCategoryIndex.value = 0;
+      subCategoryController.allCategoryProductId.value = 0;
+      subCategoryController.categoryProductId.value = 0;
+    });
   }
 }

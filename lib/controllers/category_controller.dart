@@ -34,9 +34,10 @@ class CategoryController extends GetxController{
   }
 
   assignCategoryNames(int index){
-    print(mainCategoryNames.value);
-    mainCategoryNames.value = featuredCategoryList[index].name!;
+    print(" main category name${mainCategoryNames.value}");
+    print(" main category id${mainCategoryId.value}");
     mainCategoryId.value = featuredCategoryList[index].id!;
+    mainCategoryNames.value = featuredCategoryList[index].name!;
     update();
     // print("mainCategoryID=========>${mainCategoryId.value}");
   }
@@ -53,7 +54,7 @@ class CategoryController extends GetxController{
   getCategories(int? id) async {
     categoryList!.clear();
     var categoriesAll = await CategoryRepository().getCategories(parent_id: id);
-    categoryList!.addAll(categoriesAll.categories! ?? []);
+    categoryList!.addAll(categoriesAll.categories!);
     update();
   }
 

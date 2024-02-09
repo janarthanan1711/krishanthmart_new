@@ -13,6 +13,7 @@ import '../models/product_response_model.dart';
 import '../repositories/business_repositories.dart';
 import '../repositories/category_repositories.dart';
 import '../repositories/flashdeal_repositories.dart';
+import '../repositories/payment_repositories.dart';
 import '../repositories/product_repository.dart';
 import '../repositories/slider_repository.dart';
 
@@ -23,6 +24,11 @@ class HomeController extends GetxController {
   var bannerSixImageList = [].obs;
   var bannerOneImageList = [].obs;
   var bannerThreeImageList = [].obs;
+  var bannerTwoIdList = [].obs;
+  var bannerFourIdList = [].obs;
+  var bannerSixIdList = [].obs;
+  var bannerOneIdList = [].obs;
+  var bannerThreeIdList = [].obs;
   var flashDealList = <FlashDealResponseDatum>[].obs;
   List<Category> featuredCategoryList = [];
   List<Category> topCategoryList = [];
@@ -54,6 +60,7 @@ class HomeController extends GetxController {
   var couponSubTitle = "".obs;
   Color? hexColorCoupon;
 
+
   CategoryController categoryController = Get.put(CategoryController());
 
   // var isExpanded = false.obs;
@@ -72,10 +79,11 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
+
   fetchCarouselImages() async {
     var carouselResponse = await SliderRepository().getSliders();
-    for (var slider in carouselResponse.sliders!) {
-      carouselImageList.add(slider.photo);
+    for (var slider in carouselResponse.image!) {
+      carouselImageList.add(slider);
     }
     isCarouselInitial = false;
     update();
@@ -240,38 +248,54 @@ class HomeController extends GetxController {
 
   fetchBannerOneImages() async {
     var bannerOneImages = await SliderRepository().getBannerOneImages();
-     for (var slider in bannerOneImages.sliders!){
-       bannerOneImageList.add(slider.photo);
+     for (var slider in bannerOneImages.image!){
+       bannerOneImageList.add(slider);
      }
+    for(var ids in bannerOneImages.productId!){
+      bannerOneIdList.add(ids);
+    }
      update();
   }
   fetchBannerThreeImages() async {
     var bannerOneImages = await SliderRepository().getBannerThreeImages();
-    for (var slider in bannerOneImages.sliders!){
-      bannerThreeImageList.add(slider.photo);
+    for (var slider in bannerOneImages.image!){
+      bannerThreeImageList.add(slider);
+    }
+    for(var ids in bannerOneImages.productId!){
+      bannerThreeIdList.add(ids);
     }
     update();
   }
   fetchBannerFourImages() async {
     var bannerTwoResponse = await SliderRepository().getBannerFourImages();
-    for (var slider in bannerTwoResponse.sliders!) {
-      bannerFourImageList.add(slider.photo);
+    for (var slider in bannerTwoResponse.image!) {
+      bannerFourImageList.add(slider);
+    }
+    for(var ids in bannerTwoResponse.productId!){
+      bannerFourIdList.add(ids);
     }
     update();
   }
   fetchBannerTwoImages() async {
     var bannerTwoResponse = await SliderRepository().getBannerTwoImages();
-    for (var slider in bannerTwoResponse.sliders!) {
-      bannerTwoImageList.add(slider.photo);
+    for (var slider in bannerTwoResponse.image!) {
+      bannerTwoImageList.add(slider);
+    }
+    for(var ids in bannerTwoResponse.productId!){
+      bannerTwoIdList.add(ids);
     }
     isBannerTwoInitial = false;
     update();
   }
   fetchBannerSixImages() async {
     var bannerTwoResponse = await SliderRepository().getBannerSixImages();
-    for (var slider in bannerTwoResponse.sliders!) {
-      bannerSixImageList.add(slider.photo);
+    for (var slider in bannerTwoResponse.image!) {
+      bannerSixImageList.add(slider);
     }
+    for(var ids in bannerTwoResponse.productId!){
+      bannerSixIdList.add(ids);
+    }
+    // bannerSixIdList.value = bannerTwoResponse.productId as RxList;
     update();
   }
   openWhatsApp(context) async{
@@ -330,6 +354,11 @@ class HomeController extends GetxController {
     bannerFourImageList.clear();
     bannerSixImageList.clear();
     bannerOneImageList.clear();
+    bannerOneIdList.clear();
+    bannerTwoIdList.clear();
+    bannerThreeIdList.clear();
+    bannerFourIdList.clear();
+    bannerSixIdList.clear();
     subChildCategoriesHome.clear();
     isCarouselInitial = true;
     isBannerOneInitial = true;

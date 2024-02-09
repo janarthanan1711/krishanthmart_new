@@ -206,10 +206,9 @@ class AddressRepository {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${access_token.$}",
           "App-Language": app_language.$!,
-
-
         },
         body: post_body,middleware: BannedUser());
+
     return shippingCostResponseFromJson(response.body);
   }
 

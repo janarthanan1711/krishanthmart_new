@@ -22,27 +22,46 @@ class SubCategoryController extends GetxController {
   var subSelectedIndex = 0.obs;
   var selectedMainCategoryTitle = "".obs;
   var mainNameChanged = false.obs;
+  var categoryProductId = 0.obs;
+  var allCategoryProductId = 0.obs;
+
+
+  @override
+  void onClose() {
+    clearAll();
+    super.onClose();
+  }
+
+  subCategoryIndexSelection(subCategoryId) {
+    int selectedIndexes = subCategoryList
+        .indexWhere((subcategory) => subcategory.id == subCategoryId);
+    selectedIndex.value = selectedIndexes;
+    update();
+  }
 
   getSubChildCategories(int subChildCategory) async {
     subChildCategories.clear();
     var subChildCategoriesRes = await CategoryRepository()
         .getSubChildCategories(categoryId: subChildCategory);
     subChildCategories.addAll(subChildCategoriesRes.subChildCategory);
+    // subCategoryIndexSelection(subChildCategory);
     update();
   }
-
 
   getSubCategory(int? categoryId) async {
     // var res = await CategoryRepository().getCategories(parent_id: categoryId);
     // subCategoryList.addAll(res.categories!);
     //if any problems change above code
-    var res = await CategoryRepository().getSubChildCategories(categoryId: categoryId);
+    subCategoryList.clear();
+    var res = await CategoryRepository()
+        .getSubChildCategories(categoryId: categoryId);
     subCategoryList.addAll(res.subChildCategory);
+    subCategoryIndexSelection(categoryId);
     update();
   }
 
   getCategoryProducts(
-      {int? categoryId, int page = 1, String? searchKey}) async {
+      {int? categoryId, int page = 1, String? searchKey, int? index}) async {
     categoryProductList.clear();
     isLoading(true);
     // print("called");
@@ -51,6 +70,7 @@ class SubCategoryController extends GetxController {
     categoryProductList.addAll(productResponse.products!);
     // print("Check is Empty ${categoryProductList.isEmpty}");
     // print("closed $page");
+    categoryProductId.value = categoryId!;
     totalData.value = productResponse.meta!.total!;
     isLoading(false);
     isInitial.value = false;
@@ -58,13 +78,16 @@ class SubCategoryController extends GetxController {
     update();
   }
 
-  getAllCategoryProducts({int? categoryId, int page = 1, String? searchKey}) async {
+  getAllCategoryProducts(
+      {int? categoryId, int page = 1, String? searchKey, int? index}) async {
     allCategoryProductList.clear();
     isLoading(true);
     var allProductResponse = await ProductRepository()
         .getCategoryProducts(id: categoryId, page: page, name: searchKey);
     allCategoryProductList.addAll(allProductResponse.products!);
+    allCategoryProductId.value = categoryId!;
     totalData.value = allProductResponse.meta!.total!;
+    print("Total Value of product======>${totalData.value}");
     isLoading(false);
     update();
   }
@@ -82,6 +105,25 @@ class SubCategoryController extends GetxController {
   //   print("after==========>${subCategoryList[index].id} ${id}");
   // }
 
+  // assignCategoryIds(index) {
+  //   allCategoryProductId.value = subCategoryList[index].id!;
+  //   categoryProductId.value = subCategoryList[index].id;
+  // }
+
+  pageScrollingFetchingDatas({page, searchKey}) {
+    if (showAllProducts.value == true) {
+      getAllCategoryProducts(
+          categoryId: allCategoryProductId.value,
+          page: page,
+          searchKey: searchKey);
+    } else {
+      getCategoryProducts(
+          categoryId: categoryProductId.value,
+          page: page,
+          searchKey: searchKey);
+    }
+    update();
+  }
 
   clearAll() {
     subChildCategories.clear();
@@ -98,6 +140,8 @@ class SubCategoryController extends GetxController {
     showAllProducts.value = false;
     mainNameChanged.value = false;
     selectedIndex.value = 0;
+    allCategoryProductId.value = 0;
+    categoryProductId.value = 0;
     update();
   }
 }
