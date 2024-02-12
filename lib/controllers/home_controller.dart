@@ -24,11 +24,13 @@ class HomeController extends GetxController {
   var bannerSixImageList = [].obs;
   var bannerOneImageList = [].obs;
   var bannerThreeImageList = [].obs;
+  var bannerFiveImageList = [].obs;
   var bannerTwoIdList = [].obs;
   var bannerFourIdList = [].obs;
   var bannerSixIdList = [].obs;
   var bannerOneIdList = [].obs;
   var bannerThreeIdList = [].obs;
+  var bannerFiveIdList = [].obs;
   var flashDealList = <FlashDealResponseDatum>[].obs;
   List<Category> featuredCategoryList = [];
   List<Category> topCategoryList = [];
@@ -246,6 +248,17 @@ class HomeController extends GetxController {
     await SliderRepository().getBannerFiveImages();
   }
 
+  fetchBannerFiveImages() async {
+    var bannerFiveImages = await SliderRepository().getBannerFiveImages();
+    for (var slider in bannerFiveImages.image!){
+      bannerFiveImageList.add(slider);
+    }
+    for(var ids in bannerFiveImages.productId!){
+      bannerFiveIdList.add(ids);
+    }
+    update();
+  }
+
   fetchBannerOneImages() async {
     var bannerOneImages = await SliderRepository().getBannerOneImages();
      for (var slider in bannerOneImages.image!){
@@ -328,6 +341,7 @@ class HomeController extends GetxController {
     fetchBannerOneImages();
     fetchBannerTwoImages();
     fetchBannerFourImages();
+    fetchBannerFiveImages();
     fetchBannerThreeImages();
     fetchBannerSixImages();
     fetchBestSellingProducts();
@@ -354,6 +368,8 @@ class HomeController extends GetxController {
     bannerFourImageList.clear();
     bannerSixImageList.clear();
     bannerOneImageList.clear();
+    bannerFiveImageList.clear();
+    bannerFiveIdList.clear();
     bannerOneIdList.clear();
     bannerTwoIdList.clear();
     bannerThreeIdList.clear();

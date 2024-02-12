@@ -84,13 +84,12 @@ class ProductRepository {
 
   Future<ProductMiniResponse> getCategoryProducts(
       {int? id = 0, name = "", page}) async {
-    print("pAGES FROM cATEGORIES============>$page");
     String url =
         ("${AppConfig.BASE_URL}/products/category/$id?page=$page&name=$name");
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    print("Category Products Api======>${response.body}");
+    // print("Category Products Api======>${response.body}");
     return productMiniResponseFromJson(response.body);
   }
 
@@ -99,7 +98,7 @@ class ProductRepository {
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    print("Get Product Response========>${response.body}");
+    // print("Get Product Response========>${response.body}");
 
     return productDetailsResponseFromJson(response.body);
   }
@@ -133,7 +132,7 @@ class ProductRepository {
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    // print("get all Products=======${response.body}");
+    print("get all Products=======>${response.body}");
     return productMiniResponseFromJson(response.body);
   }
 

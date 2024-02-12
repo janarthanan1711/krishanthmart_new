@@ -30,6 +30,7 @@ class _AllProductsState extends State<AllProducts> {
   ScrollController _productScrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final HomeController controller = Get.find();
+  ScrollController productScrollController = ScrollController();
 
   ScrollController? _scrollController;
   String? _selectedSort = "";
@@ -78,7 +79,6 @@ class _AllProductsState extends State<AllProducts> {
     //print("sb:"+_selectedBrands.join(",").toString());
     var productResponse =
         await ProductRepository().getAllProducts(page: _productPage);
-
     _productList.addAll(productResponse.products!);
     _isProductInitial = false;
     _totalProductData = productResponse.meta!.total;
@@ -192,7 +192,11 @@ class _AllProductsState extends State<AllProducts> {
         backgroundColor: MyTheme.accent_color,
         onRefresh: _onProductListRefresh,
         child: SingleChildScrollView(
-          controller: _productScrollController,
+          controller: widget.selected_products == 'best_selling' ||
+              widget.selected_products == "best_deals" ||
+              widget.selected_products == "todays_offer" ||
+              widget.selected_products == 'featured_products' ?
+             productScrollController : _productScrollController,
           physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
           child: Column(

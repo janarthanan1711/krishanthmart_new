@@ -74,13 +74,6 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
     super.initState();
   }
 
-  // subCategoryIndexSelection() {
-  //     int selectedIndexes = subCategoryController.subCategoryList
-  //         .indexWhere((subcategory) => subcategory.id == widget.subCategoryId);
-  //     subCategoryController.selectedIndex.value = selectedIndexes;
-  //     setState(() {});
-  //     print("subcategory list id======>${widget.subCategoryId}");
-  // }
 
   @override
   void dispose() {
@@ -123,22 +116,30 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                           subCategoryController.subCategoryList.length,
                           growable: true,
                           (index) {
-                            // subCategoryController.assignSelectedIndexes(
-                            //     index, widget.selectedIndexes);
                             return InkWell(
                               child: Container(
                                 height: 35.h,
                                 decoration: BoxDecoration(
-                                  color: subCategoryController
-                                              .selectedIndex.value ==
-                                          index
+                                  color: widget
+                                      .subCategoryId ==
+                                      subCategoryController.subCategoryList[index].id
                                       ? Colors.green
                                       : Colors.transparent,
+                                  // color: subCategoryController
+                                  //             .selectedIndex.value ==
+                                  //         index
+                                  //     ? Colors.green
+                                  //     : Colors.transparent,
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                    color: subCategoryController
-                                                .selectedIndex.value ==
-                                            index
+                                    // color: subCategoryController
+                                    //             .selectedIndex.value ==
+                                    //         index
+                                    //     ? Colors.black
+                                    //     : MyTheme.green,
+                                    color: widget
+                                        .subCategoryId ==
+                                        subCategoryController.subCategoryList[index].id
                                         ? Colors.black
                                         : MyTheme.green,
                                   ),
@@ -152,9 +153,14 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                     subCategoryController
                                         .subCategoryList[index].name!,
                                     style: TextStyle(
-                                      color: subCategoryController
-                                                  .selectedIndex.value ==
-                                              index
+                                      // color: subCategoryController
+                                      //             .selectedIndex.value ==
+                                      //         index
+                                      //     ? Colors.black
+                                      //     : MyTheme.green,
+                                      color: widget
+                                          .subCategoryId ==
+                                          subCategoryController.subCategoryList[index].id
                                           ? Colors.black
                                           : MyTheme.green,
                                     ),
@@ -169,8 +175,11 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                   page = 1;
                                 });
                                 //for coloring
-                                subCategoryController.selectedIndex.value =
-                                    index;
+                                // subCategoryController.selectedIndex.value =
+                                //     index;
+                                widget
+                                    .subCategoryId =
+                                    subCategoryController.subCategoryList[index].id;
                                 //Assign to get the all products when all method is clicked check (aLL FUNCTIONS)
                                 subCategoryController.subCategoryIndex.value =
                                     subCategoryController.selectedIndex.value;
@@ -449,9 +458,9 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
               if (subCategoryController.isInitial.value &&
                       subCategoryController.categoryProductList.length == 0 ||
                   subCategoryController.allCategoryProductList.length == 0) {
-                return Center(
-                  child: Text(
-                      AppLocalizations.of(context)!.no_product_is_available),
+                return SingleChildScrollView(
+                  child: ShimmerHelper()
+                      .buildListShimmer(),
                 );
               } else if (subCategoryController.categoryProductList.length > 0 ||
                   subCategoryController.allCategoryProductList.length > 0) {

@@ -24,7 +24,7 @@ class ShippingCostResponse {
   factory ShippingCostResponse.fromJson(Map<String, dynamic> json) => ShippingCostResponse(
     result: json["result"],
     shipping_type: json["shipping_type"],
-    value: double.parse(json["value"].toString()),
+    value: json["value"],
     value_string: json["value_string"],
   );
 

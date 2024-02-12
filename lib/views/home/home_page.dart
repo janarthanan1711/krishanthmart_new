@@ -229,9 +229,12 @@ class _HomePageState extends State<HomePage> {
                                         child: Text(item.name ?? ''),
                                       );
                                     }).toList(),
+                                    onTap: () {
+                                      print("onTap Callled");
+                                    },
                                     onChanged: (value) {
                                       // Handle dropdown item change
-                                      print("Selected Pincode: ${value?.name}");
+                                      user_pincode.$ = value!.name!;
                                     },
                                     hint: Text('Select a Pincode'),
                                   );
@@ -715,20 +718,29 @@ class _HomePageState extends State<HomePage> {
                             ? buildFlashDealList(context)
                             : const SizedBox(),
                         Container(
-                          color: MyTheme.PrimaryLightColor,
+                          color: MyTheme.noColor,
                           width: DeviceInfo(context).width,
-                          height: 150.h,
-                          child: Container(
-                            height: 150.h,
-                            width: DeviceInfo(context).width,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              image: const DecorationImage(
-                                  image: NetworkImage(
-                                      "https://krishanthmart.com/public/uploads/all/E05zNYsRkZTDQwv3YGJvwQe05kY3MoqWKIrxkxFZ.jpg"),
-                                  fit: BoxFit.fill),
-                            ),
-                          ),
+                          child: ListView.builder(
+                              padding: const EdgeInsets.all(0),
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: 1,
+                              itemBuilder: (context, index) {
+                                String imageUrl =
+                                    homeController.bannerFiveImageList[0];
+                                String productId =
+                                    homeController.bannerFiveIdList[0];
+                                if (homeController
+                                    .bannerFiveImageList.isEmpty) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  return BannersHomeList(
+                                    imageUrl: imageUrl,
+                                    productId: productId,
+                                  );
+                                }
+                              }),
                         ),
                         Container(
                           height: 221.h,
@@ -785,19 +797,29 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Container(
-                          color: MyTheme.amber_medium,
+                          color: MyTheme.noColor,
                           width: DeviceInfo(context).width,
-                          height: 150.h,
-                          child: Container(
-                            height: 150.h,
-                            width: DeviceInfo(context).width,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              image: const DecorationImage(
-                                  image: AssetImage(ImageDirectory.halfPrice),
-                                  fit: BoxFit.fill),
-                            ),
-                          ),
+                          child: ListView.builder(
+                              padding: const EdgeInsets.all(0),
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: 1,
+                              itemBuilder: (context, index) {
+                                String imageUrl =
+                                    homeController.bannerFiveImageList[1];
+                                String productId =
+                                    homeController.bannerFiveIdList[1];
+                                if (homeController
+                                    .bannerFiveImageList.isEmpty) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  return BannersHomeList(
+                                    imageUrl: imageUrl,
+                                    productId: productId,
+                                  );
+                                }
+                              }),
                         ),
                         Container(
                           color: MyTheme.golden,
@@ -1078,7 +1100,8 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   String imageUrl =
                                       homeController.bannerSixImageList[index];
-                                  String productId = homeController.bannerSixIdList[index];
+                                  String productId =
+                                      homeController.bannerSixIdList[index];
                                   if (homeController
                                       .bannerSixImageList.isEmpty) {
                                     return const Center(
@@ -1139,7 +1162,8 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   String imageUrl =
                                       homeController.bannerFourImageList[index];
-                                  final productIds = homeController.bannerFourIdList[index];
+                                  final productIds =
+                                      homeController.bannerFourIdList[index];
                                   if (homeController
                                       .bannerFourImageList.isEmpty) {
                                     return const Center(

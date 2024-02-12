@@ -56,7 +56,7 @@ class _AddressState extends State<Address> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    _postalCodeController.text = user_pincode.$;
     if (is_logged_in.$ == true) {
       fetchAll();
     }
@@ -809,6 +809,8 @@ class _AddressState extends State<Address> {
                           child: TextField(
                             controller: _postalCodeController,
                             autofocus: false,
+                            maxLines: 6,
+                            keyboardType: TextInputType.number,
                             decoration: buildAddressInputDecoration(context, AppLocalizations.of(context)!
                                 .enter_postal_code_ucf),
                           ),
@@ -821,16 +823,15 @@ class _AddressState extends State<Address> {
                             style: TextStyle(
                                 color: MyTheme.font_grey, fontSize: 12)),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Container(
-                          height: 40,
-                          child: TextField(
-                            controller: _phoneController,
-                            autofocus: false,
-                            decoration: buildAddressInputDecoration(context, AppLocalizations.of(context)!
-                                .enter_phone_number),
-                          ),
+                      Container(
+                        height: 40,
+                        child: TextField(
+                          controller: _phoneController,
+                          autofocus: false,
+                          keyboardType: TextInputType.number,
+                          maxLines: 10,
+                          decoration: buildAddressInputDecoration(context, AppLocalizations.of(context)!
+                              .enter_phone_number),
                         ),
                       )
                     ],
@@ -915,7 +916,7 @@ class _AddressState extends State<Address> {
             const Radius.circular(8.0),
           ),
         ),
-        contentPadding: EdgeInsets.only(left: 8.0, top: 16.0, bottom: 16.0));
+        contentPadding: EdgeInsets.only(left: 8.0, top: 10.0, bottom: 10.0));
   }
 
   Future buildShowUpdateFormDialog(BuildContext context, index) {
