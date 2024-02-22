@@ -70,8 +70,8 @@ static const SecondaryColor = Color(0xFF979797);
 static const SecondaryColorDark = Color(0xff292929);
 
   static TextTheme textTheme1 = const TextTheme(
-    bodyLarge: TextStyle(fontFamily: "PublicSansSerif", fontSize: 14),
-    bodyMedium: TextStyle(fontFamily: "PublicSansSerif", fontSize: 12),
+    bodyLarge: TextStyle(fontFamily: "Poppins", fontSize: 14),
+    bodyMedium: TextStyle(fontFamily: "Poppins", fontSize: 12),
   );
 
   static LinearGradient buildLinearGradient3() {

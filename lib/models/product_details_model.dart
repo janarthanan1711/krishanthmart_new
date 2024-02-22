@@ -46,6 +46,7 @@ class DetailedProduct {
     this.shop_name,
     this.shop_logo,
     this.photos,
+    this.varients,
     this.thumbnail_image,
     this.tags,
     this.price_high_low,
@@ -79,6 +80,7 @@ class DetailedProduct {
   String? shop_name;
   String? shop_logo;
   List<Photo>? photos;
+  List<Varients>? varients;
   String? thumbnail_image;
   List<String>? tags;
   String? price_high_low;
@@ -114,6 +116,8 @@ class DetailedProduct {
         shop_logo: json["shop_logo"],
         estShippingTime: json["est_shipping_time"],
         photos: List<Photo>.from(json["photos"].map((x) => Photo.fromJson(x))),
+        varients: List<Varients>.from(
+            json["varients"].map((x) => Varients.fromJson(x))),
         thumbnail_image: json["thumbnail_image"],
         tags: List<String>.from(json["tags"].map((x) => x)),
         price_high_low: json["price_high_low"],
@@ -152,6 +156,7 @@ class DetailedProduct {
     "shop_name": shop_name,
     "shop_logo": shop_logo,
     "photos": List<dynamic>.from(photos!.map((x) => x.toJson())),
+    "varients":List<dynamic>.from(varients!.map((x) => x.toJson())),
     "thumbnail_image": thumbnail_image,
     "tags": List<dynamic>.from(tags!.map((x) => x)),
     "price_high_low": price_high_low,
@@ -219,6 +224,27 @@ class Photo {
     "variant": variant,
     "path": path,
   };
+}
+class Varients {
+  String? variant;
+  int? mrp;
+  String? path;
+
+  Varients({this.variant, this.mrp, this.path});
+
+  Varients.fromJson(Map<String, dynamic> json) {
+    variant = json['variant'];
+    mrp = json['mrp'];
+    path = json['path'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['variant'] = this.variant;
+    data['mrp'] = this.mrp;
+    data['path'] = this.path;
+    return data;
+  }
 }
 
 class ChoiceOption {

@@ -22,15 +22,14 @@ class BottomAppbarIndex {
 }
 
 class CategoryListPages extends StatefulWidget {
-  CategoryListPages(
-      {Key? key,
-      this.parent_category_id = 0,
-      this.parent_category_name = "",
-      this.is_base_category = false,
-      this.is_top_category = false,
-      this.bottomAppbarIndex,
-      this.is_viewMore = false,
-      this.category_id = 0})
+  CategoryListPages({Key? key,
+    this.parent_category_id = 0,
+    this.parent_category_name = "",
+    this.is_base_category = false,
+    this.is_top_category = false,
+    this.bottomAppbarIndex,
+    this.is_viewMore = false,
+    this.category_id = 0})
       : super(key: key);
 
   final int parent_category_id;
@@ -54,7 +53,8 @@ class _CategoryListPagesState extends State<CategoryListPages> {
     // categoryController.getCategories(widget.parent_category_id);
     gettingCategoryName();
     print(
-        "main Category Names ==========> ${categoryController.mainCategoryNames.value}");
+        "main Category Names ==========> ${categoryController.mainCategoryNames
+            .value}");
     print("category ids========>${widget.category_id}");
     print(widget.is_viewMore);
     print(widget.parent_category_id);
@@ -92,7 +92,7 @@ class _CategoryListPagesState extends State<CategoryListPages> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection:
-          app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
+      app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: PreferredSize(
@@ -115,7 +115,8 @@ class _CategoryListPagesState extends State<CategoryListPages> {
     return AppBar(
       backgroundColor: Colors.transparent,
       leading: Builder(
-        builder: (context) => widget.is_base_category == false
+        builder: (context) =>
+        widget.is_base_category == false
             ? UsefulElements.backToMain(context, go_back: true)
             : UsefulElements.backButton(context),
       ),
@@ -161,9 +162,13 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                           onTap: () async {
                             await categoryController.getChildSubCategories(
                                 snapshot.data!.categories![index].id!);
+                            if(widget.is_viewMore == true){
+                            categoryController.mainCategoryId.value =
+                            snapshot.data!.categories![index].id!;
+                            }
                             widget.is_viewMore == true
                                 ? categoryController.mainCategoryNames.value =
-                                    snapshot.data!.categories![index].name!
+                                snapshot.data!.categories![index].name!
                                 : categoryController.assignCategoryNames(index);
                           },
                           child: buildCategoryItemCard(snapshot.data, index));
@@ -183,25 +188,29 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                         height: 25.h,
                       ),
                       GetBuilder<CategoryController>(
-                        builder: (categoryControllers) => Row(
-                          children: List<Widget>.generate(
-                            1,
-                            (index) => Container(
-                              padding: const EdgeInsets.all(10),
-                              margin: const EdgeInsets.only(top: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: MyTheme.green),
-                              ),
-                              child: Text(
-                                categoryControllers.mainCategoryNames.value,
-                                style: TextStyle(
-                                    color: MyTheme.green,
-                                    fontWeight: FontWeight.bold),
+                        builder: (categoryControllers) =>
+                            Row(
+                              children: List<Widget>.generate(
+                                1,
+                                    (index) =>
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      margin: const EdgeInsets.only(top: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: MyTheme.green),
+                                      ),
+                                      child: Text(
+                                        categoryControllers.mainCategoryNames
+                                            .value,
+                                        style: TextStyle(
+                                            color: MyTheme.green,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
                               ),
                             ),
-                          ),
-                        ),
                       ),
                       const SizedBox(
                         height: 25,
@@ -210,67 +219,69 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                         height: DeviceInfo(context).height,
                         width: DeviceInfo(context).width! / 1.6,
                         child: Obx(
-                          () => categoryController.subChildCategories.length ==
-                                  0
+                              () =>
+                          categoryController.subChildCategories.length ==
+                              0
                               ? Padding(
-                                padding: EdgeInsets.only(top: 210.h,left: 70.w),
-                                child: Text(AppLocalizations.of(context)!
-                                    .no_category_found),
-                              )
+                            padding: EdgeInsets.only(top: 210.h, left: 70.w),
+                            child: Text(AppLocalizations.of(context)!
+                                .no_category_found),
+                          )
                               : GridView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: categoryController
-                                      .subChildCategories.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 8.0,
-                                    mainAxisSpacing: 8.0,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      child: Card(
-                                        elevation: 3.0,
-                                        shape: RoundedRectangleBorder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: categoryController
+                                  .subChildCategories.length,
+                              gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 8.0,
+                                mainAxisSpacing: 8.0,
+                              ),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  child: Card(
+                                    elevation: 3.0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(8.0),
+                                    ),
+                                    child: Column(
+                                      // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(8.0),
+                                          const BorderRadius.vertical(
+                                              top:
+                                              Radius.circular(8.0)),
+                                          child: Image.network(
+                                            categoryController
+                                                .subChildCategories[index]
+                                                .banner,
+                                            height: 64.0,
+                                            width: double.maxFinite,
+                                            fit: BoxFit.fill,
+                                          ),
                                         ),
-                                        child: Column(
-                                          // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  const BorderRadius.vertical(
-                                                      top:
-                                                          Radius.circular(8.0)),
-                                              child: Image.network(
-                                                categoryController
-                                                    .subChildCategories[index]
-                                                    .banner,
-                                                height: 64.0,
-                                                width: double.maxFinite,
-                                                fit: BoxFit.fill,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 15,
-                                            ),
-                                            Text(
-                                              categoryController
-                                                  .subChildCategories[index]
-                                                  .name,
-                                              style: const TextStyle(
-                                                fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
+                                        const SizedBox(
+                                          height: 15,
                                         ),
-                                      ),
-                                      onTap: () {
-                                        Get.to(
-                                          () => SubCategoryPage(
+                                        Text(
+                                          categoryController
+                                              .subChildCategories[index]
+                                              .name,
+                                          style: const TextStyle(
+                                            fontSize: 10.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Get.to(
+                                          () =>
+                                          SubCategoryPage(
                                             categoryId: categoryController
                                                 .mainCategoryId.value,
                                             categoryName: categoryController
@@ -280,10 +291,10 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                                             selectedIndexes: categoryController
                                                 .subChildCategories[index].id,
                                           ),
-                                        );
-                                      },
                                     );
-                                  }),
+                                  },
+                                );
+                              }),
                         ),
                       ),
                     ],
@@ -359,7 +370,7 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                 margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecorations.buildBoxDecoration_1(),
                 child:
-                    ShimmerHelper().buildBasicShimmer(height: 140, width: 50),
+                ShimmerHelper().buildBasicShimmer(height: 140, width: 50),
               );
             },
           ),

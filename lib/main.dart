@@ -55,7 +55,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
     Future.delayed(Duration.zero).then(
       (value) async {
         Firebase.initializeApp().then((value) {
@@ -73,7 +72,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      // designSize: const Size(360, 690),
+      designSize: const Size(360, 690),
       // minTextAdapt: true,
       // splitScreenMode: true,
       // ensureScreenSize: true,

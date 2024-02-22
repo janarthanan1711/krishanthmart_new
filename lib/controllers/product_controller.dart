@@ -33,6 +33,8 @@ class ProductController extends GetxController {
   var itemsIndex = 0.obs;
   var getProductId = 0.obs;
   bool isInWishList = false;
+  String? mrpPrice = '';
+  String discountVariant = '';
 
 
   @override
@@ -62,6 +64,7 @@ class ProductController extends GetxController {
   }
 
   fetchProductDetailsMain(id) async {
+    print("Product Details Called");
     var productDetailsResponse =
         await ProductRepository().getProductDetails(id: id);
     productDetails = productDetailsResponse.detailed_products![0];
@@ -91,6 +94,8 @@ class ProductController extends GetxController {
       }
       variant = variantResponse.variantData!.variant;
       totalPrice = variantResponse.variantData!.price;
+      mrpPrice = variantResponse.variantData!.mrp;
+      discountVariant = variantResponse.variantData!.discount.toString();
       setQuantity(quantity);
       update();
     } else {

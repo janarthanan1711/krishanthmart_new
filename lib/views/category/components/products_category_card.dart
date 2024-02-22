@@ -28,7 +28,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
         );
       },
       child: Container(
-        height: 122.h,
+        height: 128.h,
         margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
         child: Card(
           elevation: 10,
@@ -91,7 +91,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                       child: Text(
                         product.name!,
                         style: TextStyle(
-                            fontSize: 14.sp, fontWeight: FontWeight.bold),
+                            fontSize: 12.sp, fontWeight: FontWeight.bold),
                       ),
                     ),
                     SizedBox(
@@ -100,7 +100,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                     Row(
                       children: [
                         RatingBar(
-                          itemSize: 15.0,
+                          itemSize: 14.0,
                           ignoreGestures: true,
                           initialRating: 0,
                           direction: Axis.horizontal,
@@ -135,7 +135,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          height: 26.h,
+                          height: 30.h,
                           width: 65.w,
                           color: MyTheme.green.withOpacity(0.300),
                           child: Column(
@@ -144,7 +144,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                                 AppLocalizations.of(context)!.ourPrice,
                                 style: TextStyle(
                                   color: MyTheme.medium_grey_50,
-                                  fontSize: 12.sp,
+                                  fontSize: 11.sp,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -152,7 +152,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                                 convertPrice(product.main_price!),
                                 style: TextStyle(
                                   color: MyTheme.accent_color,
-                                  fontSize: 12.sp,
+                                  fontSize: 11.sp,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -164,7 +164,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                         ),
                         if (product.has_discount!)
                           Container(
-                            height: 26.h,
+                            height: 30.h,
                             width: 65.w,
                             color: MyTheme.shimmer_highlighted,
                             child: Column(
@@ -173,7 +173,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                                   AppLocalizations.of(context)!.mrp,
                                   style: TextStyle(
                                     color: MyTheme.medium_grey_50,
-                                    fontSize: 12.sp,
+                                    fontSize: 11.sp,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -182,7 +182,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                                   style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
                                     color: MyTheme.medium_grey,
-                                    fontSize: 12.sp,
+                                    fontSize: 11.sp,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),

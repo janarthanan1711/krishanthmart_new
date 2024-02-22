@@ -60,7 +60,7 @@ class LargeProductCard extends StatelessWidget {
                       ),
                       Text(
                         product.name!,
-                        style: TextStyle(fontSize: 16.sp),
+                        style: TextStyle(fontSize: 14.sp),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -79,7 +79,7 @@ class LargeProductCard extends StatelessWidget {
                                   AppLocalizations.of(context)!.ourPrice,
                                   style: TextStyle(
                                     color: MyTheme.medium_grey_50,
-                                    fontSize: 12.sp,
+                                    fontSize: 11.sp,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -87,7 +87,7 @@ class LargeProductCard extends StatelessWidget {
                                   convertPrice(product.main_price!),
                                   style: TextStyle(
                                     color: MyTheme.accent_color,
-                                    fontSize: 12.sp,
+                                    fontSize: 11.sp,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -108,7 +108,7 @@ class LargeProductCard extends StatelessWidget {
                                     AppLocalizations.of(context)!.mrp,
                                     style: TextStyle(
                                       color: MyTheme.medium_grey_50,
-                                      fontSize: 12.sp,
+                                      fontSize: 11.sp,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -117,7 +117,7 @@ class LargeProductCard extends StatelessWidget {
                                     style: TextStyle(
                                       decoration: TextDecoration.lineThrough,
                                       color: MyTheme.medium_grey,
-                                      fontSize: 12.sp,
+                                      fontSize: 11.sp,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),

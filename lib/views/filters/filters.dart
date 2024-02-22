@@ -6,6 +6,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:one_context/one_context.dart';
 import 'package:toast/toast.dart';
+
 import '../../repositories/brand_repository.dart';
 import '../../repositories/category_repositories.dart';
 import '../../repositories/product_repository.dart';

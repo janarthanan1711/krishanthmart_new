@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/cart_controller.dart';
+import 'package:krishanthmart_new/controllers/delivery_slot_controller.dart';
 import 'package:krishanthmart_new/controllers/home_controller.dart';
 import 'package:krishanthmart_new/controllers/product_controller.dart';
 import 'package:krishanthmart_new/utils/colors.dart';
@@ -50,6 +51,8 @@ class _HomePageState extends State<HomePage> {
   final LocationController locationController = Get.put(LocationController());
   final ProductController productController = Get.put(ProductController());
   final CartController cartController = Get.put(CartController());
+  final DeliverySlotController deliveryController =
+      Get.put(DeliverySlotController());
   late CarouselController _carouselController;
   late ScrollController _scrollController;
   late final SliderResponse sliderResponse;
@@ -68,7 +71,7 @@ class _HomePageState extends State<HomePage> {
 
   bool get _isSliverAppBarExpanded {
     return _scrollController.hasClients &&
-        _scrollController.offset > (85.h - kToolbarHeight);
+        _scrollController.offset > (80.h - kToolbarHeight);
   }
 
   @override
@@ -105,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                 AppLocalizations.of(context)!.app_name_caps,
                 style: TextStyle(
                   color: MyTheme.black,
-                  fontSize: 23.sp,
+                  fontSize:  Get.height > 690 ? 23.sp : 18.sp,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.bold,
                 ),
@@ -113,7 +116,8 @@ class _HomePageState extends State<HomePage> {
               pinned: true,
               snap: false,
               floating: false,
-              expandedHeight: 155.h,
+              // expandedHeight: 155.h,
+              expandedHeight: DeviceInfo(context).height! > 690 ? 118.h : 111.h,
               flexibleSpace: Container(
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.vertical(
@@ -179,92 +183,68 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(24.6.h),
+                // preferredSize: Size.fromHeight(24.6.h),
+                preferredSize: Size.fromHeight(0),
                 child: _isSliverAppBarExpanded
                     ? InkWell(
                         onTap: () {
                           Get.to(() => Filter());
                         },
                         child: Container(
-                          // color: Colors.black,
-                          height: 70.h,
+                          // height: 32.h,
+                            height: 37.5.h,
+                          margin: EdgeInsets.only(
+                              left: 16.w,
+                              right: 16.w,
+                              bottom: MediaQuery.of(context).size.height > 690
+                                  ? 15.4.h
+                                  : 20.h),
+                          padding: EdgeInsets.only(right: 14.5.w, left: 14.5.w),
                           alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: EdgeInsets.all(14.5.h),
-                            child: TextField(
-                              enabled: false,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                hintText: 'Search....',
-                                suffixIcon: IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.search,
-                                    color: MyTheme.black,
-                                  ),
-                                ),
+                          decoration: BoxDecoration(color: MyTheme.white),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Search...",
+                                style: TextStyle(color: MyTheme.medium_grey),
                               ),
-                            ),
+                              Icon(
+                                Icons.search,
+                                color: MyTheme.medium_grey,
+                              ),
+                            ],
                           ),
                         ),
                       )
                     : Column(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 16.w),
-                            child: Row(
-                              children: [
-                                Obx(() {
-                                  // Obx will rebuild when pincodeList changes
-                                  return DropdownButton<Data>(
-                                    value: locationController
-                                            .pincodeList.isNotEmpty
-                                        ? locationController.pincodeList[0]
-                                        : null,
-                                    items: locationController.pincodeList
-                                        .map((Data item) {
-                                      return DropdownMenuItem<Data>(
-                                        value: item,
-                                        child: Text(item.name ?? ''),
-                                      );
-                                    }).toList(),
-                                    onTap: () {
-                                      print("onTap Callled");
-                                    },
-                                    onChanged: (value) {
-                                      // Handle dropdown item change
-                                      user_pincode.$ = value!.name!;
-                                    },
-                                    hint: Text('Select a Pincode'),
-                                  );
-                                }),
-                              ],
-                            ),
-                          ),
                           InkWell(
                             onTap: () {
                               Get.to(() => Filter());
                             },
                             child: Container(
-                              height: 42.h,
+                              height: 37.h,
+                              // height: 30.h,
+                              margin: EdgeInsets.only(left: 16.w, right: 16.w),
                               padding:
                                   EdgeInsets.only(right: 14.5.w, left: 14.5.w),
                               alignment: Alignment.centerLeft,
-                              child: TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'Search....',
-                                  suffixIcon: IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.search,
-                                      color: MyTheme.black,
-                                    ),
+                              decoration: BoxDecoration(color: MyTheme.white),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Search...",
+                                    style:
+                                        TextStyle(color: MyTheme.medium_grey),
                                   ),
-                                ),
+                                  Icon(
+                                    Icons.search,
+                                    color: MyTheme.medium_grey,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -282,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                                           .free_delivery,
                                       style: TextStyle(
                                           color: const Color(0xFF996515),
-                                          fontSize: 21.sp,
+                                          fontSize: 19.sp,
                                           fontWeight: FontWeight.bold,
                                           fontStyle: FontStyle.italic),
                                     ),
@@ -310,7 +290,7 @@ class _HomePageState extends State<HomePage> {
                                       AppLocalizations.of(context)!.flat_50,
                                       style: TextStyle(
                                           color: const Color(0xFF996515),
-                                          fontSize: 21.sp,
+                                          fontSize: 19.sp,
                                           fontWeight: FontWeight.bold,
                                           fontStyle: FontStyle.italic),
                                     ),
@@ -341,6 +321,109 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        Container(
+                          // color: Color(0xFFe6f8e8),
+                          // color: Color(0xFFffefc2),
+                          color: Colors.yellow[100],
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 5.h),
+                            child: Row(
+                              children: [
+                                Obx(() {
+                                  // Obx will rebuild when pincodeList changes
+                                  return Container(
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: MyTheme.white,
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: DropdownButton<Data>(
+                                      value: locationController
+                                              .pincodeList.isNotEmpty
+                                          ? locationController.pincodeList[0]
+                                          : null,
+                                      borderRadius: BorderRadius.circular(10),
+                                      icon: Icon(
+                                        Icons.keyboard_arrow_down,
+                                        color: MyTheme
+                                            .accent_color2, // <-- SEE HERE
+                                      ),
+                                      items: locationController.pincodeList
+                                          .map((Data item) {
+                                        return DropdownMenuItem<Data>(
+                                          value: item,
+                                          child: Text(item.name ?? ''),
+                                        );
+                                      }).toList(),
+                                      onTap: () {
+                                        print("onTap Callled");
+                                      },
+                                      onChanged: (value) {
+                                        // Handle dropdown item change
+                                        user_pincode.$ = value!.name!;
+                                      },
+                                      hint: Text('Select a Pincode'),
+                                      style: TextStyle(
+                                          color: MyTheme.accent_color2),
+                                    ),
+                                  );
+                                }),
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Delivery Time Slot Available",
+                                        style: TextStyle(fontSize: 12.sp),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.alarm,
+                                            color: MyTheme.accent_color2,
+                                            size: 11.sp,
+                                          ),
+                                          Row(
+                                            children: List.generate(
+                                              deliveryController
+                                                  .deliveryTimeSlot.length,
+                                              (index) => Text(
+                                                " ${deliveryController.deliveryTimeSlot[index].transitTime!}",
+                                                style: TextStyle(
+                                                    fontSize: 11.sp,
+                                                    color:
+                                                        MyTheme.accent_color2),
+                                              ),
+                                            ),
+                                          ),
+                                          // Text(
+                                          //   " ${deliveryController.deliveryTimeSlot[0].transitTime!}",
+                                          //   style: TextStyle(
+                                          //       fontSize: 11.sp,
+                                          //       color: MyTheme.accent_color2),
+                                          // ),
+                                          // Text(" - "),
+                                          // Text(
+                                          //   deliveryController
+                                          //       .deliveryTimeSlot[1]
+                                          //       .transitTime!,
+                                          //   style: TextStyle(
+                                          //       fontSize: 11.sp,
+                                          //       color: MyTheme.accent_color2),
+                                          // ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                         const CustomCarousel(),
                         SizedBox(
                           height: 26.h,
@@ -377,9 +460,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(
                           // height: 218.h,
-                          height: MediaQuery.of(context).size.height > 690
-                              ? ScreenUtil().setHeight(326)
-                              : ScreenUtil().setHeight(330),
+                          height: ScreenUtil().setHeight(336),
+                          // height: ScreenUtil().setHeight(330),
+
                           child: CategoryGridView(
                             homeController.featuredCategoryList,
                           ),
@@ -425,7 +508,14 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Container(
-                          color: MyTheme.mild_green,
+                          // color: MyTheme.mild_green,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [MyTheme.white, MyTheme.cinnabar],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
                           width: DeviceInfo(context).width,
                           child: Column(
                             children: [
@@ -463,20 +553,19 @@ class _HomePageState extends State<HomePage> {
                                     top: 4.h,
                                     bottom: 4.h),
                                 width: ScreenUtil().screenWidth,
-                                height: ScreenUtil().screenHeight > 690
-                                    ? ScreenUtil().setHeight(310)
-                                    : ScreenUtil().setHeight(340),
+                                height: ScreenUtil().setHeight(325),
+                                // height: ScreenUtil().setHeight(320),
                                 child: GridView.builder(
                                   padding: const EdgeInsets.all(0),
                                   physics: const NeverScrollableScrollPhysics(),
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 12,
+                                    mainAxisSpacing: 4,
                                   ),
                                   itemCount:
-                                      homeController.bannerSixImageList.length,
+                                      4,
                                   itemBuilder: (context, index) {
                                     String productId =
                                         homeController.bannerSixIdList[index];
@@ -496,7 +585,7 @@ class _HomePageState extends State<HomePage> {
                                           );
                                         },
                                         child: Container(
-                                          height: ScreenUtil().setHeight(50),
+                                          height: ScreenUtil().setHeight(40),
                                           decoration: BoxDecoration(
                                             color: Colors.black,
                                             image: DecorationImage(
@@ -743,7 +832,7 @@ class _HomePageState extends State<HomePage> {
                               }),
                         ),
                         Container(
-                          height: 221.h,
+                          height: 225.h,
                           width: DeviceInfo(context).width,
                           color: MyTheme.gigas,
                           child: Column(
@@ -932,22 +1021,6 @@ class _HomePageState extends State<HomePage> {
                                 }),
                           ),
                         ),
-                        // Container(
-                        //   color: MyTheme.amber_medium,
-                        //   width: DeviceInfo(context).width,
-                        //   height: 150.h,
-                        //   child: Container(
-                        //     height: 150.h,
-                        //     width: DeviceInfo(context).width,
-                        //     decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(5),
-                        //       image: const DecorationImage(
-                        //           image: NetworkImage(
-                        //               "https://krishanthmart.com/public/uploads/all/1g3OBsGdgw85JcWqFLRGLJMGfMWjK2UmGRyYoqMz.jpg"),
-                        //           fit: BoxFit.fill),
-                        //     ),
-                        //   ),
-                        // ),
                         Container(
                           color: MyTheme.dark_purple,
                           width: DeviceInfo(context).width,
@@ -1064,7 +1137,7 @@ class _HomePageState extends State<HomePage> {
                         Container(
                           color: MyTheme.light_purple,
                           width: DeviceInfo(context).width,
-                          height: 274.h,
+                          height: 278.h,
                           child: const BrandCategoryView(),
                         ),
                         Container(
@@ -1134,20 +1207,31 @@ class _HomePageState extends State<HomePage> {
                                 }),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 1.h),
-                              child: Text(
-                                AppLocalizations.of(context)!.offer_zone,
-                                style: TextStyle(
-                                    color: MyTheme.dark_purple,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [MyTheme.white, Colors.pink[100]!],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
-                          ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(top: 10.h, bottom: 10.h),
+                                child: Text(
+                                  AppLocalizations.of(context)!.offer_zone,
+                                  style: TextStyle(
+                                      color: MyTheme.dark_purple,
+                                      fontSize: 20.sp,
+                                      fontFamily: 'Pacifico',
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Container(
                           // color: MyTheme.light_blue,

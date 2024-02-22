@@ -17,7 +17,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   # Add the intl package
-  intl: ^0.18.0  
+  intl: ^0.18.0
   http: ^1.1.0
   shared_value:
   one_context:
@@ -100,4 +100,14 @@ flutter:
         - asset: assets/fonts/NotoSans-Bold.ttf
         - asset: assets/fonts/NotoSans-Italic.ttf
           style: italic
-
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico-Regular.ttf
+          style: italic
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+        - asset: assets/fonts/Poppins-Italic.ttf
+          style: italic

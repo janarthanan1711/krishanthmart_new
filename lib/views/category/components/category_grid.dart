@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/home_controller.dart';
 import 'package:krishanthmart_new/utils/shimmer_utils.dart';
-
 import '../../../models/category_model.dart';
 import '../category_page.dart';
 import 'category_card.dart';
@@ -24,7 +23,7 @@ class CategoryGridView extends StatelessWidget {
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 5,
-          mainAxisSpacing: 5,
+          mainAxisSpacing: 6,
         ),
         itemCount: categoryList.length,
         itemBuilder: (context, index) {

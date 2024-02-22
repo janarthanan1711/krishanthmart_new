@@ -4,7 +4,7 @@ import 'package:krishanthmart_new/utils/colors.dart';
 ThemeData theme() {
   return ThemeData(
     scaffoldBackgroundColor: MyTheme.PrimaryLightColor,
-    fontFamily: 'PublicSansSerif',
+    fontFamily: 'Poppins',
     textTheme: textTheme(),
     inputDecorationTheme: inputDecorationTheme(),
     visualDensity: VisualDensity.adaptivePlatformDensity,

@@ -62,7 +62,7 @@ class ProductRepository {
     int startIndex = response.body.indexOf('{');
 // Extract the substring from the first '{' to the end
     String jsonSubstring = response.body.substring(startIndex);
-    // print("Variant Response ${jsonSubstring}");
+    print("Variant Response ${jsonSubstring}");
     return variantResponseFromJson(jsonSubstring);
   }
 
@@ -77,7 +77,7 @@ class ProductRepository {
         },
         body: post_body);
 
-    // print("Variant Price Update ${response.body}");
+    print("Variant Price Update ${response.body}");
 
     return variantPriceResponseFromJson(response.body);
   }
@@ -98,7 +98,7 @@ class ProductRepository {
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    // print("Get Product Response========>${response.body}");
+    print("Get Product Response========>${response.body}");
 
     return productDetailsResponseFromJson(response.body);
   }

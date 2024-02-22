@@ -89,7 +89,7 @@ class _ProductCardState extends State<ProductCard> {
                                   AppLocalizations.of(context)!.ourPrice,
                                   style:  TextStyle(
                                     color: MyTheme.medium_grey_50,
-                                    fontSize: 12.sp,
+                                    fontSize: 11.sp,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -97,7 +97,7 @@ class _ProductCardState extends State<ProductCard> {
                                   convertPrice(widget.product.main_price!),
                                   style:  TextStyle(
                                     color: MyTheme.accent_color,
-                                    fontSize: 12.sp,
+                                    fontSize: 11.sp,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -115,7 +115,7 @@ class _ProductCardState extends State<ProductCard> {
                                     AppLocalizations.of(context)!.mrp,
                                     style:  TextStyle(
                                       color: MyTheme.medium_grey_50,
-                                      fontSize: 12.sp,
+                                      fontSize: 11.sp,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -124,7 +124,7 @@ class _ProductCardState extends State<ProductCard> {
                                     style: TextStyle(
                                       decoration: TextDecoration.lineThrough,
                                       color: MyTheme.medium_grey,
-                                      fontSize: 12.sp,
+                                      fontSize: 11.sp,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -135,9 +135,9 @@ class _ProductCardState extends State<ProductCard> {
                       ),
                       Text(
                         widget.product.name!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: MyTheme.font_grey,
-                          fontSize: 14,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w400,
                         ),
                         maxLines: 2,

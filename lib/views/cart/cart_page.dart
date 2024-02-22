@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/cart_controller.dart';
+import 'package:krishanthmart_new/helpers/main_helpers.dart';
 import 'package:krishanthmart_new/views/mainpage/main_page.dart';
 import 'package:toast/toast.dart';
 import '../../models/cart_model.dart';
@@ -82,7 +83,6 @@ class _CartPageState extends State<CartPage> {
     _cartTotalString = _shopResponse!.grandTotal!.replaceAll(
         SystemConfig.systemCurrency!.code!,
         SystemConfig.systemCurrency!.symbol!);
-
     setState(() {});
   }
 
@@ -278,7 +278,7 @@ class _CartPageState extends State<CartPage> {
                           child: buildCartSellerList(),
                         ),
                         Container(
-                          height: widget.has_bottomnav! ? 140 : 100,
+                          height: widget.has_bottomnav! ? DeviceInfo(context).height!/2 : 100,
                         )
                       ]),
                     )
@@ -617,15 +617,16 @@ class _CartPageState extends State<CartPage> {
                     Row(
                       children: [
                         Text(
-                          SystemConfig.systemCurrency != null
-                              ? _shopList[sellerIndex]
-                                  .cartItems[itemIndex]
-                                  .price
-                                  .replaceAll(SystemConfig.systemCurrency!.code,
-                                      SystemConfig.systemCurrency!.symbol)
-                              : _shopList[sellerIndex]
-                                  .cart_items[itemIndex]
-                                  .price,
+                        "\u20B9 ${_shopList[sellerIndex].cartItems[itemIndex].price.toString()}",
+                         //  SystemConfig.systemCurrency != null
+                         //      ? _shopList[sellerIndex]
+                         //          .cartItems[itemIndex]
+                         //          .price
+                         //          .replaceAll(SystemConfig.systemCurrency!.code,
+                         //              SystemConfig.systemCurrency!.symbol)
+                         //      : _shopList[sellerIndex]
+                         //          .cartItems[itemIndex]
+                         //          .price,
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -648,7 +649,7 @@ class _CartPageState extends State<CartPage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      (
+                      onPressDelete(
                           _shopList[sellerIndex].cartItems[itemIndex].id);
                     },
                     child: Container(

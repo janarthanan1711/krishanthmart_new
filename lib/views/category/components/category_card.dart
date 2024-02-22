@@ -26,7 +26,7 @@ class ProductCategoryCard extends StatelessWidget {
          SizedBox(height: 5.h),
         Text(
           category.name!,
-          style:TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
+          style:TextStyle(fontSize: 9.sp,),
         ),
       ],
     );

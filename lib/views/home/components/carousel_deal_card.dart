@@ -57,7 +57,7 @@ class CarouselDealCard extends StatelessWidget {
                     Text(
                       product.name!,
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -77,7 +77,7 @@ class CarouselDealCard extends StatelessWidget {
                                 AppLocalizations.of(context)!.ourPrice,
                                 style: TextStyle(
                                   color: MyTheme.medium_grey_50,
-                                  fontSize: 13.sp,
+                                  fontSize: 11.sp,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -85,7 +85,7 @@ class CarouselDealCard extends StatelessWidget {
                                 convertPrice(product.main_price!),
                                 style: TextStyle(
                                   color: MyTheme.accent_color,
-                                  fontSize: 13.sp,
+                                  fontSize: 11.sp,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -103,7 +103,7 @@ class CarouselDealCard extends StatelessWidget {
                                   AppLocalizations.of(context)!.mrp,
                                   style: TextStyle(
                                     color: MyTheme.medium_grey_50,
-                                    fontSize: 13.sp,
+                                    fontSize: 11.sp,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -112,7 +112,7 @@ class CarouselDealCard extends StatelessWidget {
                                   style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
                                     color: MyTheme.medium_grey,
-                                    fontSize: 14,
+                                    fontSize: 11.sp,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),

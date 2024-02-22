@@ -128,7 +128,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                         AppLocalizations.of(context)!.ourPrice,
                                         style: TextStyle(
                                           color: MyTheme.medium_grey_50,
-                                          fontSize: 16.sp,
+                                          fontSize: 12.sp,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -137,7 +137,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                             productController.totalPrice!),
                                         style: TextStyle(
                                           color: MyTheme.accent_color,
-                                          fontSize: 16.sp,
+                                          fontSize: 12.sp,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -155,17 +155,17 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                           AppLocalizations.of(context)!.mrp,
                                           style: TextStyle(
                                             color: MyTheme.medium_grey_50,
-                                            fontSize: 16.sp,
+                                            fontSize: 12.sp,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                         Text(
-                                          convertPrice(product.stroked_price!),
+                                          convertPrice(productController.mrpPrice!),
                                           style: TextStyle(
                                             decoration:
                                                 TextDecoration.lineThrough,
                                             color: MyTheme.medium_grey,
-                                            fontSize: 16.sp,
+                                            fontSize: 12.sp,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -196,7 +196,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                           ],
                                         ),
                                         child: Text(
-                                          product.discount ?? "",
+                                          "${productController.discountVariant}%" ?? "",
                                           style: const TextStyle(
                                             fontSize: 12,
                                             color: Color(0xffffffff),
@@ -232,103 +232,107 @@ class ProductVariantBottomSheet extends StatelessWidget {
               ),
             ],
           ),
-          buildChoiceOptionList(),
-          Divider(
-            height: 2.5.h,
-            color: MyTheme.green,
-            thickness: 1,
-            indent: 0.5,
-            endIndent: 0.5,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              0.0,
-              10.0,
-              0.0,
-              10.0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: app_language_rtl.$!
-                      ? const EdgeInsets.only(left: 8.0)
-                      : const EdgeInsets.only(right: 8.0),
-                  child: SizedBox(
-                    // width: 80.w,
-                    child: Text(
-                      AppLocalizations.of(context)!.quantity,
-                      style: const TextStyle(
-                          color: Color.fromRGBO(153, 153, 153, 1),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 6.w),
-                  child: buildQuantityButton(
-                      onTapIncrement: () {
-                        productController.incrementQuantityCart(product.id,
-                            snackbar: noStocksMessage, context: context);
-                      },
-                      onTapDecrement: () {
-                        productController.decrementQuantityCart(product.id,
-                            snackbar: noStocksMessage, context: context);
-                      },
-                      quantityText: productController.quantityText.value),
-                )
-              ],
-            ),
-          ),
-          Divider(
-            height: 2.5.h,
-            color: MyTheme.green,
-            thickness: 1,
-            indent: 0.5,
-            endIndent: 0.5,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                iconButton(
-                  onTap: () {
-                    productController.onWishTap(
-                        context,
-                        product.id,
-                        productController.isInWishList == true
-                            ? removeFromWislist
-                            : addToWishList);
-                  },
-                  height: 35.h,
-                  width: 100.w,
-                  icon: Icons.favorite,
-                ),
-                iconButton(
-                  onTap: () {
-                    SocialShare.shareOptions(
-                        productController.productDetails!.link!);
-                  },
-                  height: 35.h,
-                  width: 100.w,
-                  icon: Icons.share,
-                ),
-                iconButton(
-                  onTap: () {
-                    productController.addToCart(
-                        id: product.id,
-                        mode: "add_to_cart",
-                        context: context,
-                        snackbar: _addedToCartSnackbar);
-                  },
-                  height: 35.h,
-                  width: 100.w,
-                  icon: Icons.shopping_cart_rounded,
-                ),
-              ],
-            ),
-          )
+         Column(
+           children: [
+             Padding(
+               padding: const EdgeInsets.fromLTRB(
+                 0.0,
+                 10.0,
+                 0.0,
+                 10.0,
+               ),
+               child: Row(
+                 mainAxisAlignment: MainAxisAlignment.start,
+                 children: [
+                   Padding(
+                     padding: app_language_rtl.$!
+                         ? const EdgeInsets.only(left: 8.0)
+                         : const EdgeInsets.only(right: 8.0),
+                     child: SizedBox(
+                       // width: 80.w,
+                       child: Text(
+                         AppLocalizations.of(context)!.quantity,
+                         style: const TextStyle(
+                             color: Color.fromRGBO(153, 153, 153, 1),
+                             fontWeight: FontWeight.bold),
+                       ),
+                     ),
+                   ),
+                   Padding(
+                     padding: EdgeInsets.only(left: 6.w),
+                     child: buildQuantityButton(
+                         onTapIncrement: () {
+                           productController.incrementQuantityCart(product.id,
+                               snackbar: noStocksMessage, context: context);
+                         },
+                         onTapDecrement: () {
+                           productController.decrementQuantityCart(product.id,
+                               snackbar: noStocksMessage, context: context);
+                         },
+                         quantityText: productController.quantityText.value),
+                   )
+                 ],
+               ),
+             ),
+             Divider(
+               height: 2.5.h,
+               color: MyTheme.green,
+               thickness: 1,
+               indent: 0.5,
+               endIndent: 0.5,
+             ),
+             buildChoiceOptionList(_addedToCartSnackbar),
+             Divider(
+               height: 2.5.h,
+               color: MyTheme.green,
+               thickness: 1,
+               indent: 0.5,
+               endIndent: 0.5,
+             ),
+             Padding(
+               padding: const EdgeInsets.only(top: 10),
+               child: Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                 children: [
+                   iconButton(
+                     onTap: () {
+                       productController.onWishTap(
+                           context,
+                           product.id,
+                           productController.isInWishList == true
+                               ? removeFromWislist
+                               : addToWishList);
+                     },
+                     height: 35.h,
+                     width: 100.w,
+                     icon: Icons.favorite,
+                   ),
+                   iconButton(
+                     onTap: () {
+                       SocialShare.shareOptions(
+                           productController.productDetails!.link!);
+                     },
+                     height: 35.h,
+                     width: 100.w,
+                     icon: Icons.share,
+                   ),
+                   iconButton(
+                     onTap: () {
+                       productController.addToCart(
+                           id: product.id,
+                           mode: "add_to_cart",
+                           context: context,
+                           snackbar: _addedToCartSnackbar);
+                     },
+                     height: 35.h,
+                     width: 100.w,
+                     icon: Icons.shopping_cart_rounded,
+                   ),
+                 ],
+               ),
+             )
+           ],
+         )
         ],
       ),
     );
@@ -353,7 +357,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
     );
   }
 
-  buildChoiceOptionList() {
+  buildChoiceOptionList(_addedToCartSnackbar) {
     return ListView.builder(
       itemCount: productController.productDetails!.choice_options!.length,
       scrollDirection: Axis.vertical,
@@ -371,6 +375,71 @@ class ProductVariantBottomSheet extends StatelessWidget {
       },
     );
   }
+
+  // buildChoiceOpiton(choiceOptions, choiceOptionsIndex, mainPrice,context,_addedToCartSnackbar) {
+  //   return Padding(
+  //     padding: const EdgeInsets.fromLTRB(
+  //       0.0,
+  //       10.0,
+  //       0.0,
+  //       0.0,
+  //     ),
+  //     child: Column(
+  //       // mainAxisAlignment: MainAxisAlignment.start,
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children: [
+  //         Padding(
+  //           padding: app_language_rtl.$!
+  //               ? const EdgeInsets.only(left: 8.0)
+  //               : const EdgeInsets.only(right: 8.0),
+  //           child: SizedBox(
+  //             // width: 60.w,
+  //             child: Text(
+  //               choiceOptions[choiceOptionsIndex].title,
+  //               style: const TextStyle(
+  //                   color: Color.fromRGBO(153, 153, 153, 1),
+  //                   fontWeight: FontWeight.bold),
+  //             ),
+  //           ),
+  //         ),
+  //         Padding(
+  //           padding: EdgeInsets.only(left: 6.w),
+  //           child: Scrollbar(
+  //             thumbVisibility: false,
+  //             child: SizedBox(
+  //               width: 300.w,
+  //               child: Column(
+  //                 children: List.generate(
+  //                   choiceOptions[choiceOptionsIndex].options.length,
+  //                       (index) => Padding(
+  //                     padding: const EdgeInsets.only(bottom: 8.0),
+  //                     child: buildChoiceItem(
+  //                         choiceOptions[choiceOptionsIndex].options[index],
+  //                         choiceOptionsIndex,
+  //                         index,
+  //                         mainPrice,
+  //                         context,
+  //                         _addedToCartSnackbar,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //
+  //             /*ListView.builder(
+  //               itemCount: choice_options[choice_options_index].options.length,
+  //               scrollDirection: Axis.horizontal,
+  //               shrinkWrap: true,
+  //               itemBuilder: (context, index) {
+  //                 return
+  //               },
+  //             ),*/
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   buildChoiceOpiton(choiceOptions, choiceOptionsIndex, mainPrice) {
     return Padding(
@@ -438,6 +507,127 @@ class ProductVariantBottomSheet extends StatelessWidget {
     productController.setChoiceString();
     productController.getVariantData(product.id);
   }
+
+  // buildChoiceItem(option, choiceOptionsIndex, index, mainPrice,context,_addedToCartSnackbar) {
+  //   return Padding(
+  //     padding: app_language_rtl.$!
+  //         ? const EdgeInsets.only(left: 8.0)
+  //         : const EdgeInsets.only(right: 8.0),
+  //     child: InkWell(
+  //       onTap: () {
+  //         _onVariantChange(choiceOptionsIndex, option);
+  //       },
+  //       child: Card(
+  //         elevation: 10,
+  //         margin: const EdgeInsets.all(10),
+  //         child: Container(
+  //           height: 90.h,
+  //           width: 300.w,
+  //           decoration: BoxDecoration(
+  //             border: Border.all(
+  //                 color:
+  //                 productController.selectedChoices[choiceOptionsIndex] ==
+  //                     option
+  //                     ? MyTheme.accent_color2
+  //                     : MyTheme.noColor,
+  //                 width: 2),
+  //             borderRadius: BorderRadius.circular(3.0),
+  //             color: MyTheme.white,
+  //             boxShadow: [
+  //               BoxShadow(
+  //                 color: Colors.black.withOpacity(0.12),
+  //                 blurRadius: 6,
+  //                 spreadRadius: 1,
+  //                 offset:
+  //                 const Offset(0.0, 3.0), // shadow direction: bottom right
+  //               )
+  //             ],
+  //           ),
+  //           child: Center(
+  //             child: Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 Text(
+  //                   option,
+  //                   style: TextStyle(
+  //                       color:
+  //                       productController.selectedChoices[choiceOptionsIndex] ==
+  //                           option
+  //                           ? MyTheme.accent_color2
+  //                           : const Color.fromRGBO(224, 224, 225, 1),
+  //                       fontSize: 10.sp,
+  //                       fontWeight: FontWeight.bold),
+  //                 ),
+  //                 Text(
+  //                   "Discount",
+  //                   style: TextStyle(
+  //                       color:
+  //                       productController.selectedChoices[choiceOptionsIndex] ==
+  //                           option
+  //                           ? MyTheme.accent_color2
+  //                           : const Color.fromRGBO(224, 224, 225, 1),
+  //                       fontSize: 10.sp,
+  //                       fontWeight: FontWeight.bold),
+  //                 ),
+  //                 Column(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                   children: [
+  //                     Text(
+  //                       convertPrice(productController.totalPrice!),
+  //                       style: TextStyle(
+  //                           color:
+  //                           productController.selectedChoices[choiceOptionsIndex] ==
+  //                               option
+  //                               ? MyTheme.accent_color2
+  //                               : const Color.fromRGBO(224, 224, 225, 1),
+  //                           fontSize: 10.sp,
+  //                           fontWeight: FontWeight.bold),
+  //                     ),
+  //                     Text(
+  //                       convertPrice(productController.mrpPrice!),
+  //                       style: TextStyle(
+  //                           color:
+  //                           productController.selectedChoices[choiceOptionsIndex] ==
+  //                               option
+  //                               ? MyTheme.accent_color2
+  //                               : const Color.fromRGBO(224, 224, 225, 1),
+  //                           fontSize: 10.sp,
+  //                           fontWeight: FontWeight.bold),
+  //                     ),
+  //                     InkWell(
+  //                       onTap: (){
+  //                         productController.addToCart(
+  //                           id: product.id,
+  //                           mode: "add_to_cart",
+  //                             context: context,
+  //                             snackbar: _addedToCartSnackbar
+  //                         );
+  //                       },
+  //                       child: Container(
+  //                         height: 30.h,
+  //                         width: 100.w,
+  //                         decoration: BoxDecoration(
+  //                             color: MyTheme.green),
+  //                         child: Row(
+  //                           mainAxisAlignment: MainAxisAlignment.center,
+  //                           children: [
+  //                             Text("Add",style: TextStyle(color: MyTheme.white,fontSize: 14.sp),),
+  //                             SizedBox(width: 5,),
+  //                             Icon(Icons.shopping_cart_outlined,color: MyTheme.white,size: 14.sp,),
+  //                           ],
+  //                         )
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   buildChoiceItem(option, choiceOptionsIndex, index, mainPrice) {
     return Padding(
