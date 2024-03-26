@@ -10,8 +10,8 @@ class DeliverySlotController extends GetxController{
   var deliveryData = ''.obs;
 
   @override
-  void onInit(){
-    getDeliveryTimeSlot();
+  void onInit() async {
+    await getDeliveryTimeSlot();
     super.onInit();
   }
   @override
@@ -24,9 +24,11 @@ class DeliverySlotController extends GetxController{
     var timeSlotResponse = await PaymentRepository().deliverySlotRepository();
     // deliveryTimeSlot.add(timeSlotResponse.data);
     deliveryTimeSlot.assignAll(timeSlotResponse);
+    update();
   }
   storeValuestoApi(index){
     deliveryData.value = deliveryTimeSlot[index].transitTime!;
     deliveryIndex.value = index;
+    update();
   }
 }

@@ -9,6 +9,7 @@ import 'package:krishanthmart_new/controllers/home_controller.dart';
 import 'package:krishanthmart_new/controllers/product_controller.dart';
 import 'package:krishanthmart_new/utils/colors.dart';
 import 'package:krishanthmart_new/utils/image_directory.dart';
+import 'package:krishanthmart_new/views/category/sub_category_page.dart';
 import 'package:krishanthmart_new/views/coupons/coupon.dart';
 import 'package:krishanthmart_new/views/filters/filters.dart';
 import 'package:krishanthmart_new/views/flashdeals/flashdealslist.dart';
@@ -17,12 +18,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:krishanthmart_new/views/mainpage/components/brand_grid.dart';
 import 'package:krishanthmart_new/views/product_details/all_products.dart';
 import 'package:krishanthmart_new/views/product_details/components/product_large_card_list.dart';
-import 'package:krishanthmart_new/views/product_details/product_details.dart';
 import 'package:toast/toast.dart';
 import '../../controllers/location_controller.dart';
 import '../../helpers/main_helpers.dart';
 import '../../models/flash_deal_model.dart';
-import '../../models/pincode_response_model.dart';
 import '../../models/slider_model.dart';
 import '../../repositories/flashdeal_repositories.dart';
 import '../../utils/device_info.dart';
@@ -33,6 +32,7 @@ import '../category/category_page.dart';
 import '../category/components/category_grid.dart';
 import '../flashdeals/flashdealproducts.dart';
 import '../mainpage/components/box_decorations.dart';
+import '../product_details/product_details.dart';
 import '../profile/profile_edit.dart';
 import 'components/carousel_deal_card.dart';
 import 'components/home_carousel.dart';
@@ -67,6 +67,7 @@ class _HomePageState extends State<HomePage> {
         setState(() {});
       });
     cartController.getCount();
+    locationController.getUserLocation();
   }
 
   bool get _isSliverAppBarExpanded {
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                 AppLocalizations.of(context)!.app_name_caps,
                 style: TextStyle(
                   color: MyTheme.black,
-                  fontSize:  Get.height > 690 ? 23.sp : 18.sp,
+                  fontSize: Get.height > 690 ? 23.sp : 18.sp,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.bold,
                 ),
@@ -192,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: Container(
                           // height: 32.h,
-                            height: 37.5.h,
+                          height: 37.5.h,
                           margin: EdgeInsets.only(
                               left: 16.w,
                               right: 16.w,
@@ -332,42 +333,67 @@ class _HomePageState extends State<HomePage> {
                                 Obx(() {
                                   // Obx will rebuild when pincodeList changes
                                   return Container(
+                                    margin: EdgeInsets.only(left: 10),
                                     padding: EdgeInsets.all(8),
                                     decoration: BoxDecoration(
                                       color: MyTheme.white,
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(10),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
                                       ),
                                     ),
-                                    child: DropdownButton<Data>(
-                                      value: locationController
-                                              .pincodeList.isNotEmpty
-                                          ? locationController.pincodeList[0]
-                                          : null,
-                                      borderRadius: BorderRadius.circular(10),
-                                      icon: Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: MyTheme
-                                            .accent_color2, // <-- SEE HERE
-                                      ),
-                                      items: locationController.pincodeList
-                                          .map((Data item) {
-                                        return DropdownMenuItem<Data>(
-                                          value: item,
-                                          child: Text(item.name ?? ''),
-                                        );
-                                      }).toList(),
-                                      onTap: () {
-                                        print("onTap Callled");
-                                      },
-                                      onChanged: (value) {
-                                        // Handle dropdown item change
-                                        user_pincode.$ = value!.name!;
-                                      },
-                                      hint: Text('Select a Pincode'),
-                                      style: TextStyle(
-                                          color: MyTheme.accent_color2),
-                                    ),
+                                    child: locationController
+                                                .pincodeData.value ==
+                                            ""
+                                        ? Center(
+                                            child: CircularProgressIndicator(
+                                              color: MyTheme.accent_color2,
+                                            ),
+                                          )
+                                        : Row(
+                                            children: [
+                                              Text("Pincode: "),
+                                              Text(
+                                                user_pincode.$ == ''
+                                                    ? locationController
+                                                        .pincodeData.value
+                                                    : user_pincode.$,
+                                                style: TextStyle(
+                                                    color:
+                                                        MyTheme.accent_color2,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                    // child: DropdownButton<Data>(
+                                    //   value: locationController
+                                    //           .pincodeList.isNotEmpty
+                                    //       ? locationController.pincodeList[0]
+                                    //       : null,
+                                    //   borderRadius: BorderRadius.circular(10),
+                                    //   icon: Icon(
+                                    //     Icons.keyboard_arrow_down,
+                                    //     color: MyTheme
+                                    //         .accent_color2, // <-- SEE HERE
+                                    //   ),
+                                    //   items: locationController.pincodeList
+                                    //       .map((Data item) {
+                                    //     return DropdownMenuItem<Data>(
+                                    //       value: item,
+                                    //       child: Text(item.name ?? ''),
+                                    //     );
+                                    //   }).toList(),
+                                    //   onTap: () {
+                                    //     print("onTap Callled");
+                                    //   },
+                                    //   onChanged: (value) {
+                                    //     // Handle dropdown item change
+                                    //     user_pincode.$ = value!.name!;
+                                    //   },
+                                    //   hint: Text('Select a Pincode'),
+                                    //   style: TextStyle(
+                                    //       color: MyTheme.accent_color2),
+                                    // ),
                                   );
                                 }),
                                 Padding(
@@ -387,16 +413,18 @@ class _HomePageState extends State<HomePage> {
                                             color: MyTheme.accent_color2,
                                             size: 11.sp,
                                           ),
-                                          Row(
-                                            children: List.generate(
-                                              deliveryController
-                                                  .deliveryTimeSlot.length,
-                                              (index) => Text(
-                                                " ${deliveryController.deliveryTimeSlot[index].transitTime!}",
-                                                style: TextStyle(
-                                                    fontSize: 11.sp,
-                                                    color:
-                                                        MyTheme.accent_color2),
+                                          Obx(
+                                            () => Row(
+                                              children: List.generate(
+                                                deliveryController
+                                                    .deliveryTimeSlot.length,
+                                                (index) => Text(
+                                                  " ${deliveryController.deliveryTimeSlot[index].transitTime!}",
+                                                  style: TextStyle(
+                                                      fontSize: 11.sp,
+                                                      color: MyTheme
+                                                          .accent_color2),
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -492,8 +520,18 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   String imageUrl =
                                       homeController.bannerTwoImageList[index];
-                                  String productId =
+                                  int productId =
                                       homeController.bannerTwoIdList[index];
+                                  String categoryName =
+                                      homeController.bannerTwoNameList[index];
+                                  String subCategoryId = homeController.bannerTwoChildIDList[index];
+                                  // homeController.getChildSubCategories(
+                                  //   int.parse(productId),
+                                  // );
+                                  // int subCategoryId = homeController
+                                  //     .subChildCategoriesHome[index].id;
+                                  // String productName = homeController
+                                  //     .subChildCategoriesHome[index].name;
                                   if (homeController
                                       .bannerTwoImageList.isEmpty) {
                                     return const Center(
@@ -502,6 +540,8 @@ class _HomePageState extends State<HomePage> {
                                     return BannersHomeList(
                                       imageUrl: imageUrl,
                                       productId: productId,
+                                      subCategoryId: subCategoryId,
+                                      productName: categoryName,
                                     );
                                   }
                                 }),
@@ -564,23 +604,33 @@ class _HomePageState extends State<HomePage> {
                                     crossAxisSpacing: 12,
                                     mainAxisSpacing: 4,
                                   ),
-                                  itemCount:
-                                      4,
+                                  itemCount: 4,
                                   itemBuilder: (context, index) {
-                                    String productId =
+                                    int productId =
                                         homeController.bannerSixIdList[index];
+                                    String categoryName =
+                                        homeController.bannerSixNameList[index];
+                                    String subCategoryId = homeController.bannerSixChildIDList[index];
                                     if (homeController
                                         .bannerSixImageList.isEmpty) {
                                       return ShimmerHelper()
                                           .buildProductGridShimmer();
                                     } else {
                                       return InkWell(
-                                        onTap: () {
-                                          Get.to(
-                                            () => ProductDetails(
-                                              id: int.parse(
-                                                productId,
-                                              ),
+                                        onTap: () async {
+                                          // Get.to(
+                                          //   () => ProductDetails(
+                                          //     id: int.parse(
+                                          //       productId,
+                                          //     ),
+                                          //   ),
+                                          // );
+                                          await Get.to(
+                                            () => SubCategoryPage(
+                                              categoryId: productId,
+                                              subCategoryId: int.parse(subCategoryId),
+                                              selectedIndexes: int.parse(subCategoryId),
+                                              categoryName: categoryName,
                                             ),
                                           );
                                         },
@@ -613,8 +663,8 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index, realIndex) {
                                   final imageUrl =
                                       homeController.bannerOneImageList[index];
-                                  final productId =
-                                      homeController.bannerOneIdList[index];
+                                  // String productId =
+                                  //     homeController.bannerOneIdList[index];
                                   if (homeController
                                       .bannerOneImageList.isEmpty) {
                                     return const Center(
@@ -623,11 +673,11 @@ class _HomePageState extends State<HomePage> {
                                   } else {
                                     return InkWell(
                                       onTap: () {
-                                        Get.to(
-                                          () => ProductDetails(
-                                            id: int.parse(productId),
-                                          ),
-                                        );
+                                        // Get.to(
+                                        //   () => ProductDetails(
+                                        //     id: int.parse(productId),
+                                        //   ),
+                                        // );
                                       },
                                       child: Container(
                                         margin: EdgeInsets.symmetric(
@@ -806,31 +856,39 @@ class _HomePageState extends State<HomePage> {
                         homeController.flashDealList.isNotEmpty
                             ? buildFlashDealList(context)
                             : const SizedBox(),
-                        Container(
-                          color: MyTheme.noColor,
-                          width: DeviceInfo(context).width,
-                          child: ListView.builder(
-                              padding: const EdgeInsets.all(0),
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: 1,
-                              itemBuilder: (context, index) {
-                                String imageUrl =
-                                    homeController.bannerFiveImageList[0];
-                                String productId =
-                                    homeController.bannerFiveIdList[0];
-                                if (homeController
-                                    .bannerFiveImageList.isEmpty) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                } else {
-                                  return BannersHomeList(
-                                    imageUrl: imageUrl,
-                                    productId: productId,
-                                  );
-                                }
-                              }),
-                        ),
+                        // Container(
+                        //   color: MyTheme.noColor,
+                        //   width: DeviceInfo(context).width,
+                        //   child: ListView.builder(
+                        //       padding: const EdgeInsets.all(0),
+                        //       shrinkWrap: true,
+                        //       physics: const NeverScrollableScrollPhysics(),
+                        //       itemCount: 1,
+                        //       itemBuilder: (context, index) {
+                        //         String imageUrl =
+                        //             homeController.bannerFiveImageList[0];
+                        //         String productId =
+                        //             homeController.bannerFiveIdList[0];
+                        //         homeController.getChildSubCategories(
+                        //             int.parse(productId));
+                        //         int subCategoryId = homeController
+                        //             .subChildCategoriesHome[index].id;
+                        //         String productName = homeController
+                        //             .subChildCategoriesHome[index].name;
+                        //         if (homeController
+                        //             .bannerFiveImageList.isEmpty) {
+                        //           return const Center(
+                        //               child: CircularProgressIndicator());
+                        //         } else {
+                        //           return BannersHomeList(
+                        //             imageUrl: imageUrl,
+                        //             productId: productId,
+                        //             subCategoryId: subCategoryId,
+                        //             productName: productName,
+                        //           );
+                        //         }
+                        //       }),
+                        // ),
                         Container(
                           height: 225.h,
                           width: DeviceInfo(context).width,
@@ -895,17 +953,28 @@ class _HomePageState extends State<HomePage> {
                               itemCount: 1,
                               itemBuilder: (context, index) {
                                 String imageUrl =
-                                    homeController.bannerFiveImageList[1];
-                                String productId =
-                                    homeController.bannerFiveIdList[1];
+                                    homeController.bannerThreeImageList[index];
+                                int productId =
+                                    homeController.bannerThreeIdList[index];
+                                String categoryName =
+                                    homeController.bannerThreeNameList[index];
+                                String subCategoryId = homeController.bannerThreeChildIDList[index];
+                                // homeController.getChildSubCategories(
+                                //     int.parse(productId));
+                                // int subCategoryId = homeController
+                                //     .subChildCategoriesHome[index].id;
+                                // String productName = homeController
+                                //     .subChildCategoriesHome[index].name;
                                 if (homeController
-                                    .bannerFiveImageList.isEmpty) {
+                                    .bannerThreeImageList.isEmpty) {
                                   return const Center(
                                       child: CircularProgressIndicator());
                                 } else {
                                   return BannersHomeList(
                                     imageUrl: imageUrl,
                                     productId: productId,
+                                    productName: categoryName,
+                                    subCategoryId: subCategoryId,
                                   );
                                 }
                               }),
@@ -990,17 +1059,29 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   String imageUrl = homeController
                                       .bannerThreeImageList[index];
-                                  final productId =
+                                  String categoryName =
+                                      homeController.bannerThreeNameList[index];
+                                  int productId =
                                       homeController.bannerThreeIdList[index];
+                                  String subCategoryId = homeController.bannerThreeChildIDList[index];
+                                  // homeController.getChildSubCategories(
+                                  //     int.parse(productId));
+                                  // int subCategoryId = homeController
+                                  //     .subChildCategoriesHome[index].id;
+                                  // String productName = homeController
+                                  //     .subChildCategoriesHome[index].name;
                                   if (homeController
                                       .bannerThreeImageList.isEmpty) {
                                     return const SizedBox();
                                   } else {
                                     return InkWell(
-                                      onTap: () {
-                                        Get.to(
-                                          () => ProductDetails(
-                                            id: int.parse(productId),
+                                      onTap: () async {
+                                        await Get.to(
+                                          () => SubCategoryPage(
+                                            categoryId: productId,
+                                            subCategoryId: int.parse(subCategoryId),
+                                            selectedIndexes: int.parse(subCategoryId),
+                                            categoryName: categoryName,
                                           ),
                                         );
                                       },
@@ -1011,8 +1092,7 @@ class _HomePageState extends State<HomePage> {
                                           borderRadius:
                                               BorderRadius.circular(5),
                                           image: DecorationImage(
-                                              image: NetworkImage(homeController
-                                                  .bannerThreeImageList[index]),
+                                              image: NetworkImage(imageUrl),
                                               fit: BoxFit.fill),
                                         ),
                                       ),
@@ -1173,8 +1253,10 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   String imageUrl =
                                       homeController.bannerSixImageList[index];
-                                  String productId =
+                                  int productId =
                                       homeController.bannerSixIdList[index];
+                                  String subCategoryId = homeController.bannerSixChildIDList[index];
+                                  String categoryName = homeController.bannerSixNameList[index];
                                   if (homeController
                                       .bannerSixImageList.isEmpty) {
                                     return const Center(
@@ -1199,7 +1281,12 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       onTap: () {
                                         Get.to(
-                                          () => CategoryListPages(),
+                                          () =>SubCategoryPage(
+                                            subCategoryId: int.parse(subCategoryId),
+                                            categoryId: productId,
+                                            categoryName: categoryName,
+                                            selectedIndexes: int.parse(subCategoryId),
+                                          )
                                         );
                                       },
                                     );
@@ -1766,7 +1853,7 @@ Widget buildFlashDealsProductItem(
                     // convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
                     //     .products[productIndex].price),
                     style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         color: MyTheme.accent_color,
                         fontWeight: FontWeight.bold),
                   ),
@@ -1784,7 +1871,7 @@ Widget buildFlashDealsProductItem(
                   convertPrice(flashDealResponse.flashDeals[flashDealIndex]
                       .products!.products[productIndex].price),
                   style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 10.sp,
                       color: MyTheme.green,
                       fontWeight: FontWeight.bold),
                 ),

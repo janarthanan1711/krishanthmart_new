@@ -31,6 +31,18 @@ class HomeController extends GetxController {
   var bannerOneIdList = [].obs;
   var bannerThreeIdList = [].obs;
   var bannerFiveIdList = [].obs;
+  var bannerTwoNameList = [].obs;
+  var bannerFourNameList = [].obs;
+  var bannerSixNameList = [].obs;
+  var bannerOneNameList = [].obs;
+  var bannerThreeNameList = [].obs;
+  var bannerFiveNameList = [].obs;
+  var bannerTwoChildIDList = [].obs;
+  var bannerFourChildIDList = [].obs;
+  var bannerSixChildIDList = [].obs;
+  var bannerOneChildIDList = [].obs;
+  var bannerThreeChildIDList = [].obs;
+  var bannerFiveChildIDList = [].obs;
   var flashDealList = <FlashDealResponseDatum>[].obs;
   List<Category> featuredCategoryList = [];
   List<Category> topCategoryList = [];
@@ -56,13 +68,13 @@ class HomeController extends GetxController {
   var isAddedToCart = false.obs;
   int featuredProductPage = 1;
   var businessResponseDataList = [].obs;
+  var subChildCategories = [].obs;
   int? totalFeaturedProductData = 0;
   var couponColor = "".obs;
   var couponTitle = "".obs;
   var couponSubTitle = "".obs;
   Color? hexColorCoupon;
-
-
+  var subCategoryIds = [].obs;
   CategoryController categoryController = Get.put(CategoryController());
 
   // var isExpanded = false.obs;
@@ -80,7 +92,6 @@ class HomeController extends GetxController {
     removeAll();
     super.onClose();
   }
-
 
   fetchCarouselImages() async {
     var carouselResponse = await SliderRepository().getSliders();
@@ -172,7 +183,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Color hexToColor(hexColorCode) {
+  Color hexToColor(String hexColorCode) {
     try {
       // Ensure the input string is at least 7 characters long
       if (hexColorCode.length < 7) {
@@ -180,7 +191,7 @@ class HomeController extends GetxController {
       }
 
       // Extract the substring from index 1 to 7
-      String hexWithoutHash = hexColorCode.substring(1, 7);
+      String hexWithoutHash = hexColorCode.substring(1);
 
       // Ensure the substring is a valid hexadecimal color code
       if (RegExp(r'^[0-9a-fA-F]{6}$').hasMatch(hexWithoutHash)) {
@@ -191,10 +202,35 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       // If any error occurs, return a default color (e.g., black)
-      print("Error converting hex color: $e");
+      print("Error converting hex color $hexColorCode: $e");
       return MyTheme.noColor;
     }
   }
+
+
+  // Color hexToColor(hexColorCode) {
+  //   try {
+  //     // Ensure the input string is at least 7 characters long
+  //     if (hexColorCode.length < 7) {
+  //       throw ArgumentError("Invalid hex color code: $hexColorCode");
+  //     }
+  //
+  //     // Extract the substring from index 1 to 7
+  //     String hexWithoutHash = hexColorCode.substring(1, 7);
+  //
+  //     // Ensure the substring is a valid hexadecimal color code
+  //     if (RegExp(r'^[0-9a-fA-F]{6}$').hasMatch(hexWithoutHash)) {
+  //       // Parse the hexadecimal color code and add the alpha value
+  //       return Color(int.parse(hexWithoutHash, radix: 16) + 0xFF000000);
+  //     } else {
+  //       throw ArgumentError("Invalid hex color code: $hexColorCode");
+  //     }
+  //   } catch (e) {
+  //     // If any error occurs, return a default color (e.g., black)
+  //     print("Error converting hex color: $e");
+  //     return MyTheme.noColor;
+  //   }
+  // }
 
   void toggleExpansion() {
     isExpanded(!isExpanded.value);
@@ -237,12 +273,17 @@ class HomeController extends GetxController {
 
   getChildSubCategories(int subChildCategory) async {
     // subChildCategoriesHome.clear();
-    var subChildCategoriesRes = await CategoryRepository().getSubChildCategories(categoryId: subChildCategory);
+    var subChildCategoriesRes = await CategoryRepository()
+        .getSubChildCategories(categoryId: subChildCategory);
     subChildCategoriesHome.addAll(subChildCategoriesRes.subChildCategory);
+    for (var sub in subChildCategoriesHome) {
+      subCategoryIds.add(sub.id);
+      break;
+    }
     update();
   }
 
-  fetchSliderImages()async{
+  fetchSliderImages() async {
     await SliderRepository().getBannerOneImages();
     // await SliderRepository().getBannerThreeImages();
     await SliderRepository().getBannerFiveImages();
@@ -250,84 +291,127 @@ class HomeController extends GetxController {
 
   fetchBannerFiveImages() async {
     var bannerFiveImages = await SliderRepository().getBannerFiveImages();
-    for (var slider in bannerFiveImages.image!){
+    for (var slider in bannerFiveImages.image!) {
       bannerFiveImageList.add(slider);
     }
-    for(var ids in bannerFiveImages.productId!){
+    for (var ids in bannerFiveImages.parentId!) {
       bannerFiveIdList.add(ids);
+    }
+    for (var names in bannerFiveImages.parentName!) {
+      bannerFiveNameList.add(names);
+    }
+    for (var childId in bannerFiveImages.childId!) {
+      bannerFiveChildIDList.add(childId);
     }
     update();
   }
 
   fetchBannerOneImages() async {
     var bannerOneImages = await SliderRepository().getBannerOneImages();
-     for (var slider in bannerOneImages.image!){
-       bannerOneImageList.add(slider);
-     }
-    for(var ids in bannerOneImages.productId!){
+    for (var slider in bannerOneImages.image!) {
+      bannerOneImageList.add(slider);
+    }
+    for (var ids in bannerOneImages.parentId!) {
       bannerOneIdList.add(ids);
     }
-     update();
-  }
-  fetchBannerThreeImages() async {
-    var bannerOneImages = await SliderRepository().getBannerThreeImages();
-    for (var slider in bannerOneImages.image!){
-      bannerThreeImageList.add(slider);
+    for (var names in bannerOneImages.parentName!) {
+      bannerOneNameList.add(names);
     }
-    for(var ids in bannerOneImages.productId!){
-      bannerThreeIdList.add(ids);
+    for (var childId in bannerOneImages.childId!) {
+      bannerOneChildIDList.add(childId);
     }
     update();
   }
+
+  fetchBannerThreeImages() async {
+    var bannerOneImages = await SliderRepository().getBannerThreeImages();
+    for (var slider in bannerOneImages.image!) {
+      bannerThreeImageList.add(slider);
+    }
+    for (var ids in bannerOneImages.parentId!) {
+      bannerThreeIdList.add(ids);
+    }
+    for (var names in bannerOneImages.parentName!) {
+      bannerThreeNameList.add(names);
+    }
+    for (var childId in bannerOneImages.childId!) {
+      bannerThreeChildIDList.add(childId);
+    }
+    update();
+  }
+
   fetchBannerFourImages() async {
     var bannerTwoResponse = await SliderRepository().getBannerFourImages();
     for (var slider in bannerTwoResponse.image!) {
       bannerFourImageList.add(slider);
     }
-    for(var ids in bannerTwoResponse.productId!){
+    for (var ids in bannerTwoResponse.parentId!) {
       bannerFourIdList.add(ids);
+    }
+    for (var names in bannerTwoResponse.parentName!) {
+      bannerFourNameList.add(names);
+    }
+    for (var childId in bannerTwoResponse.childId!) {
+      bannerFourChildIDList.add(childId);
     }
     update();
   }
+
   fetchBannerTwoImages() async {
     var bannerTwoResponse = await SliderRepository().getBannerTwoImages();
     for (var slider in bannerTwoResponse.image!) {
       bannerTwoImageList.add(slider);
     }
-    for(var ids in bannerTwoResponse.productId!){
+    for (var ids in bannerTwoResponse.parentId!) {
       bannerTwoIdList.add(ids);
+    }
+    for (var names in bannerTwoResponse.parentName!) {
+      bannerTwoNameList.add(names);
+    }
+    for (var childId in bannerTwoResponse.childId!) {
+      bannerTwoChildIDList.add(childId);
     }
     isBannerTwoInitial = false;
     update();
   }
+
   fetchBannerSixImages() async {
     var bannerTwoResponse = await SliderRepository().getBannerSixImages();
     for (var slider in bannerTwoResponse.image!) {
       bannerSixImageList.add(slider);
     }
-    for(var ids in bannerTwoResponse.productId!){
+    for (var ids in bannerTwoResponse.parentId!) {
       bannerSixIdList.add(ids);
+    }
+    for (var names in bannerTwoResponse.parentName!) {
+      bannerSixNameList.add(names);
+    }
+    for (var childId in bannerTwoResponse.childId!) {
+      bannerSixChildIDList.add(childId);
     }
     // bannerSixIdList.value = bannerTwoResponse.productId as RxList;
     update();
   }
-  openWhatsApp(context) async{
-    var whatsapp ="+919597959797";
-    var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=Hello, I have a question about https://krishanthmart.com/";
-    var whatsappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
-    if(Platform.isIOS){
+
+  openWhatsApp(context) async {
+    var whatsapp = "+919597959797";
+    var whatsappURl_android = "whatsapp://send?phone=" +
+        whatsapp +
+        "&text=Hello, I have a question about https://krishanthmart.com/";
+    var whatsappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("hello")}";
+    if (Platform.isIOS) {
       // for iOS phone only
-      if( await canLaunch(whatsappURL_ios)){
+      if (await canLaunch(whatsappURL_ios)) {
         await launch(whatsappURL_ios, forceSafariVC: false);
-      }else{
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: new Text("whatsapp not installed")));
       }
-    }else{
+    } else {
       // android , web
-      if( await canLaunch(whatsappURl_android)){
+      if (await canLaunch(whatsappURl_android)) {
         await launch(whatsappURl_android);
-      }else{
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: new Text("whatsapp not installed")));
       }
@@ -341,7 +425,7 @@ class HomeController extends GetxController {
     fetchBannerOneImages();
     fetchBannerTwoImages();
     fetchBannerFourImages();
-    fetchBannerFiveImages();
+    // fetchBannerFiveImages();
     fetchBannerThreeImages();
     fetchBannerSixImages();
     fetchBestSellingProducts();
@@ -375,6 +459,18 @@ class HomeController extends GetxController {
     bannerThreeIdList.clear();
     bannerFourIdList.clear();
     bannerSixIdList.clear();
+    bannerTwoNameList.clear();
+    bannerOneNameList.clear();
+    bannerThreeNameList.clear();
+    bannerFiveNameList.clear();
+    bannerFourNameList.clear();
+    bannerSixNameList.clear();
+    bannerTwoChildIDList.clear();
+    bannerOneChildIDList.clear();
+    bannerThreeChildIDList.clear();
+    bannerFiveChildIDList.clear();
+    bannerFourChildIDList.clear();
+    bannerSixChildIDList.clear();
     subChildCategoriesHome.clear();
     isCarouselInitial = true;
     isBannerOneInitial = true;

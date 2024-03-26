@@ -39,6 +39,8 @@ class AddressRepository {
     bool checkResult = ResponseCheck.apply(response.body);
     if (!checkResult) return responseCheckModelFromJson(response.body);
 
+    print("Address Response=======.${response.body}");
+
     return addressResponseFromJson(response.body);
   }
 

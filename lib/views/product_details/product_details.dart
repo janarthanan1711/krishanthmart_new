@@ -94,7 +94,8 @@ class _ProductDetailsState extends State<ProductDetails>
   int? _quantity = 1;
   int? _stock = 0;
   var _stock_txt;
-
+  String? mrpPrice = '';
+  String discountVariant = '';
   double opacity = 0;
 
   List<dynamic> _relatedProducts = [];
@@ -292,6 +293,8 @@ class _ProductDetailsState extends State<ProductDetails>
     //fetchVariantPrice();
     // _singlePriceString = variantResponse.price_string;
     _totalPrice = variantResponse.variantData!.price;
+    mrpPrice = variantResponse.variantData!.mrp;
+    discountVariant = variantResponse.variantData!.discount.toString();
 
     // if (change_appbar_string) {
     //   _appbarPriceString = "${variantResponse.variant} ${_singlePriceString}";

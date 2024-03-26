@@ -5,19 +5,33 @@ String sliderResponseToJson(SliderResponse data) => json.encode(data.toJson());
 
 class SliderResponse {
   List<String>? image;
-  List<String>? productId;
+  List<int>? parentId;
+  List<String>? parentName;
+  List<String>? childId;
+  List<String>? childName;
 
-  SliderResponse({this.image, this.productId});
+  SliderResponse(
+      {this.image,
+        this.parentId,
+        this.parentName,
+        this.childId,
+        this.childName});
 
   SliderResponse.fromJson(Map<String, dynamic> json) {
     image = json['image'].cast<String>();
-    productId = json['product_id'].cast<String>();
+    parentId = json['parent_id'].cast<int>();
+    parentName = json['parent_name'].cast<String>();
+    childId = json['child_id'].cast<String>();
+    childName = json['child_name'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['image'] = this.image;
-    data['product_id'] = this.productId;
+    data['parent_id'] = this.parentId;
+    data['parent_name'] = this.parentName;
+    data['child_id'] = this.childId;
+    data['child_name'] = this.childName;
     return data;
   }
 }

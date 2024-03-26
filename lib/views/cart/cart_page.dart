@@ -303,7 +303,7 @@ class _CartPageState extends State<CartPage> {
                 )*/
       ),
 
-      height: widget.has_bottomnav! ? 200 : 120,
+      height: widget.has_bottomnav! ? 200 : 180,
       //color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 4),
@@ -372,13 +372,13 @@ class _CartPageState extends State<CartPage> {
                               borderRadius: const BorderRadius.only(
                               topLeft: const Radius.circular(6.0),
                               bottomLeft: const Radius.circular(6.0),
-                              topRight: const Radius.circular(0.0),
-                              bottomRight: const Radius.circular(0.0),
+                              topRight: const Radius.circular(6.0),
+                              bottomRight: const Radius.circular(6.0),
                             ))
                           : RoundedRectangleBorder(
                               borderRadius: const BorderRadius.only(
-                              topLeft: const Radius.circular(0.0),
-                              bottomLeft: const Radius.circular(0.0),
+                              topLeft: const Radius.circular(6.0),
+                              bottomLeft: const Radius.circular(6.0),
                               topRight: const Radius.circular(6.0),
                               bottomRight: const Radius.circular(6.0),
                             )),
@@ -406,8 +406,8 @@ class _CartPageState extends State<CartPage> {
                         //     Border.all(color: MyTheme.accent_color, width: 1),
                         borderRadius: app_language_rtl.$!
                             ? const BorderRadius.only(
-                                topLeft: const Radius.circular(0.0),
-                                bottomLeft: const Radius.circular(0.0),
+                                topLeft: const Radius.circular(6.0),
+                                bottomLeft: const Radius.circular(6.0),
                                 topRight: const Radius.circular(6.0),
                                 bottomRight: const Radius.circular(6.0),
                               )
@@ -433,8 +433,8 @@ class _CartPageState extends State<CartPage> {
                               borderRadius: const BorderRadius.only(
                                 topLeft: const Radius.circular(6.0),
                                 bottomLeft: const Radius.circular(6.0),
-                                topRight: const Radius.circular(0.0),
-                                bottomRight: const Radius.circular(0.0),
+                                topRight: const Radius.circular(6.0),
+                                bottomRight: const Radius.circular(6.0),
                               ),
                             ),
                       child: Text(

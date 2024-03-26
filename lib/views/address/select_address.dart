@@ -63,6 +63,7 @@ class _SelectAddressState extends State<SelectAddress> {
       _shippingAddressList.forEach((address) {
         if (address.set_default == 1) {
           _seleted_shipping_address = address.id;
+          print("${address.postal_code}");
         }
       });
     }
@@ -97,11 +98,7 @@ class _SelectAddressState extends State<SelectAddress> {
     fetchAll();
   }
 
-
-
   onPressProceed(context) async {
-
-
     if (_seleted_shipping_address == 0) {
       ToastComponent.showDialog(
           AppLocalizations.of(context)!.choose_an_address_or_pickup_point,
@@ -305,6 +302,8 @@ class _SelectAddressState extends State<SelectAddress> {
       onTap: () {
         if (_seleted_shipping_address != _shippingAddressList[index].id) {
           _seleted_shipping_address = _shippingAddressList[index].id;
+          user_pincode.$ = _shippingAddressList[index].postal_code;
+          print("selected Postal Code=====>${_shippingAddressList[index].postal_code}");
 
           // onAddressSwitch();
         }

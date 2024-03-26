@@ -74,7 +74,7 @@ class _MainPageState extends State<MainPage> {
                   child: AlertDialog(
                     contentPadding: const EdgeInsets.only(left: 15,right: 15,top: 15),
                     content: SizedBox(
-                      height: 57.h,
+                      height: 61.h,
                       width: 250.w,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

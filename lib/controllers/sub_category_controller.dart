@@ -24,6 +24,7 @@ class SubCategoryController extends GetxController {
   var mainNameChanged = false.obs;
   var categoryProductId = 0.obs;
   var allCategoryProductId = 0.obs;
+  var subChildCategoryId = 0.obs;
 
 
   @override
@@ -70,6 +71,7 @@ class SubCategoryController extends GetxController {
     categoryProductList.addAll(productResponse.products!);
     // print("Check is Empty ${categoryProductList.isEmpty}");
     // print("closed $page");
+    print("Total Page of product======>${page}");
     categoryProductId.value = categoryId!;
     totalData.value = productResponse.meta!.total!;
     isLoading(false);
@@ -88,6 +90,7 @@ class SubCategoryController extends GetxController {
     allCategoryProductId.value = categoryId!;
     totalData.value = allProductResponse.meta!.total!;
     print("Total Value of product======>${totalData.value}");
+    print("Total Page of product======>${page}");
     isLoading(false);
     update();
   }
