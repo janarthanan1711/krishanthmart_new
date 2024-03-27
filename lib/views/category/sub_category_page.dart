@@ -5,10 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/sub_category_controller.dart';
 import 'package:krishanthmart_new/utils/device_info.dart';
+import '../../controllers/cart_controller.dart';
 import '../../utils/colors.dart';
+import '../../utils/image_directory.dart';
 import '../../utils/shared_value.dart';
 import '../../utils/shimmer_utils.dart';
+import '../cart/cart_page.dart';
 import 'components/products_category_card.dart';
+import 'package:badges/badges.dart' as badges;
 
 class SubCategoryPage extends StatefulWidget {
   SubCategoryPage(
@@ -609,6 +613,38 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                   Icons.search,
                   size: 25,
                 )),
+          ),
+          SizedBox(width: 10,),
+          InkWell(
+            onTap: (){
+              Get.to(()=>CartPage(has_bottomnav: false,from_navigation: false,));
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: badges.Badge(
+                  badgeStyle: badges.BadgeStyle(
+                    shape: badges.BadgeShape.circle,
+                    badgeColor: MyTheme.accent_color,
+                    borderRadius: BorderRadius.circular(10),
+                    padding: const EdgeInsets.all(5),
+                  ),
+                  badgeAnimation: const badges.BadgeAnimation.slide(
+                    toAnimate: false,
+                  ),
+                  child: Image.asset(
+                    ImageDirectory.cartIconImage,
+                    color: MyTheme.black,
+                    height: 16,
+                  ),
+                  badgeContent: GetBuilder<CartController>(
+                    builder: (cartController) {
+                      return Text(
+                        "${cartController.cartCounter}",
+                        style: TextStyle(fontSize: 10, color: Colors.white),
+                      );
+                    },
+                  )),
+            ),
           ),
         ],
       ),

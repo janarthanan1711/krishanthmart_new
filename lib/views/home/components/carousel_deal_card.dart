@@ -23,6 +23,7 @@ class CarouselDealCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
         color: Colors.white,
+        border: Border.all(color: MyTheme.black),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Stack(

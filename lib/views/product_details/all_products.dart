@@ -4,14 +4,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/home_controller.dart';
+import '../../controllers/cart_controller.dart';
 import '../../models/product_response_model.dart';
 import '../../repositories/product_repository.dart';
 import '../../utils/colors.dart';
+import '../../utils/image_directory.dart';
 import '../../utils/shared_value.dart';
 import '../../utils/shimmer_utils.dart';
 import '../../utils/useful_elements.dart';
+import '../cart/cart_page.dart';
 import '../home/components/product_card.dart';
-
+import 'package:badges/badges.dart' as badges;
 class AllProducts extends StatefulWidget {
   AllProducts(
       {Key? key,
@@ -153,6 +156,39 @@ class _AllProductsState extends State<AllProducts> {
         icon: UsefulElements.backButton(context),
         onPressed: () => Navigator.of(context).pop(),
       ),
+      actions: [
+        InkWell(
+          onTap: (){
+            Get.to(()=>CartPage(has_bottomnav: false,from_navigation: false,));
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: badges.Badge(
+                badgeStyle: badges.BadgeStyle(
+                  shape: badges.BadgeShape.circle,
+                  badgeColor: MyTheme.accent_color,
+                  borderRadius: BorderRadius.circular(10),
+                  padding: const EdgeInsets.all(5),
+                ),
+                badgeAnimation: const badges.BadgeAnimation.slide(
+                  toAnimate: false,
+                ),
+                child: Image.asset(
+                  ImageDirectory.cartIconImage,
+                  color: MyTheme.black,
+                  height: 16,
+                ),
+                badgeContent: GetBuilder<CartController>(
+                  builder: (cartController) {
+                    return Text(
+                      "${cartController.cartCounter}",
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    );
+                  },
+                )),
+          ),
+        ),
+      ],
       title: Text(
         widget.selected_products == 'best_selling'
             ? AppLocalizations.of(context)!.best_selling_ucf

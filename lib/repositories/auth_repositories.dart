@@ -108,7 +108,7 @@ class AuthRepository {
     String password,
     String passowrd_confirmation,
     String register_by,
-    String capchaKey,
+    // String capchaKey,
   ) async {
     var post_body = jsonEncode({
       "name": name,
@@ -116,7 +116,7 @@ class AuthRepository {
       "password": password,
       "password_confirmation": passowrd_confirmation,
       "register_by": register_by,
-      "g-recaptcha-response": capchaKey,
+      // "g-recaptcha-response": capchaKey,
     });
 
     String url = ("${AppConfig.BASE_URL}/auth/signup");

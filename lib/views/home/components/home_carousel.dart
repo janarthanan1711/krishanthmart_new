@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/home_controller.dart';
 import '../../../utils/colors.dart';
+import '../../category/sub_category_page.dart';
 
 class CustomCarousel extends StatelessWidget {
   const CustomCarousel({super.key});
@@ -17,12 +18,26 @@ class CustomCarousel extends StatelessWidget {
             itemCount: homeControllers.carouselImageList.length,
             itemBuilder: (context, index, realIndex) {
               final imageUrl = homeControllers.carouselImageList[index];
+              int categoryId = homeControllers.carouselIdList[index];
+              String subCategoryId = homeControllers.carouselChildIdList[index];
+              String categoryName = homeControllers.carouselNameList[index];
               if (homeControllers.carouselImageList.isEmpty) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else {
-                return Image.network(imageUrl, fit: BoxFit.fill);
+                return InkWell(
+                    onTap: () {
+                      Get.to(
+                        () => SubCategoryPage(
+                          categoryName: categoryName,
+                          categoryId: categoryId,
+                          subCategoryId: int.parse(subCategoryId),
+                          selectedIndexes: int.parse(subCategoryId),
+                        ),
+                      );
+                    },
+                    child: Image.network(imageUrl, fit: BoxFit.fill));
               }
             },
             options: CarouselOptions(
@@ -42,7 +57,7 @@ class CustomCarousel extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.only(left: 16.h,right: 16.h,bottom: 16.h),
+              padding: EdgeInsets.only(left: 16.h, right: 16.h, bottom: 16.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(

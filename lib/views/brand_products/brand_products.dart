@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
 import 'package:krishanthmart_new/views/home/components/product_card.dart';
-
+import 'package:badges/badges.dart' as badges;
+import '../../controllers/cart_controller.dart';
 import '../../repositories/product_repository.dart';
 import '../../utils/colors.dart';
+import '../../utils/image_directory.dart';
 import '../../utils/shimmer_utils.dart';
 
 class BrandProducts extends StatefulWidget {
@@ -164,6 +167,32 @@ class _BrandProductsState extends State<BrandProducts> {
             },
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+          child: badges.Badge(
+              badgeStyle: badges.BadgeStyle(
+                shape: badges.BadgeShape.circle,
+                badgeColor: MyTheme.accent_color,
+                borderRadius: BorderRadius.circular(10),
+                padding: const EdgeInsets.all(5),
+              ),
+              badgeAnimation: const badges.BadgeAnimation.slide(
+                toAnimate: false,
+              ),
+              child: Image.asset(
+                ImageDirectory.cartIconImage,
+                color: MyTheme.black,
+                height: 16,
+              ),
+              badgeContent: GetBuilder<CartController>(
+                builder: (cartController) {
+                  return Text(
+                    "${cartController.cartCounter}",
+                    style: TextStyle(fontSize: 10, color: Colors.white),
+                  );
+                },
+              )),
+        )
       ],
     );
   }

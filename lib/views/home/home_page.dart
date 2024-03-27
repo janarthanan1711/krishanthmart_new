@@ -28,6 +28,7 @@ import '../../utils/device_info.dart';
 import '../../utils/shared_value.dart';
 import '../../utils/shimmer_utils.dart';
 import '../../utils/toast_component.dart';
+import '../auth/login.dart';
 import '../category/category_page.dart';
 import '../category/components/category_grid.dart';
 import '../flashdeals/flashdealproducts.dart';
@@ -164,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                           ? () {
                               Get.to(() => ProfileEdit());
                             }
-                          : () => showLoginWarning(),
+                          : () => Get.to(()=>Login()),
                       child: is_logged_in.$
                           ? CircleAvatar(
                               backgroundImage:
@@ -563,7 +564,7 @@ class _HomePageState extends State<HomePage> {
                                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       AppLocalizations.of(context)!
@@ -573,16 +574,16 @@ class _HomePageState extends State<HomePage> {
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    InkWell(
-                                      child: Text(
-                                        AppLocalizations.of(context)!
-                                            .view_more_ucf,
-                                        style: TextStyle(
-                                            color: MyTheme.black,
-                                            fontSize: 14.sp),
-                                      ),
-                                      onTap: () {},
-                                    )
+                                    // InkWell(
+                                    //   child: Text(
+                                    //     AppLocalizations.of(context)!
+                                    //         .view_more_ucf,
+                                    //     style: TextStyle(
+                                    //         color: MyTheme.black,
+                                    //         fontSize: 14.sp),
+                                    //   ),
+                                    //   onTap: () {},
+                                    // )
                                   ],
                                 ),
                               ),
@@ -663,8 +664,10 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index, realIndex) {
                                   final imageUrl =
                                       homeController.bannerOneImageList[index];
-                                  // String productId =
-                                  //     homeController.bannerOneIdList[index];
+                                  int categoryId =
+                                      homeController.bannerOneIdList[index];
+                                  String subCategoryId = homeController.bannerOneChildIDList[index];
+                                  String categoryName = homeController.bannerOneNameList[index];
                                   if (homeController
                                       .bannerOneImageList.isEmpty) {
                                     return const Center(
@@ -673,11 +676,14 @@ class _HomePageState extends State<HomePage> {
                                   } else {
                                     return InkWell(
                                       onTap: () {
-                                        // Get.to(
-                                        //   () => ProductDetails(
-                                        //     id: int.parse(productId),
-                                        //   ),
-                                        // );
+                                        Get.to(
+                                          () => SubCategoryPage(
+                                            categoryName: categoryName,
+                                            categoryId: categoryId,
+                                            subCategoryId: int.parse(subCategoryId),
+                                            selectedIndexes: int.parse(subCategoryId),
+                                          ),
+                                        );
                                       },
                                       child: Container(
                                         margin: EdgeInsets.symmetric(
@@ -735,7 +741,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(
                           width: DeviceInfo(context).width,
-                          height: 385.h,
+                          height: 386.h,
                           child: Column(
                             children: [
                               Obx(
@@ -744,7 +750,7 @@ class _HomePageState extends State<HomePage> {
                                   itemCount:
                                       homeController.todayDealList.length,
                                   options: CarouselOptions(
-                                    height: 297.h,
+                                    height: 298.h,
                                     autoPlay: true,
                                     aspectRatio: 2.0,
                                     viewportFraction: 1,
@@ -1333,8 +1339,10 @@ class _HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   String imageUrl =
                                       homeController.bannerFourImageList[index];
-                                  final productIds =
+                                  int categoryId =
                                       homeController.bannerFourIdList[index];
+                                  String subCategoryId = homeController.bannerFourChildIDList[index];
+                                  String categoryName = homeController.bannerFourNameList[index];
                                   if (homeController
                                       .bannerFourImageList.isEmpty) {
                                     return const Center(
@@ -1343,7 +1351,12 @@ class _HomePageState extends State<HomePage> {
                                     return InkWell(
                                       onTap: () {
                                         Get.to(
-                                          () => AllProducts(),
+                                          () => SubCategoryPage(
+                                            categoryId: categoryId,
+                                            subCategoryId: int.parse(subCategoryId),
+                                            categoryName: categoryName,
+                                            selectedIndexes: int.parse(subCategoryId),
+                                          )
                                         );
                                       },
                                       child: Container(
@@ -1811,75 +1824,74 @@ Widget timerContainer(Widget child) {
 
 Widget buildFlashDealsProductItem(
     flashDealResponse, flashDealIndex, productIndex) {
-  return Card(
-    child: Container(
-      margin: const EdgeInsets.only(left: 10),
-      height: 140.h,
-      width: 130.w,
-      decoration: BoxDecoration(
-        color: MyTheme.white,
-        borderRadius: BorderRadius.circular(6.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 110,
-            width: 160,
-            child: ClipRRect(
-              clipBehavior: Clip.none,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(6),
-                bottomLeft: Radius.circular(6),
-              ),
-              child: FadeInImage(
-                placeholder: const AssetImage("assets/placeholder.png"),
-                image: NetworkImage(flashDealResponse.flashDeals[flashDealIndex]
-                    .products.products[productIndex].image),
-              ),
+  return Container(
+    margin: const EdgeInsets.only(left: 10),
+    height: 140.h,
+    width: 131.w,
+    decoration: BoxDecoration(
+      color: MyTheme.white,
+      border: Border.all(color: MyTheme.golden),
+      borderRadius: BorderRadius.circular(6.0),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 110,
+          width: 160,
+          child: ClipRRect(
+            clipBehavior: Clip.none,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(6),
+              bottomLeft: Radius.circular(6),
+            ),
+            child: FadeInImage(
+              placeholder: const AssetImage("assets/placeholder.png"),
+              image: NetworkImage(flashDealResponse.flashDeals[flashDealIndex]
+                  .products.products[productIndex].image),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 5),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 130,
-                  child: Text(
-                    flashDealResponse.flashDeals[flashDealIndex].products!
-                        .products[productIndex].name,
-                    maxLines: 2,
-                    // convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
-                    //     .products[productIndex].price),
-                    style: TextStyle(
-                        fontSize: 10.sp,
-                        color: MyTheme.accent_color,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, top: 5),
-            child: Row(
-              children: [
-                Text(
-                  // flashDealResponse.flashDeals[flashDealIndex].products!
-                  //     .products[productIndex].price,
-                  convertPrice(flashDealResponse.flashDeals[flashDealIndex]
-                      .products!.products[productIndex].price),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0, top: 5),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 130,
+                child: Text(
+                  flashDealResponse.flashDeals[flashDealIndex].products!
+                      .products[productIndex].name,
+                  maxLines: 2,
+                  // convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
+                  //     .products[productIndex].price),
                   style: TextStyle(
                       fontSize: 10.sp,
-                      color: MyTheme.green,
+                      color: MyTheme.accent_color,
                       fontWeight: FontWeight.bold),
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0, top: 5),
+          child: Row(
+            children: [
+              Text(
+                // flashDealResponse.flashDeals[flashDealIndex].products!
+                //     .products[productIndex].price,
+                convertPrice(flashDealResponse.flashDeals[flashDealIndex]
+                    .products!.products[productIndex].price),
+                style: TextStyle(
+                    fontSize: 10.sp,
+                    color: MyTheme.green,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        )
+      ],
     ),
   );
 }

@@ -19,6 +19,9 @@ import '../repositories/slider_repository.dart';
 
 class HomeController extends GetxController {
   var carouselImageList = [].obs;
+  var carouselIdList = [].obs;
+  var carouselNameList = [].obs;
+  var carouselChildIdList = [].obs;
   var bannerTwoImageList = [].obs;
   var bannerFourImageList = [].obs;
   var bannerSixImageList = [].obs;
@@ -97,6 +100,15 @@ class HomeController extends GetxController {
     var carouselResponse = await SliderRepository().getSliders();
     for (var slider in carouselResponse.image!) {
       carouselImageList.add(slider);
+    }
+    for (var ids in carouselResponse.parentId!) {
+      carouselIdList.add(ids);
+    }
+    for (var names in carouselResponse.parentName!) {
+      carouselNameList.add(names);
+    }
+    for (var childId in carouselResponse.childId!) {
+      carouselChildIdList.add(childId);
     }
     isCarouselInitial = false;
     update();

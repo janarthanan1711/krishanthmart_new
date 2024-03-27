@@ -17,6 +17,7 @@ import '../../utils/other_config.dart';
 import '../../utils/shared_value.dart';
 import '../../utils/toast_component.dart';
 import '../mainpage/components/input_decorations.dart';
+import '../mainpage/main_page.dart';
 import '../webview/common_webview_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -126,14 +127,14 @@ class _RegistrationState extends State<Registration> {
         password,
         passwordConfirm,
         _register_by,
-        googleRecaptchaKey);
+        // googleRecaptchaKey
+    );
     Loading.close();
     print("userName========>${name}");
     print("registerby========>${email}");
     print("password========>${password}");
     print("confirm password========>${passwordConfirm}");
     print("2ndRegister========>${_register_by}");
-    print("captchaKey========>${googleRecaptchaKey}");
 
     if (signupResponse.result == false) {
       var message = "";
@@ -163,6 +164,7 @@ class _RegistrationState extends State<Registration> {
 
       print("Getuer Registration========>${signupResponse.user?.email}");
       print("loginRESPONSE RESULT=========>${signupResponse.result}");
+      print(signupResponse.message);
         AuthHelper().setUserData(signupResponse);
       // AuthHelper().setUserData(signupResponse.user as LoginResponse);
       ToastComponent.showDialog(signupResponse.message,
@@ -193,10 +195,10 @@ class _RegistrationState extends State<Registration> {
         }
       }
 
-      // Navigator.pushAndRemoveUntil(context,
-      //     MaterialPageRoute(builder: (context) {
-      //   return MainPage();
-      // }), (newRoute) => false);
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) {
+        return MainPage();
+      }), (newRoute) => false);
       if ((mail_verification_status.$ && _register_by == "email") ||
           _register_by == "phone") {
         // Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -206,9 +208,9 @@ class _RegistrationState extends State<Registration> {
         //   );
         // }));
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return Login();
-        }));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //   return Login();
+        // }));
       }
     }
   }

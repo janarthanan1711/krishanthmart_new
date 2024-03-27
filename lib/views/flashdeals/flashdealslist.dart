@@ -142,7 +142,7 @@ class _FlashDealListState extends State<FlashDealList> {
 
     return SizedBox(
       // color: MyTheme.amber,
-      height: 340,
+      height: 353,
       child: CountdownTimer(
         controller: _timerControllerList[index],
         widgetBuilder: (_, CurrentRemainingTime? time) {
@@ -236,37 +236,37 @@ class _FlashDealListState extends State<FlashDealList> {
                       )
                     ],
                   ),
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: InkWell(
-                          onTap: () {},
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.view_more_ucf,
-                                style: const TextStyle(
-                                    fontSize: 10, color: MyTheme.grey_153),
-                              ),
-                              const SizedBox(
-                                width: 3,
-                              ),
-                              //Image.asset("assets/arrow.png",height: 10,color: MyTheme.grey_153,),
-                              const Icon(
-                                Icons.arrow_forward_outlined,
-                                size: 10,
-                                color: MyTheme.grey_153,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Positioned.fill(
+                  //   child: Align(
+                  //     alignment: Alignment.topRight,
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(10),
+                  //       child: InkWell(
+                  //         onTap: () {},
+                  //         child: Row(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           mainAxisAlignment: MainAxisAlignment.end,
+                  //           children: [
+                  //             Text(
+                  //               AppLocalizations.of(context)!.view_more_ucf,
+                  //               style: const TextStyle(
+                  //                   fontSize: 10, color: MyTheme.grey_153),
+                  //             ),
+                  //             const SizedBox(
+                  //               width: 3,
+                  //             ),
+                  //             //Image.asset("assets/arrow.png",height: 10,color: MyTheme.grey_153,),
+                  //             const Icon(
+                  //               Icons.arrow_forward_outlined,
+                  //               size: 10,
+                  //               color: MyTheme.grey_153,
+                  //             )
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -373,77 +373,76 @@ class _FlashDealListState extends State<FlashDealList> {
           ),
         );
       },
-      child: Card(
-        child: Container(
-          margin: const EdgeInsets.only(left: 10),
-          height: 165,
-          width: 140,
-          decoration: BoxDecoration(
-            color: MyTheme.white,
-            borderRadius: BorderRadius.circular(6.0),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 110,
-                width: 160,
-                child: ClipRRect(
-                  clipBehavior: Clip.none,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(6),
-                    bottomLeft: Radius.circular(6),
-                  ),
-                  child: FadeInImage(
-                    placeholder: const AssetImage("assets/placeholder.png"),
-                    image: NetworkImage(flashDealResponse
-                        .flashDeals[flashDealIndex]
-                        .products
-                        .products[productIndex]
-                        .image),
-                  ),
+      child: Container(
+        margin: const EdgeInsets.only(left: 10),
+        height: 192,
+        width: 142,
+        decoration: BoxDecoration(
+          color: MyTheme.white,
+          border: Border.all(color: MyTheme.golden),
+          borderRadius: BorderRadius.circular(6.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 110,
+              width: 160,
+              child: ClipRRect(
+                clipBehavior: Clip.none,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(6),
+                  bottomLeft: Radius.circular(6),
+                ),
+                child: FadeInImage(
+                  placeholder: const AssetImage("assets/placeholder.png"),
+                  image: NetworkImage(flashDealResponse
+                      .flashDeals[flashDealIndex]
+                      .products
+                      .products[productIndex]
+                      .image),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0, top: 5),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 130,
-                      child: Text(
-                        flashDealResponse.flashDeals[flashDealIndex].products!
-                            .products[productIndex].name,
-                        // convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
-                        //     .products[productIndex].price),
-                        style: const TextStyle(
-                            fontSize: 12,
-                            color: MyTheme.accent_color,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0, top: 5),
-                child: Row(
-                  children: [
-                    Text(
-                      // flashDealResponse.flashDeals[flashDealIndex].products!
-                      //     .products[productIndex].price,
-                      convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
-                          .products[productIndex].price),
-                      style: TextStyle(
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, top: 5),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 130,
+                    child: Text(
+                      flashDealResponse.flashDeals[flashDealIndex].products!
+                          .products[productIndex].name,
+                      // convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
+                      //     .products[productIndex].price),
+                      style: const TextStyle(
                           fontSize: 12,
-                          color: MyTheme.green,
+                          color: MyTheme.accent_color,
                           fontWeight: FontWeight.bold),
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, top: 5),
+              child: Row(
+                children: [
+                  Text(
+                    // flashDealResponse.flashDeals[flashDealIndex].products!
+                    //     .products[productIndex].price,
+                    convertPrice(flashDealResponse.flashDeals[flashDealIndex].products!
+                        .products[productIndex].price),
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: MyTheme.green,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

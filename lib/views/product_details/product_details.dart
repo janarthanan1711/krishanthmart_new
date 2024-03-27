@@ -142,7 +142,6 @@ class _ProductDetailsState extends State<ProductDetails>
     super.initState();
   }
 
-
   fetchAll() {
     fetchProductDetails();
     if (is_logged_in.$ == true) {
@@ -295,7 +294,6 @@ class _ProductDetailsState extends State<ProductDetails>
     _totalPrice = variantResponse.variantData!.price;
     mrpPrice = variantResponse.variantData!.mrp;
     discountVariant = variantResponse.variantData!.discount.toString();
-
     // if (change_appbar_string) {
     //   _appbarPriceString = "${variantResponse.variant} ${_singlePriceString}";
     // }
@@ -380,7 +378,7 @@ class _ProductDetailsState extends State<ProductDetails>
           gravity: Toast.center,
           duration: Toast.lengthLong);
       // Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-      Get.to(()=>Login());
+      Get.to(() => Login());
       return;
     }
 
@@ -400,6 +398,7 @@ class _ProductDetailsState extends State<ProductDetails>
       // Provider.of<CartCounter>(context, listen: false).getCount();
       cartController.getCount();
       if (mode == "add_to_cart") {
+        print("Add to Cart Success");
         if (snackbar != null && context != null) {
           ScaffoldMessenger.of(context).showSnackBar(snackbar);
         }
@@ -451,9 +450,11 @@ class _ProductDetailsState extends State<ProductDetails>
                         height: 60.h,
                         width: 60.w,
                         decoration: BoxDecoration(
-                          image: DecorationImage(image: NetworkImage(_productDetails!.thumbnail_image!),fit: BoxFit.fill),
-                          border: Border.all(color: MyTheme.medium_grey)
-                        ),
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    _productDetails!.thumbnail_image!),
+                                fit: BoxFit.fill),
+                            border: Border.all(color: MyTheme.medium_grey)),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
@@ -781,10 +782,10 @@ class _ProductDetailsState extends State<ProductDetails>
     SnackBar _addedToCartSnackbar = SnackBar(
       content: Text(
         AppLocalizations.of(context)!.added_to_cart,
-        style: const TextStyle(color: MyTheme.font_grey),
+        style:  TextStyle(color: MyTheme.black, fontWeight: FontWeight.bold, fontSize: 18.sp),
       ),
       // backgroundColor: MyTheme.soft_accent_color,
-      backgroundColor: MyTheme.green_light,
+      backgroundColor: MyTheme.accent_color2,
       duration: const Duration(seconds: 3),
       action: SnackBarAction(
         label: AppLocalizations.of(context)!.show_cart_all_capital,
@@ -794,7 +795,7 @@ class _ProductDetailsState extends State<ProductDetails>
                   ))!
               .then((value) => onPopped(value));
         },
-        textColor: MyTheme.accent_color2,
+        textColor: MyTheme.black,
         disabledTextColor: Colors.grey,
       ),
     );
@@ -917,15 +918,15 @@ class _ProductDetailsState extends State<ProductDetails>
                                   ),
                           ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 14, left: 14, right: 14),
-                          child: _productDetails != null
-                              ? buildMainPriceRow()
-                              : ShimmerHelper().buildBasicShimmer(
-                                  height: 30.0,
-                                ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(
+                        //       top: 14, left: 14, right: 14),
+                        //   child: _productDetails != null
+                        //       ? buildMainPriceRow()
+                        //       : ShimmerHelper().buildBasicShimmer(
+                        //           height: 30.0,
+                        //         ),
+                        // ),
                         Visibility(
                           visible: club_point_addon_installed.$,
                           child: Padding(
@@ -947,14 +948,14 @@ class _ProductDetailsState extends State<ProductDetails>
                                   height: 50.0,
                                 ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 14),
-                          child: _productDetails != null
-                              ? buildSellerRow(context)
-                              : ShimmerHelper().buildBasicShimmer(
-                                  height: 50.0,
-                                ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(top: 14),
+                        //   child: _productDetails != null
+                        //       ? buildSellerRow(context)
+                        //       : ShimmerHelper().buildBasicShimmer(
+                        //           height: 50.0,
+                        //         ),
+                        // ),
                         Padding(
                           padding: EdgeInsets.only(
                               top: 14,
@@ -1193,138 +1194,6 @@ class _ProductDetailsState extends State<ProductDetails>
                           ),
                         ),
                         divider(),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return CommonWebviewScreen(
-                                url:
-                                    "${AppConfig.RAW_BASE_URL}/mobile-page/seller-policy",
-                                page_name: AppLocalizations.of(context)!
-                                    .seller_policy_ucf,
-                              );
-                            }));
-                          },
-                          child: Container(
-                            color: MyTheme.white,
-                            height: 48,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                18.0,
-                                14.0,
-                                18.0,
-                                14.0,
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .seller_policy_ucf,
-                                    style: TextStyle(
-                                        color: MyTheme.dark_font_grey,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  const Spacer(),
-                                  Image.asset(
-                                    "assets/arrow.png",
-                                    height: 11,
-                                    width: 20,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        divider(),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return CommonWebviewScreen(
-                                url:
-                                    "${AppConfig.RAW_BASE_URL}/mobile-page/return-policy",
-                                page_name: AppLocalizations.of(context)!
-                                    .return_policy_ucf,
-                              );
-                            }));
-                          },
-                          child: Container(
-                            color: MyTheme.white,
-                            height: 48,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                18.0,
-                                14.0,
-                                18.0,
-                                14.0,
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .return_policy_ucf,
-                                    style: TextStyle(
-                                        color: MyTheme.dark_font_grey,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  const Spacer(),
-                                  Image.asset(
-                                    "assets/arrow.png",
-                                    height: 11,
-                                    width: 20,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        divider(),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return CommonWebviewScreen(
-                                url:
-                                    "${AppConfig.RAW_BASE_URL}/mobile-page/support-policy",
-                                page_name: AppLocalizations.of(context)!
-                                    .support_policy_ucf,
-                              );
-                            }));
-                          },
-                          child: Container(
-                            color: MyTheme.white,
-                            height: 48,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                18.0,
-                                14.0,
-                                18.0,
-                                14.0,
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .support_policy_ucf,
-                                    style: TextStyle(
-                                        color: MyTheme.dark_font_grey,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  const Spacer(),
-                                  Image.asset(
-                                    "assets/arrow.png",
-                                    height: 11,
-                                    width: 20,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        divider(),
                       ]),
                 ),
                 SliverList(
@@ -1387,96 +1256,96 @@ class _ProductDetailsState extends State<ProductDetails>
     );
   }
 
-  Widget buildSellerRow(BuildContext context) {
-    //print("sl:" +  _productDetails!.shop_logo);
-    return Container(
-      color: MyTheme.light_grey,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      child: Row(
-        children: [
-          _productDetails!.added_by == "admin"
-              ? Container()
-              : InkWell(
-                  onTap: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => SellerDetails(
-                    //               id: _productDetails!.shop_id,
-                    //             )));
-                  },
-                  child: Padding(
-                    padding: app_language_rtl.$!
-                        ? const EdgeInsets.only(left: 8.0)
-                        : const EdgeInsets.only(right: 8.0),
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6.0),
-                        border: Border.all(
-                            color: const Color.fromRGBO(112, 112, 112, .3),
-                            width: 1),
-                        //shape: BoxShape.rectangle,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6.0),
-                        child: FadeInImage.assetNetwork(
-                          placeholder: 'assets/placeholder.png',
-                          image: _productDetails!.shop_logo!,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * (.5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(AppLocalizations.of(context)!.seller_ucf,
-                    style: const TextStyle(
-                      color: Color.fromRGBO(153, 153, 153, 1),
-                    )),
-                Text(
-                  _productDetails!.shop_name!,
-                  style: const TextStyle(
-                      color: MyTheme.font_grey,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600),
-                )
-              ],
-            ),
-          ),
-          const Spacer(),
-          Visibility(
-            visible: conversation_system_status.$,
-            child: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecorations.buildCircularButtonDecoration_1(),
-                child: Row(
-                  children: [
-                    InkWell(
-                        onTap: () {
-                          if (is_logged_in.$ == false) {
-                            ToastComponent.showDialog("You need to log in",
-                                gravity: Toast.center,
-                                duration: Toast.lengthLong);
-                            return;
-                          }
-
-                          onTapSellerChat();
-                        },
-                        child: Image.asset('assets/chat.png',
-                            height: 16, width: 16, color: MyTheme.dark_grey)),
-                  ],
-                )),
-          )
-        ],
-      ),
-    );
-  }
+  // Widget buildSellerRow(BuildContext context) {
+  //   //print("sl:" +  _productDetails!.shop_logo);
+  //   return Container(
+  //     color: MyTheme.light_grey,
+  //     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+  //     child: Row(
+  //       children: [
+  //         _productDetails!.added_by == "admin"
+  //             ? Container()
+  //             : InkWell(
+  //                 onTap: () {
+  //                   // Navigator.push(
+  //                   //     context,
+  //                   //     MaterialPageRoute(
+  //                   //         builder: (context) => SellerDetails(
+  //                   //               id: _productDetails!.shop_id,
+  //                   //             )));
+  //                 },
+  //                 child: Padding(
+  //                   padding: app_language_rtl.$!
+  //                       ? const EdgeInsets.only(left: 8.0)
+  //                       : const EdgeInsets.only(right: 8.0),
+  //                   child: Container(
+  //                     width: 30,
+  //                     height: 30,
+  //                     decoration: BoxDecoration(
+  //                       borderRadius: BorderRadius.circular(6.0),
+  //                       border: Border.all(
+  //                           color: const Color.fromRGBO(112, 112, 112, .3),
+  //                           width: 1),
+  //                       //shape: BoxShape.rectangle,
+  //                     ),
+  //                     child: ClipRRect(
+  //                       borderRadius: BorderRadius.circular(6.0),
+  //                       child: FadeInImage.assetNetwork(
+  //                         placeholder: 'assets/placeholder.png',
+  //                         image: _productDetails!.shop_logo!,
+  //                         fit: BoxFit.cover,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //         SizedBox(
+  //           width: MediaQuery.of(context).size.width * (.5),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(AppLocalizations.of(context)!.seller_ucf,
+  //                   style: const TextStyle(
+  //                     color: Color.fromRGBO(153, 153, 153, 1),
+  //                   )),
+  //               Text(
+  //                 _productDetails!.shop_name!,
+  //                 style: const TextStyle(
+  //                     color: MyTheme.font_grey,
+  //                     fontSize: 14,
+  //                     fontWeight: FontWeight.w600),
+  //               )
+  //             ],
+  //           ),
+  //         ),
+  //         const Spacer(),
+  //         Visibility(
+  //           visible: conversation_system_status.$,
+  //           child: Container(
+  //               padding: const EdgeInsets.all(10),
+  //               decoration: BoxDecorations.buildCircularButtonDecoration_1(),
+  //               child: Row(
+  //                 children: [
+  //                   InkWell(
+  //                       onTap: () {
+  //                         if (is_logged_in.$ == false) {
+  //                           ToastComponent.showDialog("You need to log in",
+  //                               gravity: Toast.center,
+  //                               duration: Toast.lengthLong);
+  //                           return;
+  //                         }
+  //
+  //                         onTapSellerChat();
+  //                       },
+  //                       child: Image.asset('assets/chat.png',
+  //                           height: 16, width: 16, color: MyTheme.dark_grey)),
+  //                 ],
+  //               )),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget buildTotalPriceRow() {
     return Container(
@@ -1513,7 +1382,39 @@ class _ProductDetailsState extends State<ProductDetails>
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600),
             ),
-          )
+          ),
+          Visibility(
+            visible: _productDetails!.has_discount!,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                  convertPrice(mrpPrice.toString()),
+                  style:  TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    color: MyTheme.medium_grey,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.normal,
+                  )),
+            ),
+          ),
+          Visibility(
+            visible: _productDetails!.has_discount!,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                "${discountVariant.toString()}",
+                style: TextStyles.largeBoldAccentTexStyle(),
+              ),
+            ),
+          ),
+          Text(
+            "/${_productDetails!.unit}",
+            // _singlePriceString,
+            style: const TextStyle(
+                color: MyTheme.accent_color,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w600),
+          ),
         ],
       ),
     );

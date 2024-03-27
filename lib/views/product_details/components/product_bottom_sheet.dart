@@ -27,7 +27,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
             color: MyTheme.black, fontWeight: FontWeight.bold, fontSize: 18.sp),
       ),
       // backgroundColor: MyTheme.soft_accent_color,
-      backgroundColor: MyTheme.green_light,
+      backgroundColor: MyTheme.accent_color2,
       duration: const Duration(seconds: 3),
       action: SnackBarAction(
         label: AppLocalizations.of(context)!.show_cart_all_capital,
@@ -36,7 +36,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                 has_bottomnav: false,
               ));
         },
-        textColor: MyTheme.white,
+        textColor: MyTheme.black,
         disabledTextColor: Colors.grey,
       ),
     );

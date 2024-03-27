@@ -11,6 +11,7 @@ import '../../helpers/auth_helpers.dart';
 import '../../repositories/auth_repositories.dart';
 import '../../repositories/profile_repositories.dart';
 import '../../utils/aiz_routes.dart';
+import '../../utils/app_config.dart';
 import '../../utils/btn_elements.dart';
 import '../../utils/colors.dart';
 import '../../utils/device_info.dart';
@@ -19,11 +20,13 @@ import '../../utils/toast_component.dart';
 import '../auth/login.dart';
 import '../change_language/change_language.dart';
 import '../coupons/coupon.dart';
+import '../filters/filters.dart';
 import '../mainpage/components/box_decorations.dart';
 import '../mainpage/main_page.dart';
 import '../orders/my_orders_page.dart';
 import '../top_selling/top_selling_products.dart';
 import '../wallet/wallets.dart';
+import '../webview/common_webview_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key, this.show_back_button = false}) : super(key: key);
@@ -120,9 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
       leading_zeros = "0";
     }
 
-    var newtxt = (txt == "" || txt == null.toString())
-        ? blank_zeros
-        : txt;
+    var newtxt = (txt == "" || txt == null.toString()) ? blank_zeros : txt;
 
     // print(txt + " " + default_length.toString());
     // print(newtxt);
@@ -208,10 +209,10 @@ class _ProfilePageState extends State<ProfilePage> {
               child: buildCountersRow(),
             ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: buildHorizontalSettings(),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            //   child: buildHorizontalSettings(),
+            // ),
             // Padding(
             //   padding: const EdgeInsets.symmetric(horizontal: 18.0),
             //   child: buildSettingAndAddonsVerticalMenu(),
@@ -270,18 +271,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 thickness: 1,
                 color: MyTheme.light_grey,
               ),
-              buildBottomVerticalCardListItem("assets/messages.png",
-                  AppLocalizations.of(context)!.conversation_ucf,
-                  onPressed: () {
-                     setState(() {
-                       onTapSellerChat();
-                     });
-                  }),
-              Divider(
-                thickness: 1,
-                color: MyTheme.light_grey,
-              ),
             ],
+          ),
+          buildBottomVerticalCardListItem("assets/filter.png",
+              AppLocalizations.of(context)!.filter_ucf,
+              onPressed: () {
+                Get.to(() => Filter());
+              }),
+          Divider(
+            thickness: 1,
+            color: MyTheme.light_grey,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,6 +289,60 @@ class _ProfilePageState extends State<ProfilePage> {
                   AppLocalizations.of(context)!.top_selling_products_ucf,
                   onPressed: () {
                 AIZRoute.push(context, const TopSellingProducts());
+              }),
+              Divider(
+                thickness: 1,
+                color: MyTheme.light_grey,
+              ),
+              buildBottomVerticalCardListItem("assets/messages.png",
+                  AppLocalizations.of(context)!.seller_policy_ucf,
+                  onPressed: () {
+                setState(() {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return CommonWebviewScreen(
+                      url:
+                          "${AppConfig.RAW_BASE_URL}/mobile-page/seller-policy",
+                      page_name:
+                          AppLocalizations.of(context)!.seller_policy_ucf,
+                    );
+                  }));
+                });
+              }),
+              Divider(
+                thickness: 1,
+                color: MyTheme.light_grey,
+              ),
+              buildBottomVerticalCardListItem("assets/messages.png",
+                  AppLocalizations.of(context)!.return_policy_ucf,
+                  onPressed: () {
+                setState(() {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return CommonWebviewScreen(
+                      url:
+                          "${AppConfig.RAW_BASE_URL}/mobile-page/return-policy",
+                      page_name:
+                          AppLocalizations.of(context)!.return_policy_ucf,
+                    );
+                  }));
+                });
+              }),
+              Divider(
+                thickness: 1,
+                color: MyTheme.light_grey,
+              ),
+              buildBottomVerticalCardListItem("assets/messages.png",
+                  AppLocalizations.of(context)!.support_policy_ucf,
+                  onPressed: () {
+                setState(() {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return CommonWebviewScreen(
+                      url:
+                          "${AppConfig.RAW_BASE_URL}/mobile-page/support-policy",
+                      page_name:
+                          AppLocalizations.of(context)!.support_policy_ucf,
+                    );
+                  }));
+                });
               }),
               Divider(
                 thickness: 1,
@@ -782,20 +835,6 @@ class _ProfilePageState extends State<ProfilePage> {
         cacheExtent: 5.0,
         mainAxisSpacing: 16,
         children: [
-          if (wallet_system_status.$)
-            Container(
-              // color: Colors.red,
-              child: buildSettingAndAddonsHorizontalMenuItem(
-                  "assets/wallet.png",
-                  AppLocalizations.of(context)!.my_wallet_ucf, () {
-                //   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                //     return Wallet();
-                //   }
-                //   )
-                //   );
-                Get.to(() => Wallet());
-              }),
-            ),
           buildSettingAndAddonsHorizontalMenuItem(
               "assets/orders.png",
               AppLocalizations.of(context)!.orders_ucf,
@@ -820,29 +859,44 @@ class _ProfilePageState extends State<ProfilePage> {
                       Get.to(() => WishlistPage());
                     }
                   : () => null),
-          if (refund_addon_installed.$)
-            buildSettingAndAddonsHorizontalMenuItem(
-                "assets/refund.png",
-                AppLocalizations.of(context)!.refund_requests_ucf,
-                is_logged_in.$
-                    ? () {
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) {
-                        //       return RefundRequest();
-                        //     }));
-                      }
-                    : () => null),
+          // buildSettingAndAddonsHorizontalMenuItem(
+          //     "assets/download.png",
+          //     AppLocalizations.of(context)!.downloads_ucf,
+          //     is_logged_in.$
+          //         ? () {
+          //             // Navigator.push(context,
+          //             //     MaterialPageRoute(builder: (context) {
+          //             //       return PurchasedDigitalProducts();
+          //             //     }));
+          //           }
+          //         : () => null),
           buildSettingAndAddonsHorizontalMenuItem(
-              "assets/download.png",
-              AppLocalizations.of(context)!.downloads_ucf,
+              "assets/edit.png",
+              AppLocalizations.of(context)!.edit_profile_ucf,
               is_logged_in.$
                   ? () {
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) {
-                      //       return PurchasedDigitalProducts();
-                      //     }));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ProfileEdit();
+                      }));
                     }
-                  : () => null),
+                  : () => showLoginWarning()),
+          buildSettingAndAddonsHorizontalMenuItem(
+            "assets/location.png",
+            AppLocalizations.of(context)!.address_ucf,
+            is_logged_in.$
+                ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return Address();
+                        },
+                      ),
+                    );
+                  }
+                : () => showLoginWarning(),
+          ),
         ],
       ),
     );
@@ -1392,164 +1446,164 @@ class _ProfilePageState extends State<ProfilePage> {
     return showDialog(
         context: context,
         builder: (_) => Directionality(
-          textDirection:
-          app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
-          child: AlertDialog(
-            insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-            contentPadding: const EdgeInsets.only(
-                top: 36.0, left: 36.0, right: 36.0, bottom: 2.0),
-            content: SizedBox(
-              width: 400.w,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Text(AppLocalizations.of(context)!.title_ucf,
-                          style: const TextStyle(
-                              color: MyTheme.font_grey, fontSize: 12)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: SizedBox(
-                        height: 40,
-                        child: TextField(
-                          // controller: sellerChatTitleController,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)!
-                                  .enter_title_ucf,
-                              hintStyle: const TextStyle(
-                                  fontSize: 12.0,
-                                  color: MyTheme.textfield_grey),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: MyTheme.textfield_grey,
-                                    width: 0.5),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: MyTheme.textfield_grey,
-                                    width: 1.0),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0)),
+              textDirection:
+                  app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
+              child: AlertDialog(
+                insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: const EdgeInsets.only(
+                    top: 36.0, left: 36.0, right: 36.0, bottom: 2.0),
+                content: SizedBox(
+                  width: 400.w,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Text(AppLocalizations.of(context)!.title_ucf,
+                              style: const TextStyle(
+                                  color: MyTheme.font_grey, fontSize: 12)),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Text(
-                          "${AppLocalizations.of(context)!.message_ucf} *",
-                          style: const TextStyle(
-                              color: MyTheme.font_grey, fontSize: 12)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: SizedBox(
-                        height: 55,
-                        child: TextField(
-                          // controller: sellerChatMessageController,
-                          autofocus: false,
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)!
-                                  .enter_message_ucf,
-                              hintStyle: const TextStyle(
-                                  fontSize: 12.0,
-                                  color: MyTheme.textfield_grey),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: MyTheme.textfield_grey,
-                                    width: 0.5),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: MyTheme.textfield_grey,
-                                    width: 1.0),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                              ),
-                              contentPadding: const EdgeInsets.only(
-                                  right: 16.0,
-                                  left: 8.0,
-                                  top: 16.0,
-                                  bottom: 16.0)),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: SizedBox(
+                            height: 40,
+                            child: TextField(
+                              // controller: sellerChatTitleController,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                  hintText: AppLocalizations.of(context)!
+                                      .enter_title_ucf,
+                                  hintStyle: const TextStyle(
+                                      fontSize: 12.0,
+                                      color: MyTheme.textfield_grey),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: MyTheme.textfield_grey,
+                                        width: 0.5),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8.0),
+                                    ),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: MyTheme.textfield_grey,
+                                        width: 1.0),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8.0),
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0)),
+                            ),
+                          ),
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                              "${AppLocalizations.of(context)!.message_ucf} *",
+                              style: const TextStyle(
+                                  color: MyTheme.font_grey, fontSize: 12)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: SizedBox(
+                            height: 55,
+                            child: TextField(
+                              // controller: sellerChatMessageController,
+                              autofocus: false,
+                              maxLines: null,
+                              keyboardType: TextInputType.multiline,
+                              decoration: InputDecoration(
+                                  hintText: AppLocalizations.of(context)!
+                                      .enter_message_ucf,
+                                  hintStyle: const TextStyle(
+                                      fontSize: 12.0,
+                                      color: MyTheme.textfield_grey),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: MyTheme.textfield_grey,
+                                        width: 0.5),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8.0),
+                                    ),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: MyTheme.textfield_grey,
+                                        width: 1.0),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8.0),
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.only(
+                                      right: 16.0,
+                                      left: 8.0,
+                                      top: 16.0,
+                                      bottom: 16.0)),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Btn.minWidthFixHeight(
-                      minWidth: 75,
-                      height: 30,
-                      color: const Color.fromRGBO(253, 253, 253, 1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          side: BorderSide(
-                              color: MyTheme.light_grey, width: 1.0)),
-                      child: Text(
-                        AppLocalizations.of(context)!.close_all_capital,
-                        style: const TextStyle(
-                          color: MyTheme.font_grey,
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Btn.minWidthFixHeight(
+                          minWidth: 75,
+                          height: 30,
+                          color: const Color.fromRGBO(253, 253, 253, 1),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              side: BorderSide(
+                                  color: MyTheme.light_grey, width: 1.0)),
+                          child: Text(
+                            AppLocalizations.of(context)!.close_all_capital,
+                            style: const TextStyle(
+                              color: MyTheme.font_grey,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          },
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      },
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 1,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                    child: Btn.minWidthFixHeight(
-                      minWidth: 75,
-                      height: 30,
-                      color: MyTheme.accent_color2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          side: BorderSide(
-                              color: MyTheme.light_grey, width: 1.0)),
-                      child: Text(
-                        AppLocalizations.of(context)!.send_all_capital,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
+                      const SizedBox(
+                        width: 1,
                       ),
-                      onPressed: () {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        // onPressSendMessage();
-                      },
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                        child: Btn.minWidthFixHeight(
+                          minWidth: 75,
+                          height: 30,
+                          color: MyTheme.accent_color2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              side: BorderSide(
+                                  color: MyTheme.light_grey, width: 1.0)),
+                          child: Text(
+                            AppLocalizations.of(context)!.send_all_capital,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                            // onPressSendMessage();
+                          },
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
-            ],
-          ),
-        ));
+              ),
+            ));
   }
 }
