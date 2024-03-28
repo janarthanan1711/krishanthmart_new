@@ -58,8 +58,8 @@ class OrderRepository {
     return reOrderResponseFromJson(response.body);
   }
 
-  Future<CommonResponse> cancelOrder({int? id = 0}) async {
-    String url = "${AppConfig.BASE_URL}/order/cancel/$id";
+  Future<CommonResponse> cancelOrder({int? id,String? reason}) async {
+    String url = "${AppConfig.BASE_URL}/order/cancel/$id/$reason";
 
     final response = await ApiRequest.get(
         url: url,

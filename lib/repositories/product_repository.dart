@@ -17,7 +17,7 @@ class ProductRepository {
       // "Currency-Exchange-Rate":
       // SystemConfig.systemCurrency!.exchangeRate.toString(),
     });
-    // print("Best Selling Product=========> ${response.body}");
+    print("Best Selling Product=========> ${response.body}");
     return productMiniResponseFromJson(response.body);
   }
 

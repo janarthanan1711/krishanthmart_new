@@ -55,6 +55,7 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   TextEditingController _refundReasonController = TextEditingController();
   bool _showReasonWarning = false;
+  TextEditingController cancelController = TextEditingController();
 
   @pragma('vm:entry-point')
   static void downloadCallback(String id, int status, int progress) {
@@ -199,9 +200,9 @@ class _OrderDetailsState extends State<OrderDetails> {
     fetchAll();
   }
 
-  _onPressCancelOrder(id) async {
+  _onPressCancelOrder(id,reason) async {
     Loading.show(context);
-    var response = await OrderRepository().cancelOrder(id: id);
+    var response = await OrderRepository().cancelOrder(id: id,reason: reason);
     Loading.close();
     if (response.result) {
       _onPageRefresh();
@@ -280,8 +281,9 @@ class _OrderDetailsState extends State<OrderDetails> {
       message: "Do you want to cancel this order?",
       yesText: "Yes",
       noText: "No",
+      controller: cancelController,
       pressYes: () {
-        _onPressCancelOrder(id);
+        _onPressCancelOrder(id,cancelController.text);
       },
     );
   }

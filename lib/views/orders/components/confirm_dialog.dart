@@ -6,18 +6,39 @@ import '../../../utils/device_info.dart';
 
 class ConfirmDialog{
 
-  static show(BuildContext context,{String? title,required String message,String? yesText,String? noText,required OnPress pressYes}){
+  static show(BuildContext context,{String? title,required String message,String? yesText,String? noText,required OnPress pressYes,required TextEditingController controller}){
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return  AlertDialog(
           title: const Text("Please ensure us."),
-          content: Row(
-            children: [
-              SizedBox(
-                width: DeviceInfo(context).width! * 0.6,
-                child: Text(message,style: const TextStyle(fontSize: 14,color: MyTheme.font_grey),),)
-            ],
+          content: SizedBox(
+            height: 90,
+            child: Column(
+              children: [
+                SizedBox(
+                  width: DeviceInfo(context).width! * 0.6,
+                  child: Text(message,style: const TextStyle(fontSize: 14,color: MyTheme.font_grey),),),
+                SizedBox(height: 5,),
+                SizedBox(
+                  // height: 300,
+                  width: MediaQuery.of(context).size.width,
+                  child: TextFormField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8),
+                        ),
+                      ),
+                    ),
+                    // onChanged: (value) {
+                    //   orderCancelController.otherText.text = value;
+                    // },
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: [
             Btn.basic(
