@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                           ? () {
                               Get.to(() => ProfileEdit());
                             }
-                          : () => Get.to(()=>Login()),
+                          : () => Get.to(() => Login()),
                       child: is_logged_in.$
                           ? CircleAvatar(
                               backgroundImage:
@@ -525,7 +525,8 @@ class _HomePageState extends State<HomePage> {
                                       homeController.bannerTwoIdList[index];
                                   String categoryName =
                                       homeController.bannerTwoNameList[index];
-                                  String subCategoryId = homeController.bannerTwoChildIDList[index];
+                                  String subCategoryId = homeController
+                                      .bannerTwoChildIDList[index];
                                   // homeController.getChildSubCategories(
                                   //   int.parse(productId),
                                   // );
@@ -563,8 +564,7 @@ class _HomePageState extends State<HomePage> {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       AppLocalizations.of(context)!
@@ -611,7 +611,8 @@ class _HomePageState extends State<HomePage> {
                                         homeController.bannerSixIdList[index];
                                     String categoryName =
                                         homeController.bannerSixNameList[index];
-                                    String subCategoryId = homeController.bannerSixChildIDList[index];
+                                    String subCategoryId = homeController
+                                        .bannerSixChildIDList[index];
                                     if (homeController
                                         .bannerSixImageList.isEmpty) {
                                       return ShimmerHelper()
@@ -629,8 +630,10 @@ class _HomePageState extends State<HomePage> {
                                           await Get.to(
                                             () => SubCategoryPage(
                                               categoryId: productId,
-                                              subCategoryId: int.parse(subCategoryId),
-                                              selectedIndexes: int.parse(subCategoryId),
+                                              subCategoryId:
+                                                  int.parse(subCategoryId),
+                                              selectedIndexes:
+                                                  int.parse(subCategoryId),
                                               categoryName: categoryName,
                                             ),
                                           );
@@ -666,8 +669,10 @@ class _HomePageState extends State<HomePage> {
                                       homeController.bannerOneImageList[index];
                                   int categoryId =
                                       homeController.bannerOneIdList[index];
-                                  String subCategoryId = homeController.bannerOneChildIDList[index];
-                                  String categoryName = homeController.bannerOneNameList[index];
+                                  String subCategoryId = homeController
+                                      .bannerOneChildIDList[index];
+                                  String categoryName =
+                                      homeController.bannerOneNameList[index];
                                   if (homeController
                                       .bannerOneImageList.isEmpty) {
                                     return const Center(
@@ -680,8 +685,10 @@ class _HomePageState extends State<HomePage> {
                                           () => SubCategoryPage(
                                             categoryName: categoryName,
                                             categoryId: categoryId,
-                                            subCategoryId: int.parse(subCategoryId),
-                                            selectedIndexes: int.parse(subCategoryId),
+                                            subCategoryId:
+                                                int.parse(subCategoryId),
+                                            selectedIndexes:
+                                                int.parse(subCategoryId),
                                           ),
                                         );
                                       },
@@ -964,7 +971,8 @@ class _HomePageState extends State<HomePage> {
                                     homeController.bannerThreeIdList[index];
                                 String categoryName =
                                     homeController.bannerThreeNameList[index];
-                                String subCategoryId = homeController.bannerThreeChildIDList[index];
+                                String subCategoryId = homeController
+                                    .bannerThreeChildIDList[index];
                                 // homeController.getChildSubCategories(
                                 //     int.parse(productId));
                                 // int subCategoryId = homeController
@@ -1069,7 +1077,8 @@ class _HomePageState extends State<HomePage> {
                                       homeController.bannerThreeNameList[index];
                                   int productId =
                                       homeController.bannerThreeIdList[index];
-                                  String subCategoryId = homeController.bannerThreeChildIDList[index];
+                                  String subCategoryId = homeController
+                                      .bannerThreeChildIDList[index];
                                   // homeController.getChildSubCategories(
                                   //     int.parse(productId));
                                   // int subCategoryId = homeController
@@ -1085,8 +1094,10 @@ class _HomePageState extends State<HomePage> {
                                         await Get.to(
                                           () => SubCategoryPage(
                                             categoryId: productId,
-                                            subCategoryId: int.parse(subCategoryId),
-                                            selectedIndexes: int.parse(subCategoryId),
+                                            subCategoryId:
+                                                int.parse(subCategoryId),
+                                            selectedIndexes:
+                                                int.parse(subCategoryId),
                                             categoryName: categoryName,
                                           ),
                                         );
@@ -1261,8 +1272,10 @@ class _HomePageState extends State<HomePage> {
                                       homeController.bannerSixImageList[index];
                                   int productId =
                                       homeController.bannerSixIdList[index];
-                                  String subCategoryId = homeController.bannerSixChildIDList[index];
-                                  String categoryName = homeController.bannerSixNameList[index];
+                                  String subCategoryId = homeController
+                                      .bannerSixChildIDList[index];
+                                  String categoryName =
+                                      homeController.bannerSixNameList[index];
                                   if (homeController
                                       .bannerSixImageList.isEmpty) {
                                     return const Center(
@@ -1286,14 +1299,14 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                       onTap: () {
-                                        Get.to(
-                                          () =>SubCategoryPage(
-                                            subCategoryId: int.parse(subCategoryId),
-                                            categoryId: productId,
-                                            categoryName: categoryName,
-                                            selectedIndexes: int.parse(subCategoryId),
-                                          )
-                                        );
+                                        Get.to(() => SubCategoryPage(
+                                              subCategoryId:
+                                                  int.parse(subCategoryId),
+                                              categoryId: productId,
+                                              categoryName: categoryName,
+                                              selectedIndexes:
+                                                  int.parse(subCategoryId),
+                                            ));
                                       },
                                     );
                                   }
@@ -1341,8 +1354,10 @@ class _HomePageState extends State<HomePage> {
                                       homeController.bannerFourImageList[index];
                                   int categoryId =
                                       homeController.bannerFourIdList[index];
-                                  String subCategoryId = homeController.bannerFourChildIDList[index];
-                                  String categoryName = homeController.bannerFourNameList[index];
+                                  String subCategoryId = homeController
+                                      .bannerFourChildIDList[index];
+                                  String categoryName =
+                                      homeController.bannerFourNameList[index];
                                   if (homeController
                                       .bannerFourImageList.isEmpty) {
                                     return const Center(
@@ -1350,14 +1365,14 @@ class _HomePageState extends State<HomePage> {
                                   } else {
                                     return InkWell(
                                       onTap: () {
-                                        Get.to(
-                                          () => SubCategoryPage(
-                                            categoryId: categoryId,
-                                            subCategoryId: int.parse(subCategoryId),
-                                            categoryName: categoryName,
-                                            selectedIndexes: int.parse(subCategoryId),
-                                          )
-                                        );
+                                        Get.to(() => SubCategoryPage(
+                                              categoryId: categoryId,
+                                              subCategoryId:
+                                                  int.parse(subCategoryId),
+                                              categoryName: categoryName,
+                                              selectedIndexes:
+                                                  int.parse(subCategoryId),
+                                            ));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.symmetric(
@@ -1519,8 +1534,19 @@ buildFlashDealListItem(
                               flashDealResponse.flashDeals![index].products
                                       ?.products?.length ??
                                   6,
-                              (productIndex) => buildFlashDealsProductItem(
-                                  flashDealResponse, index, productIndex)),
+                              (productIndex) => InkWell(
+                                    onTap: () {
+                                      Get.to(() => ProductDetails(
+                                            id: flashDealResponse
+                                                .flashDeals![index]
+                                                .products!
+                                                .products![index]
+                                                .id,
+                                          ));
+                                    },
+                                    child: buildFlashDealsProductItem(
+                                        flashDealResponse, index, productIndex),
+                                  )),
                         ),
                       ),
                     )
