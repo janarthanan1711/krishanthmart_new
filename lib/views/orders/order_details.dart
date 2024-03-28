@@ -1352,34 +1352,34 @@ class _OrderDetailsState extends State<OrderDetails> {
                       const SizedBox(
                         height: 8,
                       ),
-                      Btn.basic(
-                          // shape: RoundedRectangleBorder(side: Border()),
-
-                          minWidth: 60,
-                          // color: MyTheme.font_grey,
-                          onPressed: () {
-                            _onPressReorder(_orderDetails!.id);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: MyTheme.light_grey)),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.refresh,
-                                  color: MyTheme.grey_153,
-                                  size: 16,
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)!.re_order_ucf,
-                                  style: const TextStyle(
-                                      color: MyTheme.grey_153, fontSize: 14),
-                                ),
-                              ],
-                            ),
-                          )),
+                      // Btn.basic(
+                      //     // shape: RoundedRectangleBorder(side: Border()),
+                      //
+                      //     minWidth: 60,
+                      //     // color: MyTheme.font_grey,
+                      //     onPressed: () {
+                      //       _onPressReorder(_orderDetails!.id);
+                      //     },
+                      //     child: Container(
+                      //       padding: const EdgeInsets.all(8),
+                      //       decoration: BoxDecoration(
+                      //           borderRadius: BorderRadius.circular(8),
+                      //           border: Border.all(color: MyTheme.light_grey)),
+                      //       child: Row(
+                      //         children: [
+                      //           const Icon(
+                      //             Icons.refresh,
+                      //             color: MyTheme.grey_153,
+                      //             size: 16,
+                      //           ),
+                      //           Text(
+                      //             AppLocalizations.of(context)!.re_order_ucf,
+                      //             style: const TextStyle(
+                      //                 color: MyTheme.grey_153, fontSize: 14),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     )),
                       const SizedBox(
                         height: 8,
                       ),

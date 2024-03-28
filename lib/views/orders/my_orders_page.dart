@@ -19,7 +19,7 @@ class PaymentStatus {
 
   static List<PaymentStatus> getPaymentStatusList() {
     return <PaymentStatus>[
-      PaymentStatus('', AppLocalizations.of(OneContext().context!)!.all_ucf),
+      PaymentStatus('', AppLocalizations.of(OneContext().context!)!.all_payments_ucf),
       PaymentStatus(
           'paid', AppLocalizations.of(OneContext().context!)!.paid_ucf),
       PaymentStatus(
@@ -36,7 +36,7 @@ class DeliveryStatus {
 
   static List<DeliveryStatus> getDeliveryStatusList() {
     return <DeliveryStatus>[
-      DeliveryStatus('', AppLocalizations.of(OneContext().context!)!.all_ucf),
+      DeliveryStatus('', AppLocalizations.of(OneContext().context!)!.all_deliveries_ucf),
       DeliveryStatus('confirmed',
           AppLocalizations.of(OneContext().context!)!.confirmed_ucf),
       DeliveryStatus('on_the_way',
@@ -261,12 +261,12 @@ class _OrderListState extends State<OrderList> {
         children: [
           Container(
             decoration: BoxDecorations.buildBoxDecoration_1(),
-            padding: EdgeInsets.symmetric(horizontal: 14),
+            padding: EdgeInsets.symmetric(horizontal: 10),
             height: 36,
             width: MediaQuery.of(context).size.width * .4,
             child: new DropdownButton<PaymentStatus>(
               icon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.only(left: 20.0),
                 child: Icon(Icons.expand_more, color: Colors.black54),
               ),
               hint: Text(
@@ -296,7 +296,7 @@ class _OrderListState extends State<OrderList> {
             width: MediaQuery.of(context).size.width * .4,
             child: new DropdownButton<DeliveryStatus>(
               icon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.only(left: 23.0),
                 child: Icon(Icons.expand_more, color: Colors.black54),
               ),
               hint: Text(
