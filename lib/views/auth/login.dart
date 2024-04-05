@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'dart:math';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -109,30 +109,30 @@ class _LoginState extends State<Login> {
           gravity: Toast.center, duration: Toast.lengthLong);
       AuthHelper().setUserData(loginResponse);
       // push notification starts
-      if (OtherConfig.USE_PUSH_NOTIFICATION) {
-        final FirebaseMessaging fcm = FirebaseMessaging.instance;
-
-        await fcm.requestPermission(
-          alert: true,
-          announcement: false,
-          badge: true,
-          carPlay: false,
-          criticalAlert: false,
-          provisional: false,
-          sound: true,
-        );
-
-        String? fcmToken = await fcm.getToken();
-
-        if (fcmToken != null) {
-          print("--fcm token--");
-          if (is_logged_in.$ == true) {
-            // update device token
-            var deviceTokenUpdateResponse = await ProfileRepository()
-                .getDeviceTokenUpdateResponse(fcmToken);
-          }
-        }
-      }
+      // if (OtherConfig.USE_PUSH_NOTIFICATION) {
+      //   final FirebaseMessaging fcm = FirebaseMessaging.instance;
+      //
+      //   await fcm.requestPermission(
+      //     alert: true,
+      //     announcement: false,
+      //     badge: true,
+      //     carPlay: false,
+      //     criticalAlert: false,
+      //     provisional: false,
+      //     sound: true,
+      //   );
+      //
+      //   String? fcmToken = await fcm.getToken();
+      //
+      //   if (fcmToken != null) {
+      //     print("--fcm token--");
+      //     if (is_logged_in.$ == true) {
+      //       // update device token
+      //       var deviceTokenUpdateResponse = await ProfileRepository()
+      //           .getDeviceTokenUpdateResponse(fcmToken);
+      //     }
+      //   }
+      // }
 
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {

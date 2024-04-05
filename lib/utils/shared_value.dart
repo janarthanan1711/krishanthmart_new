@@ -145,3 +145,8 @@ final SharedValue<String> user_pincode = SharedValue(
   value: "", // initial value
   key: "user_pincode", // disk storage key for shared_preferences
 );
+
+final SharedValue<bool> pincode_matched = SharedValue(
+  value: false, // initial value
+  key: "pincode_matched", // disk storage key for shared_preferences
+);

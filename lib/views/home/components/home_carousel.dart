@@ -34,6 +34,7 @@ class CustomCarousel extends StatelessWidget {
                           categoryId: categoryId,
                           subCategoryId: int.parse(subCategoryId),
                           selectedIndexes: int.parse(subCategoryId),
+                          from_banner: true,
                         ),
                       );
                     },

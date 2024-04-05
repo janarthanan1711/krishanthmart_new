@@ -26,6 +26,7 @@ class ConfirmDialog{
                   child: TextFormField(
                     controller: controller,
                     decoration: InputDecoration(
+                      hintText: 'eg. Wrong Order',
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(8),

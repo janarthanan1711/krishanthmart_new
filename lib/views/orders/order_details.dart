@@ -278,12 +278,17 @@ class _OrderDetailsState extends State<OrderDetails> {
     return ConfirmDialog.show(
       context,
       title: "Please ensure us.",
-      message: "Do you want to cancel this order?",
-      yesText: "Yes",
-      noText: "No",
+      message: "We'd love to hear why your thinking about cancelling.",
+      yesText: "Submit",
+      noText: "Cancel",
       controller: cancelController,
       pressYes: () {
-        _onPressCancelOrder(id,cancelController.text);
+         if(cancelController.text != ""){
+           _onPressCancelOrder(id,cancelController.text);
+         }else{
+           print("Failed");
+         }
+
       },
     );
   }

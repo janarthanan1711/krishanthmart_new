@@ -219,11 +219,11 @@ class AuthRepository {
   }
 
   Future<LoginResponse> getUserByTokenResponse() async {
-    var post_body = jsonEncode(
-        {"access_token": "${access_token != null ? access_token.$ : ''}"});
+    // var post_body = jsonEncode(
+    //     {"access_token": "${access_token.$ != null ? access_token.$ : ''}"});
+    var post_body = jsonEncode({"access_token": "${access_token.$}"});
 
     String url = ("${AppConfig.BASE_URL}/get-user-by-access_token");
-    if (access_token.$!.isNotEmpty) {
       final response = await ApiRequest.post(
           url: url,
           headers: {
@@ -233,7 +233,7 @@ class AuthRepository {
           body: post_body);
       print("auth Info -------${response.body}");
       return loginResponseFromJson(response.body);
-    }
+
     return LoginResponse();
   }
 }

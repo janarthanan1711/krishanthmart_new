@@ -437,7 +437,7 @@ class HomeController extends GetxController {
     fetchBannerOneImages();
     fetchBannerTwoImages();
     fetchBannerFourImages();
-    // fetchBannerFiveImages();
+    fetchBannerFiveImages();
     fetchBannerThreeImages();
     fetchBannerSixImages();
     fetchBestSellingProducts();

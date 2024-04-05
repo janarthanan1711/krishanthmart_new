@@ -23,7 +23,7 @@ class BrandCategoryView extends StatelessWidget {
                 style: TextStyle(
                     color: MyTheme.black,
                     fontSize: 16.sp,
-                    fontWeight: FontWeight.bold)),
+                    )),
             InkWell(
               child: Text(
                 AppLocalizations.of(context)!.view_more_ucf,

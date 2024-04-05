@@ -34,10 +34,10 @@ class CategoryController extends GetxController{
   }
 
   assignCategoryNames(int index){
-    print(" main category name${mainCategoryNames.value}");
-    print(" main category id${mainCategoryId.value}");
     mainCategoryId.value = featuredCategoryList[index].id!;
     mainCategoryNames.value = featuredCategoryList[index].name!;
+    print(" main category name${mainCategoryNames.value}");
+    print(" main category id${mainCategoryId.value}");
     update();
     // print("mainCategoryID=========>${mainCategoryId.value}");
   }

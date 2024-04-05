@@ -141,8 +141,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<String?> getSharedValueHelperData()async{
-    await access_token.load().whenComplete(() {
-       AuthHelper().fetch_and_set();
+    await access_token.load().whenComplete(() async {
+      print("acces Token Called======>${access_token.$}");
+       await AuthHelper().fetch_and_set();
     });
     // AddonsHelper().setAddonsData();
     BusinessSettingHelper().setBusinessSettingData();
@@ -150,33 +151,9 @@ class _SplashScreenState extends State<SplashScreen> {
     await app_mobile_language.load();
     await app_language_rtl.load();
     await system_currency.load();
-    await is_logged_in.load();
+    // await is_logged_in.load();
     currencyController.fetchListData();
     cartController.getCount();
     return app_mobile_language.$;
-  }
-
-  fetch_and_set() async {
-    print("Fetch and Set Caleed");
-    var userByTokenResponse = await AuthRepository().getUserByTokenResponse();
-    print('It is True==========>${userByTokenResponse.user?.avatar_original}');
-    print('It is True==========>${userByTokenResponse.user?.name}');
-    print('It is True==========>${userByTokenResponse.user?.email ?? ''}');
-    print('It is True==========>${userByTokenResponse.user?.phone ?? ''}');
-    print("token Response result======> ${userByTokenResponse.result}");
-    if (userByTokenResponse.result == true) {
-      // setUserData(userByTokenResponse);
-     setState(() {
-       SystemConfig.systemUser= userByTokenResponse.user;
-       is_logged_in.$ = true;
-       user_id.$ = userByTokenResponse.user!.id;
-       user_name.$ = userByTokenResponse.user!.name;
-       user_email.$ = userByTokenResponse.user!.email!;
-       user_phone.$ = userByTokenResponse.user!.phone!;
-       avatar_original.$ = userByTokenResponse.user!.avatar_original;
-     });
-    }else{
-     AuthHelper().clearUserData();
-    }
   }
 }

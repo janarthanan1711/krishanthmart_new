@@ -75,7 +75,7 @@ class ProductController extends GetxController {
   }
 
   setQuantity(quantity) {
-    quantityText.value = "${quantity ?? 0}";
+    quantityText.value = "${quantity}";
     update();
   }
 
@@ -141,6 +141,11 @@ class ProductController extends GetxController {
       ToastComponent.showDialog(AppLocalizations.of(context)!.you_need_to_log_in,
           gravity: Toast.center, duration: Toast.lengthLong);
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+      return;
+    }
+    if(pincode_matched.$ == false){
+      ToastComponent.showDialog("Service Not Available",
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     }
     var cartAddResponse = await CartRepository()

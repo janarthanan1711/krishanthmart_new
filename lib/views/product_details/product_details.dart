@@ -381,6 +381,11 @@ class _ProductDetailsState extends State<ProductDetails>
       Get.to(() => Login());
       return;
     }
+    if(pincode_matched.$ == false){
+      ToastComponent.showDialog("Service Not Available",
+          gravity: Toast.center, duration: Toast.lengthLong);
+      return;
+    }
 
     // print(widget.id);
     // print(_variant);

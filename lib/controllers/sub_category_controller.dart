@@ -50,6 +50,7 @@ class SubCategoryController extends GetxController {
   }
 
   getSubCategory(int? categoryId) async {
+    print("subCategoryCalled");
     // var res = await CategoryRepository().getCategories(parent_id: categoryId);
     // subCategoryList.addAll(res.categories!);
     //if any problems change above code
@@ -89,9 +90,8 @@ class SubCategoryController extends GetxController {
     allCategoryProductList.addAll(allProductResponse.products!);
     allCategoryProductId.value = categoryId!;
     totalData.value = allProductResponse.meta!.total!;
-    print("Total Value of product======>${totalData.value}");
-    print("Total Page of product======>${page}");
     isLoading(false);
+    isInitial.value = false;
     update();
   }
 

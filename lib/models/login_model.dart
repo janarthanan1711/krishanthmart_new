@@ -22,7 +22,6 @@ class LoginResponse {
   Users? user;
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
-    print("Login Response datassssssssss================>${json}");
     return LoginResponse(
       result: json["result"],
       message: json["message"],
@@ -70,7 +69,7 @@ class Users {
     type: json["type"],
     name: json["name"],
     email: json["email"],
-    avatar: json["avatar"] ?? '',
+    avatar: json["avatar"] ?? "",
     avatar_original: json["avatar_original"],
     phone: json["phone"],
     emailVerified: json["email_verified"],

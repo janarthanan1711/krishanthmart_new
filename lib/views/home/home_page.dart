@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
   late CarouselController _carouselController;
   late ScrollController _scrollController;
   late final SliderResponse sliderResponse;
-
+  GlobalKey<State<StatefulWidget>> itemKey = GlobalKey();
   @override
   void initState() {
     // TODO: implement initState
@@ -366,35 +366,6 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             ],
                                           ),
-                                    // child: DropdownButton<Data>(
-                                    //   value: locationController
-                                    //           .pincodeList.isNotEmpty
-                                    //       ? locationController.pincodeList[0]
-                                    //       : null,
-                                    //   borderRadius: BorderRadius.circular(10),
-                                    //   icon: Icon(
-                                    //     Icons.keyboard_arrow_down,
-                                    //     color: MyTheme
-                                    //         .accent_color2, // <-- SEE HERE
-                                    //   ),
-                                    //   items: locationController.pincodeList
-                                    //       .map((Data item) {
-                                    //     return DropdownMenuItem<Data>(
-                                    //       value: item,
-                                    //       child: Text(item.name ?? ''),
-                                    //     );
-                                    //   }).toList(),
-                                    //   onTap: () {
-                                    //     print("onTap Callled");
-                                    //   },
-                                    //   onChanged: (value) {
-                                    //     // Handle dropdown item change
-                                    //     user_pincode.$ = value!.name!;
-                                    //   },
-                                    //   hint: Text('Select a Pincode'),
-                                    //   style: TextStyle(
-                                    //       color: MyTheme.accent_color2),
-                                    // ),
                                   );
                                 }),
                                 Padding(
@@ -429,21 +400,6 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             ),
                                           ),
-                                          // Text(
-                                          //   " ${deliveryController.deliveryTimeSlot[0].transitTime!}",
-                                          //   style: TextStyle(
-                                          //       fontSize: 11.sp,
-                                          //       color: MyTheme.accent_color2),
-                                          // ),
-                                          // Text(" - "),
-                                          // Text(
-                                          //   deliveryController
-                                          //       .deliveryTimeSlot[1]
-                                          //       .transitTime!,
-                                          //   style: TextStyle(
-                                          //       fontSize: 11.sp,
-                                          //       color: MyTheme.accent_color2),
-                                          // ),
                                         ],
                                       ),
                                     ],
@@ -453,6 +409,32 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
+                        pincode_matched.$ == true
+                            ? SizedBox()
+                            : locationController.isLoading
+                                    .value // Assuming you have an isLoading variable in your LocationController
+                                ? CircularProgressIndicator() // Show loader if isLoading is true
+                                : Container(
+                                    color: Colors.red[100],
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Service Not Available for this pincode ${locationController.pincodeData.value}",
+                                            style: TextStyle(
+                                              color: MyTheme.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
                         const CustomCarousel(),
                         SizedBox(
                           height: 26.h,
@@ -465,9 +447,9 @@ class _HomePageState extends State<HomePage> {
                                   AppLocalizations.of(context)!
                                       .shop_by_category,
                                   style: TextStyle(
-                                      color: MyTheme.black,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold),
+                                    color: MyTheme.black,
+                                    fontSize: 16.sp,
+                                  ),
                                 ),
                                 InkWell(
                                   child: Text(
@@ -491,7 +473,6 @@ class _HomePageState extends State<HomePage> {
                           // height: 218.h,
                           height: ScreenUtil().setHeight(336),
                           // height: ScreenUtil().setHeight(330),
-
                           child: CategoryGridView(
                             homeController.featuredCategoryList,
                           ),
@@ -503,9 +484,9 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                             AppLocalizations.of(context)!.highlight_ucf,
                             style: TextStyle(
-                                color: MyTheme.PrimaryColor,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold),
+                              color: MyTheme.PrimaryColor,
+                              fontSize: 16.sp,
+                            ),
                           ),
                         ),
                         Container(
@@ -570,9 +551,9 @@ class _HomePageState extends State<HomePage> {
                                       AppLocalizations.of(context)!
                                           .baskets_must_have,
                                       style: TextStyle(
-                                          color: MyTheme.black,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
+                                        color: MyTheme.black,
+                                        fontSize: 16.sp,
+                                      ),
                                     ),
                                     // InkWell(
                                     //   child: Text(
@@ -608,13 +589,13 @@ class _HomePageState extends State<HomePage> {
                                   itemCount: 4,
                                   itemBuilder: (context, index) {
                                     int productId =
-                                        homeController.bannerSixIdList[index];
+                                        homeController.bannerFiveIdList[index];
                                     String categoryName =
-                                        homeController.bannerSixNameList[index];
+                                        homeController.bannerFiveNameList[index];
                                     String subCategoryId = homeController
-                                        .bannerSixChildIDList[index];
+                                        .bannerFiveChildIDList[index];
                                     if (homeController
-                                        .bannerSixImageList.isEmpty) {
+                                        .bannerFiveImageList.isEmpty) {
                                       return ShimmerHelper()
                                           .buildProductGridShimmer();
                                     } else {
@@ -635,6 +616,7 @@ class _HomePageState extends State<HomePage> {
                                               selectedIndexes:
                                                   int.parse(subCategoryId),
                                               categoryName: categoryName,
+                                              from_banner: true,
                                             ),
                                           );
                                         },
@@ -645,7 +627,7 @@ class _HomePageState extends State<HomePage> {
                                             image: DecorationImage(
                                                 image: NetworkImage(
                                                     homeController
-                                                            .bannerSixImageList[
+                                                            .bannerFiveImageList[
                                                         index]),
                                                 fit: BoxFit.fill),
                                             borderRadius:
@@ -689,6 +671,7 @@ class _HomePageState extends State<HomePage> {
                                                 int.parse(subCategoryId),
                                             selectedIndexes:
                                                 int.parse(subCategoryId),
+                                            from_banner: true,
                                           ),
                                         );
                                       },
@@ -725,9 +708,9 @@ class _HomePageState extends State<HomePage> {
                               Text(
                                 AppLocalizations.of(context)!.todays_deal_ucf,
                                 style: TextStyle(
-                                    color: MyTheme.black,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold),
+                                  color: MyTheme.black,
+                                  fontSize: 16.sp,
+                                ),
                               ),
                               InkWell(
                                 child: Text(
@@ -846,9 +829,9 @@ class _HomePageState extends State<HomePage> {
                                           AppLocalizations.of(context)!
                                               .flash_deal_ucf,
                                           style: TextStyle(
-                                              color: MyTheme.black,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold)),
+                                            color: MyTheme.black,
+                                            fontSize: 16.sp,
+                                          )),
                                       InkWell(
                                         child: Text(
                                           AppLocalizations.of(context)!
@@ -905,7 +888,7 @@ class _HomePageState extends State<HomePage> {
                         Container(
                           height: 225.h,
                           width: DeviceInfo(context).width,
-                          color: MyTheme.gigas,
+                          color: MyTheme.blue_light2,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -919,16 +902,16 @@ class _HomePageState extends State<HomePage> {
                                     Text(
                                       AppLocalizations.of(context)!.best_deals,
                                       style: TextStyle(
-                                          color: MyTheme.white,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
+                                        color: MyTheme.black,
+                                        fontSize: 16.sp,
+                                      ),
                                     ),
                                     InkWell(
                                       child: Text(
                                         AppLocalizations.of(context)!
                                             .view_more_ucf,
                                         style: TextStyle(
-                                            color: MyTheme.white,
+                                            color: MyTheme.black,
                                             fontSize: 14.sp),
                                       ),
                                       onTap: () {
@@ -966,13 +949,13 @@ class _HomePageState extends State<HomePage> {
                               itemCount: 1,
                               itemBuilder: (context, index) {
                                 String imageUrl =
-                                    homeController.bannerThreeImageList[index];
+                                    homeController.bannerThreeImageList[0];
                                 int productId =
-                                    homeController.bannerThreeIdList[index];
+                                    homeController.bannerThreeIdList[0];
                                 String categoryName =
-                                    homeController.bannerThreeNameList[index];
-                                String subCategoryId = homeController
-                                    .bannerThreeChildIDList[index];
+                                    homeController.bannerThreeNameList[0];
+                                String subCategoryId =
+                                    homeController.bannerThreeChildIDList[0];
                                 // homeController.getChildSubCategories(
                                 //     int.parse(productId));
                                 // int subCategoryId = homeController
@@ -994,7 +977,7 @@ class _HomePageState extends State<HomePage> {
                               }),
                         ),
                         Container(
-                          color: MyTheme.golden,
+                          color: Color(0xFFfaf3cf),
                           width: DeviceInfo(context).width,
                           height: 255.h,
                           child: Column(
@@ -1010,16 +993,16 @@ class _HomePageState extends State<HomePage> {
                                       AppLocalizations.of(context)!
                                           .best_selling_ucf,
                                       style: TextStyle(
-                                          color: MyTheme.white,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
+                                        color: MyTheme.black,
+                                        fontSize: 16.sp,
+                                      ),
                                     ),
                                     InkWell(
                                       child: Text(
                                         AppLocalizations.of(context)!
                                             .view_more_ucf,
                                         style: TextStyle(
-                                            color: MyTheme.white,
+                                            color: MyTheme.black,
                                             fontSize: 14.sp),
                                       ),
                                       onTap: () {
@@ -1062,64 +1045,95 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Container(
+                          color: MyTheme.noColor,
                           width: DeviceInfo(context).width,
-                          child: Obx(
-                            () => ListView.builder(
-                                padding: const EdgeInsets.all(0),
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount:
-                                    homeController.bannerThreeImageList.length,
-                                itemBuilder: (context, index) {
-                                  String imageUrl = homeController
-                                      .bannerThreeImageList[index];
-                                  String categoryName =
-                                      homeController.bannerThreeNameList[index];
-                                  int productId =
-                                      homeController.bannerThreeIdList[index];
-                                  String subCategoryId = homeController
-                                      .bannerThreeChildIDList[index];
-                                  // homeController.getChildSubCategories(
-                                  //     int.parse(productId));
-                                  // int subCategoryId = homeController
-                                  //     .subChildCategoriesHome[index].id;
-                                  // String productName = homeController
-                                  //     .subChildCategoriesHome[index].name;
-                                  if (homeController
-                                      .bannerThreeImageList.isEmpty) {
-                                    return const SizedBox();
-                                  } else {
-                                    return InkWell(
-                                      onTap: () async {
-                                        await Get.to(
-                                          () => SubCategoryPage(
-                                            categoryId: productId,
-                                            subCategoryId:
-                                                int.parse(subCategoryId),
-                                            selectedIndexes:
-                                                int.parse(subCategoryId),
-                                            categoryName: categoryName,
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 150.h,
-                                        width: DeviceInfo(context).width,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          image: DecorationImage(
-                                              image: NetworkImage(imageUrl),
-                                              fit: BoxFit.fill),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                }),
-                          ),
+                          child: ListView.builder(
+                              padding: const EdgeInsets.all(0),
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: 1,
+                              itemBuilder: (context, index) {
+                                String imageUrl =
+                                    homeController.bannerThreeImageList[0];
+                                int productId =
+                                    homeController.bannerThreeIdList[0];
+                                String categoryName =
+                                    homeController.bannerThreeNameList[0];
+                                String subCategoryId =
+                                    homeController.bannerThreeChildIDList[0];
+                                if (homeController
+                                    .bannerThreeImageList.isEmpty) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  return BannersHomeList(
+                                    imageUrl: imageUrl,
+                                    productId: productId,
+                                    productName: categoryName,
+                                    subCategoryId: subCategoryId,
+                                  );
+                                }
+                              }),
                         ),
+                        // Container(
+                        //   width: DeviceInfo(context).width,
+                        //   child: Obx(
+                        //     () => ListView.builder(
+                        //         padding: const EdgeInsets.all(0),
+                        //         shrinkWrap: true,
+                        //         physics: const NeverScrollableScrollPhysics(),
+                        //         itemCount:
+                        //             homeController.bannerThreeImageList.length,
+                        //         itemBuilder: (context, index) {
+                        //           String imageUrl = homeController
+                        //               .bannerThreeImageList[index];
+                        //           String categoryName =
+                        //               homeController.bannerThreeNameList[index];
+                        //           int productId =
+                        //               homeController.bannerThreeIdList[index];
+                        //           String subCategoryId = homeController
+                        //               .bannerThreeChildIDList[index];
+                        //           // homeController.getChildSubCategories(
+                        //           //     int.parse(productId));
+                        //           // int subCategoryId = homeController
+                        //           //     .subChildCategoriesHome[index].id;
+                        //           // String productName = homeController
+                        //           //     .subChildCategoriesHome[index].name;
+                        //           if (homeController
+                        //               .bannerThreeImageList.isEmpty) {
+                        //             return const SizedBox();
+                        //           } else {
+                        //             return InkWell(
+                        //               onTap: () async {
+                        //                 await Get.to(
+                        //                   () => SubCategoryPage(
+                        //                     categoryId: productId,
+                        //                     subCategoryId:
+                        //                         int.parse(subCategoryId),
+                        //                     selectedIndexes:
+                        //                         int.parse(subCategoryId),
+                        //                     categoryName: categoryName,
+                        //                   ),
+                        //                 );
+                        //               },
+                        //               child: Container(
+                        //                 height: 150.h,
+                        //                 width: DeviceInfo(context).width,
+                        //                 decoration: BoxDecoration(
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(5),
+                        //                   image: DecorationImage(
+                        //                       image: NetworkImage(imageUrl),
+                        //                       fit: BoxFit.fill),
+                        //                 ),
+                        //               ),
+                        //             );
+                        //           }
+                        //         }),
+                        //   ),
+                        // ),
                         Container(
-                          color: MyTheme.dark_purple,
+                          color: MyTheme.light_purple2,
                           width: DeviceInfo(context).width,
                           height: 255.h,
                           child: Column(
@@ -1135,15 +1149,15 @@ class _HomePageState extends State<HomePage> {
                                         AppLocalizations.of(context)!
                                             .featured_products_ucf,
                                         style: TextStyle(
-                                            color: MyTheme.white,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold)),
+                                          color: MyTheme.black,
+                                          fontSize: 16.sp,
+                                        )),
                                     InkWell(
                                       child: Text(
                                         AppLocalizations.of(context)!
                                             .view_more_ucf,
                                         style: TextStyle(
-                                            color: MyTheme.white,
+                                            color: MyTheme.black,
                                             fontSize: 14.sp),
                                       ),
                                       onTap: () {
@@ -1188,7 +1202,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Container(
-                          height: 182.h,
+                          height: 195.h,
                           padding: const EdgeInsets.all(10),
                           color: homeController
                               .hexToColor(homeController.couponColor.value),
@@ -1247,9 +1261,9 @@ class _HomePageState extends State<HomePage> {
                               Text(
                                 AppLocalizations.of(context)!.homekitchenhave,
                                 style: TextStyle(
-                                    color: MyTheme.black,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold),
+                                  color: MyTheme.black,
+                                  fontSize: 16.sp,
+                                ),
                               ),
                             ],
                           ),
@@ -1306,6 +1320,7 @@ class _HomePageState extends State<HomePage> {
                                               categoryName: categoryName,
                                               selectedIndexes:
                                                   int.parse(subCategoryId),
+                                              from_banner: true,
                                             ));
                                       },
                                     );
@@ -1372,6 +1387,7 @@ class _HomePageState extends State<HomePage> {
                                               categoryName: categoryName,
                                               selectedIndexes:
                                                   int.parse(subCategoryId),
+                                          from_banner: true,
                                             ));
                                       },
                                       child: Container(

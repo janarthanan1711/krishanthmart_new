@@ -18,7 +18,8 @@ class ProductCard extends StatefulWidget {
       {super.key,
       required this.product,
       required this.onTap,
-      required this.itemIndex});
+      required this.itemIndex
+      });
 
   Product product;
   final VoidCallback onTap;

@@ -5,17 +5,71 @@ import 'package:http/http.dart' as http;
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../models/pincode_response_model.dart';
+import '../repositories/location_repository.dart';
+import '../utils/shared_value.dart';
+
 class LocationController extends GetxController {
   var currentLocation = "".obs;
   var pincodeData = "".obs;
   var isAddressSelected = false.obs;
+  var pincodeIsMatched = false.obs;
   Position? position;
+  var pincodeList = <Data>[].obs;
+  RxBool isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    getUserLocation();
+    getUserLocation().then((value) => fetchPincodeData());
   }
+
+  Future<void> fetchPincodeData() async {
+    try {
+      // Set loading to true to display loader
+      isLoading.value = true;
+
+      var pincodeResponse = await LocationRepository().getPincodeData();
+      isLoading.value = false;
+      // Iterate through the list of pincode data
+      pincodeIsMatched.value = pincodeResponse.data!
+          .any((element) => element.name == pincodeData.value);
+      pincode_matched.$ = pincodeIsMatched.value;
+
+      update();
+    } catch (e) {
+      // Set loading to false in case of error
+      isLoading.value = false;
+      print("Error fetching pincode data: $e");
+    }
+  }
+
+  // Future<void> fetchPincodeData() async {
+  //   try {
+  //     var pincodeResponse = await LocationRepository().getPincodeData();
+  //     // Iterate through the list of pincode data
+  //     // bool pinCodeAvailable = pincodeResponse.data.where((element) => element.name == pincodeData.value);
+  //     pincodeIsMatched.value = pincodeResponse.data!
+  //         .any((element) => element.name == pincodeData.value);
+  //     pincode_matched.$ = pincodeIsMatched.value;
+  //     // for (var pincodeDataItem in pincodeResponse.data!) {
+  //     //   // Assuming pincodeDataItem is a Data object with a pincode attribute
+  //     //   if (pincodeDataItem.name == pincodeData.value) {
+  //     //     print(
+  //     //         "Success: Pincode ${pincodeData.value} : ${pincodeDataItem.name} found in the list.");
+  //     //     // Perform any actions you need when the pincode matches
+  //     //   } else {
+  //     //     print(
+  //     //         "Failure: Pincode ${pincodeData.value} : ${pincodeDataItem.name} not found in the list.");
+  //     //     // Perform any actions you need when the pincode doesn't match
+  //     //   }
+  //     // }
+  //     update();
+  //   } catch (e) {
+  //     print("Error fetching pincode data: $e");
+  //   }
+  // }
+
 
   Future<void> getUserLocation() async {
     try {
@@ -27,17 +81,17 @@ class LocationController extends GetxController {
         }
       } else if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.always) {
-
         await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high)
+                desiredAccuracy: LocationAccuracy.high)
             .then((Position _position) {
-         position = _position;
-         update();
-         print("Positon Gotted=====>${position}");
+          position = _position;
+          update();
+          print("Positon Gotted=====>${position}");
         }).catchError((e) {
           debugPrint(e);
         });
-        print('Location permission granted: ${position!.latitude} : ${position!.longitude}');
+        print(
+            'Location permission granted: ${position!.latitude} : ${position!.longitude}');
         await fetchLocationData(position!);
       } else {
         throw Exception('Location permission not granted');
@@ -57,10 +111,13 @@ class LocationController extends GetxController {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         currentLocation.value = data['results'][0]['formatted'];
-        pincodeData.value = await getAddressPincode(position.latitude, position.longitude);
+        pincodeData.value =
+            await getAddressPincode(position.latitude, position.longitude);
+        // pincodeData.value = '890230';
         print("fetched pincoded Value========>${pincodeData.value}");
       } else {
-        print('Failed to get location details. Status code: ${response.statusCode}');
+        print(
+            'Failed to get location details. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Error fetching location data: $e');
@@ -69,7 +126,8 @@ class LocationController extends GetxController {
 
   Future<String> getAddressPincode(double latitude, double longitude) async {
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latitude, longitude);
       Placemark place = placemarks[0];
       return place.postalCode ?? "";
     } catch (e) {
@@ -78,26 +136,6 @@ class LocationController extends GetxController {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import 'dart:async';
 // import 'dart:convert';

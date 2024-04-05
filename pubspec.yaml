@@ -24,7 +24,7 @@ dependencies:
   url_launcher:
   flip_card:
   get: ^4.3.8
-  firebase_messaging:
+#  firebase_messaging:
   social_share:
   flutter_downloader:
   timeline_tile:
@@ -35,7 +35,7 @@ dependencies:
   flutter_chat_bubble:
   webview_flutter: ^4.4.2
   image_picker:
-  firebase_core:
+#  firebase_core:
   intl_phone_number_input:
   google_sign_in:
   twitter_login:

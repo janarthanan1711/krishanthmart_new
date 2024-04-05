@@ -31,6 +31,7 @@ class BannersHomeList extends StatelessWidget {
             subCategoryId: int.parse(subCategoryId),
             selectedIndexes: int.parse(subCategoryId),
             categoryName: productName,
+            from_banner: true,
           ),
         );
       },
