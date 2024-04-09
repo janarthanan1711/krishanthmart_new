@@ -44,6 +44,7 @@ class _LoginState extends State<Login> {
   var countries_code = <String?>[];
 
   String? _phone = "";
+  bool _passwordVisible = false;
 
   //controllers
   TextEditingController _phoneNumberController = TextEditingController();
@@ -466,11 +467,28 @@ class _LoginState extends State<Login> {
                       child: TextField(
                         controller: _passwordController,
                         autofocus: false,
-                        obscureText: true,
+                        obscureText: !_passwordVisible,
                         enableSuggestions: false,
                         autocorrect: false,
                         decoration: InputDecorations.buildInputDecoration_1(
-                            hint_text: "• • • • • • • •"),
+                            hint_text: "• • • • • • • •",
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(
+                                    () {
+                                  _passwordVisible = !_passwordVisible;
+                                },
+                              );
+                            },
+                            icon: Icon(
+                              _passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: MyTheme.accent_color,
+                              size: 20,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     GestureDetector(

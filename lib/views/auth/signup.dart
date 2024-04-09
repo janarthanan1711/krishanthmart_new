@@ -44,6 +44,8 @@ class _RegistrationState extends State<Registration> {
   bool? _isAgree = false;
   bool _isCaptchaShowing = false;
   String googleRecaptchaKey = "";
+  bool _passwordVisible = false;
+  bool _confirmPasswordVisible = false;
 
   //controllers
   TextEditingController _nameController = TextEditingController();
@@ -375,11 +377,28 @@ class _RegistrationState extends State<Registration> {
                       child: TextField(
                         controller: _passwordController,
                         autofocus: false,
-                        obscureText: true,
+                        obscureText: !_passwordVisible,
                         enableSuggestions: false,
                         autocorrect: false,
                         decoration: InputDecorations.buildInputDecoration_1(
-                            hint_text: "• • • • • • • •"),
+                            hint_text: "• • • • • • • •",
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(
+                                    () {
+                                      _passwordVisible = !_passwordVisible;
+                                },
+                              );
+                            },
+                            icon: Icon(
+                              _passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: MyTheme.accent_color,
+                              size: 20,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Text(
@@ -407,11 +426,28 @@ class _RegistrationState extends State<Registration> {
                   child: TextField(
                     controller: _passwordConfirmController,
                     autofocus: false,
-                    obscureText: true,
+                    obscureText: !_confirmPasswordVisible,
                     enableSuggestions: false,
                     autocorrect: false,
                     decoration: InputDecorations.buildInputDecoration_1(
-                        hint_text: "• • • • • • • •"),
+                        hint_text: "• • • • • • • •",
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(
+                                () {
+                                  _confirmPasswordVisible = !_confirmPasswordVisible;
+                            },
+                          );
+                        },
+                        icon: Icon(
+                          _confirmPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: MyTheme.accent_color,
+                          size: 20,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),

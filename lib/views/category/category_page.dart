@@ -251,13 +251,14 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                                                 categoryController
                                                     .subChildCategories[index]
                                                     .banner,
-                                                height: 64.0,
+                                                // height: 64.0,
+                                                height: 85,
                                                 width: double.maxFinite,
                                                 fit: BoxFit.fill,
                                               ),
                                             ),
                                             const SizedBox(
-                                              height: 15,
+                                              height: 5,
                                             ),
                                             Text(
                                               categoryController

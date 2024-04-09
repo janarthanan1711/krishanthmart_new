@@ -17,7 +17,7 @@ class ProductRepository {
       // "Currency-Exchange-Rate":
       // SystemConfig.systemCurrency!.exchangeRate.toString(),
     });
-    print("Best Selling Product=========> ${response.body}");
+    // print("Best Selling Product=========> ${response.body}");
     return productMiniResponseFromJson(response.body);
   }
 
@@ -62,7 +62,7 @@ class ProductRepository {
     int startIndex = response.body.indexOf('{');
 // Extract the substring from the first '{' to the end
     String jsonSubstring = response.body.substring(startIndex);
-    print("Variant Response ${jsonSubstring}");
+    // print("Variant Response ${jsonSubstring}");
     return variantResponseFromJson(jsonSubstring);
   }
 
@@ -77,7 +77,7 @@ class ProductRepository {
         },
         body: post_body);
 
-    print("Variant Price Update ${response.body}");
+    // print("Variant Price Update ${response.body}");
 
     return variantPriceResponseFromJson(response.body);
   }
@@ -89,8 +89,8 @@ class ProductRepository {
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    print("Category Products Api======>${response.body}");
-    print("Pages========>${page}");
+    // print("Category Products Api======>${response.body}");
+    // print("Pages========>${page}");
     return productMiniResponseFromJson(response.body);
   }
 
@@ -99,7 +99,7 @@ class ProductRepository {
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    print("Get Product Response========>${response.body}");
+    // print("Get Product Response========>${response.body}");
 
     return productDetailsResponseFromJson(response.body);
   }
@@ -133,7 +133,7 @@ class ProductRepository {
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    print("get all Products=======>${response.body}");
+    // print("get all Products=======>${response.body}");
     return productMiniResponseFromJson(response.body);
   }
 

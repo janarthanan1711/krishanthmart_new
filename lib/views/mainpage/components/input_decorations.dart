@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../utils/colors.dart';
 class InputDecorations {
-  static InputDecoration buildInputDecoration_1({hint_text = ""}) {
+  static InputDecoration buildInputDecoration_1({hint_text = "", suffixIcon,}) {
     return InputDecoration(
         hintText: hint_text,
         filled: true,
@@ -15,6 +15,7 @@ class InputDecorations {
             const Radius.circular(6.0),
           ),
         ),
+        suffixIcon: suffixIcon,
         focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(
               color: MyTheme.accent_color,

@@ -294,7 +294,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 thickness: 1,
                 color: MyTheme.light_grey,
               ),
-              buildBottomVerticalCardListItem("assets/messages.png",
+              buildBottomVerticalCardListItem("assets/favoriteseller.png",
                   AppLocalizations.of(context)!.seller_policy_ucf,
                   onPressed: () {
                 setState(() {
@@ -312,7 +312,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 thickness: 1,
                 color: MyTheme.light_grey,
               ),
-              buildBottomVerticalCardListItem("assets/messages.png",
+              buildBottomVerticalCardListItem("assets/return_policy.png",
                   AppLocalizations.of(context)!.return_policy_ucf,
                   onPressed: () {
                 setState(() {
@@ -330,7 +330,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 thickness: 1,
                 color: MyTheme.light_grey,
               ),
-              buildBottomVerticalCardListItem("assets/messages.png",
+              buildBottomVerticalCardListItem("assets/headphone.png",
                   AppLocalizations.of(context)!.support_policy_ucf,
                   onPressed: () {
                 setState(() {

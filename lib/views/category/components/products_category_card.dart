@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:krishanthmart_new/models/product_response_model.dart';
 import 'package:krishanthmart_new/utils/common_btn_options.dart';
 import 'package:krishanthmart_new/views/product_details/product_details.dart';
+import 'package:social_share/social_share.dart';
 import '../../../controllers/product_controller.dart';
 import '../../../helpers/main_helpers.dart';
 import '../../../utils/colors.dart';
@@ -19,10 +20,30 @@ class ProductCategoryCardLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SnackBar removeFromWishlist = SnackBar(
+      content: Text(
+        "Remove From Wishlist",
+        style: TextStyle(
+            color: MyTheme.black, fontWeight: FontWeight.bold, fontSize: 18.sp),
+      ),
+      backgroundColor: MyTheme.soft_accent_color,
+      // backgroundColor: MyTheme.green_light,
+      duration: const Duration(seconds: 3),
+    );
+    SnackBar addToWishList = SnackBar(
+      content: Text(
+        "Added to Wishlist",
+        style: TextStyle(
+            color: MyTheme.black, fontWeight: FontWeight.bold, fontSize: 18.sp),
+      ),
+      // backgroundColor: MyTheme.soft_accent_color,
+      backgroundColor: MyTheme.green_light,
+      duration: const Duration(seconds: 3),
+    );
     return InkWell(
-      onTap:(){
+      onTap: () {
         Get.to(
-              () => ProductDetails(
+          () => ProductDetails(
             id: product.id,
           ),
         );
@@ -49,7 +70,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                   ),
                   onTap: () {
                     Get.to(
-                          () => ProductDetails(
+                      () => ProductDetails(
                         id: product.id,
                       ),
                     );
@@ -194,53 +215,76 @@ class ProductCategoryCardLarge extends StatelessWidget {
                         ),
                         product.has_discount!
                             ? Container(
-                          decoration: const BoxDecoration(
-                            color: MyTheme.accent_color2,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(6.0),
-                              bottomLeft: Radius.circular(6.0),
-                              topLeft: Radius.circular(6.0),
-                              bottomRight: Radius.circular(6.0),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0x14000000),
-                                offset: Offset(-1, 1),
-                                blurRadius: 1,
-                              ),
-                            ],
-                          ),
-                          height: 25.h,
-                          width: 60.w,
-                          child: Center(
-                            child: Text(
-                              product.discount ?? "",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Color(0xffffffff),
-                                fontWeight: FontWeight.w700,
-                                height: 1.8,
-                              ),
-                              textHeightBehavior: const TextHeightBehavior(
-                                  applyHeightToFirstAscent: false),
-                              softWrap: false,
-                            ),
-                          ),
-                        )
+                                decoration: const BoxDecoration(
+                                  color: MyTheme.accent_color2,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(6.0),
+                                    bottomLeft: Radius.circular(6.0),
+                                    topLeft: Radius.circular(6.0),
+                                    bottomRight: Radius.circular(6.0),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(0x14000000),
+                                      offset: Offset(-1, 1),
+                                      blurRadius: 1,
+                                    ),
+                                  ],
+                                ),
+                                height: 25.h,
+                                width: 60.w,
+                                child: Center(
+                                  child: Text(
+                                    product.discount ?? "",
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xffffffff),
+                                      fontWeight: FontWeight.w700,
+                                      height: 1.8,
+                                    ),
+                                    textHeightBehavior:
+                                        const TextHeightBehavior(
+                                            applyHeightToFirstAscent: false),
+                                    softWrap: false,
+                                  ),
+                                ),
+                              )
                             : const SizedBox(),
                       ],
                     ),
                     SizedBox(
                       height: 5.h,
                     ),
-                    ChooseOptionButton(
-                      height: 20.h,
-                      width: 250.w,
-                      onTap: () async {
-                        await variantBottomSheet();
-                      },
-                      iconColor: MyTheme.black,
-                      bgColor: MyTheme.green_light,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ChooseOptionButton(
+                          height: 20.h,
+                          width: 140.w,
+                          onTap: () async {
+                            await variantBottomSheet();
+                          },
+                          iconColor: MyTheme.black,
+                          bgColor: MyTheme.green_light,
+                        ),
+                        iconButton(
+                          context,
+                          onTap: () {
+                            productController.onWishTap(
+                                context,
+                                product.id,
+                                productController.isInWishList == true
+                                    ? removeFromWishlist
+                                    : addToWishList);
+                          },
+                          height: 20.h,
+                          width: 60.w,
+                          icon: Icons.favorite,
+                          color: productController.isInWishList
+                              ? const Color.fromRGBO(230, 46, 4, 1)
+                              : MyTheme.white,
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 6.h,
@@ -269,6 +313,33 @@ class ProductCategoryCardLarge extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
+
+  static iconButton(
+  context,
+      {required onTap,
+      required height,
+      required width,
+      required icon,
+      required color}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: MyTheme.green,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Center(
+          child: Icon(
+            icon,
+            color: color,
+            // color: MyTheme.white,
+          ),
+        ),
       ),
     );
   }

@@ -59,6 +59,8 @@ class MyTheme {
   static const Color cinnabar = Color.fromRGBO(226, 88, 62, 1);
   static const Color tealDark = Color(0xff03331F);
   static const Color teal = Color(0xff065535);
+  static const Color couponFirstColor = Color(0xFF4C1A75);
+  static const Color couponSecondColor = Color(0xFF00A8AA);
 
  static const PrimaryColor = Color(0xffea4b4b);
 static const PrimaryLightColor = Color(0xffF7F9F9);

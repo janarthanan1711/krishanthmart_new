@@ -30,9 +30,9 @@ class AuthRepository {
         },
         body: post_body);
 
-    print("post Login Data==========>${post_body}");
-
-    print("login data ====> ${response.body}");
+    // print("post Login Data==========>${post_body}");
+    //
+    // print("login data ====> ${response.body}");
 
     return loginResponseFromJson(response.body);
   }
@@ -127,8 +127,8 @@ class AuthRepository {
           "App-Language": app_language.$!,
         },
         body: post_body);
-    print("Signup_Response=========>${post_body}");
-    print("Signup_Response=========>${response.body}");
+    // print("Signup_Response=========>${post_body}");
+    // print("Signup_Response=========>${response.body}");
     return loginResponseFromJson(response.body);
   }
 
@@ -218,10 +218,10 @@ class AuthRepository {
     return resendCodeResponseFromJson(response.body);
   }
 
-  Future<LoginResponse> getUserByTokenResponse() async {
+  Future<LoginResponse> getUserByTokenResponse(access_token) async {
     // var post_body = jsonEncode(
     //     {"access_token": "${access_token.$ != null ? access_token.$ : ''}"});
-    var post_body = jsonEncode({"access_token": "${access_token.$}"});
+    var post_body = jsonEncode({"access_token": "$access_token"});
 
     String url = ("${AppConfig.BASE_URL}/get-user-by-access_token");
       final response = await ApiRequest.post(
@@ -231,7 +231,8 @@ class AuthRepository {
             "App-Language": app_language.$!,
           },
           body: post_body);
-      print("auth Info -------${response.body}");
+      // print("auth Post----${post_body}");
+      // print("auth Info -------${response.body}");
       return loginResponseFromJson(response.body);
 
     return LoginResponse();

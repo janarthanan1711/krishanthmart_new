@@ -23,7 +23,9 @@ class BrandCategoryCard extends StatelessWidget {
               width: 85.w,
               child: Text(
                 brands.name!,
-                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 15.sp,
+                ),
               ),
             ),
             Container(

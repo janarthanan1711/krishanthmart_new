@@ -63,35 +63,37 @@ class SubCategoryController extends GetxController {
   }
 
   getCategoryProducts(
-      {int? categoryId, int page = 1, String? searchKey, int? index}) async {
+      {int? categoryId, int? page, String? searchKey, int? index}) async {
     categoryProductList.clear();
     isLoading(true);
     // print("called");
     var productResponse = await ProductRepository()
         .getCategoryProducts(id: categoryId, page: page, name: searchKey);
-    categoryProductList.addAll(productResponse.products!);
+    // categoryProductList.addAll(productResponse.products!);
+    categoryProductList.value = productResponse.products!;
     // print("Check is Empty ${categoryProductList.isEmpty}");
     // print("closed $page");
     print("Total Page of product======>${page}");
     categoryProductId.value = categoryId!;
-    totalData.value = productResponse.meta!.total!;
-    isLoading(false);
     isInitial.value = false;
+    totalData.value = productResponse.meta!.total!;
+    // isLoading(false);
     showLoadingContainer = false;
     update();
   }
 
   getAllCategoryProducts(
-      {int? categoryId, int page = 1, String? searchKey, int? index}) async {
+      {int? categoryId, int? page, String? searchKey, int? index}) async {
     allCategoryProductList.clear();
     isLoading(true);
     var allProductResponse = await ProductRepository()
         .getCategoryProducts(id: categoryId, page: page, name: searchKey);
-    allCategoryProductList.addAll(allProductResponse.products!);
+    // allCategoryProductList.addAll(allProductResponse.products!);
+    allCategoryProductList.value = allProductResponse.products!;
     allCategoryProductId.value = categoryId!;
-    totalData.value = allProductResponse.meta!.total!;
-    isLoading(false);
     isInitial.value = false;
+    totalData.value = allProductResponse.meta!.total!;
+    // isLoading(false);
     update();
   }
 

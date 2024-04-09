@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   late ScrollController _scrollController;
   late final SliderResponse sliderResponse;
   GlobalKey<State<StatefulWidget>> itemKey = GlobalKey();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -125,15 +126,16 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.vertical(
                     bottom: Radius.circular(15.0),
                   ),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFFAE8625),
-                      Color(0xFFF7EF8A),
-                      Color(0xFFD2AC47),
-                    ],
-                  ),
+                  color: Color(0xFFF7EF8A),
+                  // gradient: LinearGradient(
+                  //   begin: Alignment.topLeft,
+                  //   end: Alignment.bottomRight,
+                  //   colors: [
+                  //     Color(0xFFAE8625),
+                  //     Color(0xFFF7EF8A),
+                  //     Color(0xFFD2AC47),
+                  //   ],
+                  // ),
                 ),
               ),
               actions: [
@@ -255,55 +257,38 @@ class _HomePageState extends State<HomePage> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10.w, vertical: 5.h),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!
-                                          .free_delivery,
+                                SizedBox(
+                                  width: 130.w,
+                                  child: Obx(
+                                  ()=> Text(
+                                      homeController.headerText1.value,
                                       style: TextStyle(
                                           color: const Color(0xFF996515),
-                                          fontSize: 19.sp,
+                                          fontSize: 15.sp,
                                           fontWeight: FontWeight.bold,
-                                          fontStyle: FontStyle.italic),
+                                      ),
                                     ),
-                                    Text(
-                                      AppLocalizations.of(context)!
-                                          .order_above_99,
-                                      style: TextStyle(
-                                          color: const Color(0xFF996515),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 10.sp),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                                 Text(
                                   "|",
                                   style: TextStyle(
                                       color: const Color(0xFF996515),
-                                      fontSize: 30.sp,
+                                      fontSize: 25.sp,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic),
                                 ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!.flat_50,
-                                      style: TextStyle(
-                                          color: const Color(0xFF996515),
-                                          fontSize: 19.sp,
-                                          fontWeight: FontWeight.bold,
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(context)!.blink_50,
-                                      style: TextStyle(
-                                          color: const Color(0xFF996515),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 10.sp),
-                                    ),
-                                  ],
+                                SizedBox(
+                                  width: 120.w,
+                                  child: Text(
+                                    homeController.headerText2.value,
+                                    style: TextStyle(
+                                        color: const Color(0xFF996515),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15.sp),
+                                  ),
                                 )
                               ],
                             ),
@@ -409,31 +394,37 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        pincode_matched.$ == true
-                            ? SizedBox()
-                            : locationController.isLoading
-                                    .value // Assuming you have an isLoading variable in your LocationController
-                                ? CircularProgressIndicator() // Show loader if isLoading is true
-                                : Container(
-                                    color: Colors.red[100],
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 5),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Service Not Available for this pincode ${locationController.pincodeData.value}",
-                                            style: TextStyle(
-                                              color: MyTheme.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                        Container(
+                          color: Colors.red[100],
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            child: Obx(
+                              () => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  pincode_matched.$ == true
+                                      ? Text(
+                                          "Service Available for this pincode ${locationController.pincodeData.value}",
+                                          style: TextStyle(
+                                            color: MyTheme.black,
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                        )
+                                      : locationController.isLoading
+                                              .value // Assuming you have an isLoading variable in your LocationController
+                                          ? CircularProgressIndicator() // Show loader if isLoading is true
+                                          : Text(
+                                              "Service Not Available for this pincode ${locationController.pincodeData.value}",
+                                              style: TextStyle(
+                                                color: MyTheme.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
 
                         const CustomCarousel(),
                         SizedBox(
@@ -590,8 +581,8 @@ class _HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     int productId =
                                         homeController.bannerFiveIdList[index];
-                                    String categoryName =
-                                        homeController.bannerFiveNameList[index];
+                                    String categoryName = homeController
+                                        .bannerFiveNameList[index];
                                     String subCategoryId = homeController
                                         .bannerFiveChildIDList[index];
                                     if (homeController
@@ -939,43 +930,43 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        Container(
-                          color: MyTheme.noColor,
-                          width: DeviceInfo(context).width,
-                          child: ListView.builder(
-                              padding: const EdgeInsets.all(0),
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: 1,
-                              itemBuilder: (context, index) {
-                                String imageUrl =
-                                    homeController.bannerThreeImageList[0];
-                                int productId =
-                                    homeController.bannerThreeIdList[0];
-                                String categoryName =
-                                    homeController.bannerThreeNameList[0];
-                                String subCategoryId =
-                                    homeController.bannerThreeChildIDList[0];
-                                // homeController.getChildSubCategories(
-                                //     int.parse(productId));
-                                // int subCategoryId = homeController
-                                //     .subChildCategoriesHome[index].id;
-                                // String productName = homeController
-                                //     .subChildCategoriesHome[index].name;
-                                if (homeController
-                                    .bannerThreeImageList.isEmpty) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                } else {
-                                  return BannersHomeList(
-                                    imageUrl: imageUrl,
-                                    productId: productId,
-                                    productName: categoryName,
-                                    subCategoryId: subCategoryId,
-                                  );
-                                }
-                              }),
-                        ),
+                        // Container(
+                        //   color: MyTheme.noColor,
+                        //   width: DeviceInfo(context).width,
+                        //   child: ListView.builder(
+                        //       padding: const EdgeInsets.all(0),
+                        //       shrinkWrap: true,
+                        //       physics: const NeverScrollableScrollPhysics(),
+                        //       itemCount: 1,
+                        //       itemBuilder: (context, index) {
+                        //         String imageUrl =
+                        //             homeController.bannerThreeImageList[0];
+                        //         int productId =
+                        //             homeController.bannerThreeIdList[0];
+                        //         String categoryName =
+                        //             homeController.bannerThreeNameList[0];
+                        //         String subCategoryId =
+                        //             homeController.bannerThreeChildIDList[0];
+                        //         // homeController.getChildSubCategories(
+                        //         //     int.parse(productId));
+                        //         // int subCategoryId = homeController
+                        //         //     .subChildCategoriesHome[index].id;
+                        //         // String productName = homeController
+                        //         //     .subChildCategoriesHome[index].name;
+                        //         if (homeController
+                        //             .bannerThreeImageList.isEmpty) {
+                        //           return const Center(
+                        //               child: CircularProgressIndicator());
+                        //         } else {
+                        //           return BannersHomeList(
+                        //             imageUrl: imageUrl,
+                        //             productId: productId,
+                        //             productName: categoryName,
+                        //             subCategoryId: subCategoryId,
+                        //           );
+                        //         }
+                        //       }),
+                        // ),
                         Container(
                           color: Color(0xFFfaf3cf),
                           width: DeviceInfo(context).width,
@@ -1054,13 +1045,13 @@ class _HomePageState extends State<HomePage> {
                               itemCount: 1,
                               itemBuilder: (context, index) {
                                 String imageUrl =
-                                    homeController.bannerThreeImageList[0];
+                                    homeController.bannerThreeImageList[index];
                                 int productId =
-                                    homeController.bannerThreeIdList[0];
+                                    homeController.bannerThreeIdList[index];
                                 String categoryName =
-                                    homeController.bannerThreeNameList[0];
+                                    homeController.bannerThreeNameList[index];
                                 String subCategoryId =
-                                    homeController.bannerThreeChildIDList[0];
+                                    homeController.bannerThreeChildIDList[index];
                                 if (homeController
                                     .bannerThreeImageList.isEmpty) {
                                   return const Center(
@@ -1201,48 +1192,61 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        Container(
-                          height: 195.h,
-                          padding: const EdgeInsets.all(10),
-                          color: homeController
-                              .hexToColor(homeController.couponColor.value),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(homeController.couponTitle.value,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22.sp,
-                                      color: MyTheme.white),
-                                  textAlign: TextAlign.center),
-                              Text(homeController.couponSubTitle.value,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17.sp,
-                                      color: MyTheme.white),
-                                  textAlign: TextAlign.center),
-                              InkWell(
-                                onTap: () {
-                                  Get.to(() => const Coupons());
-                                },
-                                child: Container(
-                                  height: 50.h,
-                                  width: 150.w,
-                                  decoration: BoxDecoration(
-                                      color: MyTheme.medium_grey,
-                                      border: Border.all(color: MyTheme.white),
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Center(
-                                    child: Text(
-                                      AppLocalizations.of(context)!.view_coupon,
-                                      style: const TextStyle(
-                                          color: MyTheme.white,
-                                          fontWeight: FontWeight.bold),
+                        Padding(
+                          padding:  EdgeInsets.symmetric(horizontal: 4.w,vertical: 4.h),
+                          child: Container(
+                            height: 195.h,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(20.0) //                 <--- border radius here
+                              ),
+                              gradient:  LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [MyTheme.couponFirstColor, MyTheme.couponSecondColor],
+                                )
+                              // color: homeController
+                              //     .hexToColor(homeController.couponColor.value),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(homeController.couponTitle.value,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22.sp,
+                                        color: MyTheme.white),
+                                    textAlign: TextAlign.center),
+                                Text(homeController.couponSubTitle.value,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17.sp,
+                                        color: MyTheme.white),
+                                    textAlign: TextAlign.center),
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(() => const Coupons());
+                                  },
+                                  child: Container(
+                                    height: 50.h,
+                                    width: 150.w,
+                                    decoration: BoxDecoration(
+                                        color: MyTheme.medium_grey,
+                                        border: Border.all(color: MyTheme.white),
+                                        borderRadius: BorderRadius.circular(15)),
+                                    child: Center(
+                                      child: Text(
+                                        AppLocalizations.of(context)!.view_coupon,
+                                        style: const TextStyle(
+                                            color: MyTheme.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         Container(
@@ -1387,7 +1391,7 @@ class _HomePageState extends State<HomePage> {
                                               categoryName: categoryName,
                                               selectedIndexes:
                                                   int.parse(subCategoryId),
-                                          from_banner: true,
+                                              from_banner: true,
                                             ));
                                       },
                                       child: Container(

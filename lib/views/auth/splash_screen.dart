@@ -47,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     _initPackageInfo();
     getSharedValueHelperData().then((value){
+      print("access Value====>${value}");
       Future.delayed(const Duration(seconds: 3)).then((value) {
         languageController.setLocale(app_mobile_language.$!);
         Navigator.pushAndRemoveUntil(context,
@@ -143,10 +144,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<String?> getSharedValueHelperData()async{
     await access_token.load().whenComplete(() async {
       print("acces Token Called======>${access_token.$}");
-       await AuthHelper().fetch_and_set();
+        AuthHelper().fetch_and_set();
     });
     // AddonsHelper().setAddonsData();
     BusinessSettingHelper().setBusinessSettingData();
+    await is_logged_in.load();
     await app_language.load();
     await app_mobile_language.load();
     await app_language_rtl.load();

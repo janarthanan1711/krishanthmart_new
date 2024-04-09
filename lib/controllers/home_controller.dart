@@ -76,6 +76,8 @@ class HomeController extends GetxController {
   var couponColor = "".obs;
   var couponTitle = "".obs;
   var couponSubTitle = "".obs;
+  var headerText1 = "".obs;
+  var headerText2 = "".obs;
   Color? hexColorCoupon;
   var subCategoryIds = [].obs;
   CategoryController categoryController = Get.put(CategoryController());
@@ -185,6 +187,12 @@ class HomeController extends GetxController {
             break;
           case "cupon_subtitle":
             couponSubTitle.value = businessType.value;
+            break;
+          case "custom_text_1":
+            headerText1.value = businessType.value;
+            break;
+          case "custom_text_2":
+            headerText2.value = businessType.value;
             break;
           default:
             // Handle other types if needed

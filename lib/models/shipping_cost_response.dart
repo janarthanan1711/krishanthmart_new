@@ -18,7 +18,7 @@ class ShippingCostResponse {
 
   bool? result;
   String? shipping_type;
-  double? value;
+  int? value;
   String? value_string;
 
   factory ShippingCostResponse.fromJson(Map<String, dynamic> json) => ShippingCostResponse(

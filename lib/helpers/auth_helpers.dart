@@ -57,7 +57,8 @@ class AuthHelper {
 
 
   fetch_and_set() async {
-    LoginResponse userByTokenResponse = await AuthRepository().getUserByTokenResponse();
+    // print("fetch and Set access token=======>${access_token.$}");
+    LoginResponse userByTokenResponse = await AuthRepository().getUserByTokenResponse(access_token.$);
     if (userByTokenResponse.result == true) {
       setUserData(userByTokenResponse);
     }else{

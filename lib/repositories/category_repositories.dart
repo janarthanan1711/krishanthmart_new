@@ -24,7 +24,7 @@ class CategoryRepository {
       "App-Language": app_language.$!,
     });
     // print("${AppConfig.BASE_URL}/categories?parent_id=${parent_id}");
-    print("Get Sub Categories========>>>>>>>>> ${response.body.toString()}");
+    // print("Get Sub Categories========>>>>>>>>> ${response.body.toString()}");
     return subChildResponseFromJson(response.body);
 
   }
@@ -35,7 +35,7 @@ class CategoryRepository {
     await ApiRequest.get(url: url,headers: {
       "App-Language": app_language.$!,
     });
-    print("--featured cat--${response.body.toString()}");
+    // print("--featured cat--${response.body.toString()}");
     return categoryResponseFromJson(response.body);
   }
 

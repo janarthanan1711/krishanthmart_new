@@ -158,7 +158,7 @@ class _CouponsState extends State<Coupons> {
                       ),
                     ),
                     padding: const EdgeInsets.only(
-                        left: 30, right: 30, top: 30, bottom: 20),
+                        left: 30, right: 30, top: 30, bottom: 12.4),
                     height: 200,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

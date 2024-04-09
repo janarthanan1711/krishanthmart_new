@@ -306,6 +306,9 @@ class ProductVariantBottomSheet extends StatelessWidget {
                      height: 35.h,
                      width: 100.w,
                      icon: Icons.favorite,
+                    color: productController.isInWishList
+                         ? const Color.fromRGBO(230, 46, 4, 1)
+                         : MyTheme.white,
                    ),
                    iconButton(
                      onTap: () {
@@ -315,6 +318,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                      height: 35.h,
                      width: 100.w,
                      icon: Icons.share,
+                     color: MyTheme.white
                    ),
                    iconButton(
                      onTap: () {
@@ -327,6 +331,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                      height: 35.h,
                      width: 100.w,
                      icon: Icons.shopping_cart_rounded,
+                     color: MyTheme.white
                    ),
                  ],
                ),
@@ -339,7 +344,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
   }
 
   static iconButton(
-      {required onTap, required height, required width, required icon}) {
+      {required onTap, required height, required width, required icon,required color}) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -350,7 +355,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
         child: Center(
             child: Icon(
           icon,
-          color: MyTheme.white,
+          color:color,
           // color: MyTheme.white,
         )),
       ),
