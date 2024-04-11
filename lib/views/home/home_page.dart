@@ -126,16 +126,16 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.vertical(
                     bottom: Radius.circular(15.0),
                   ),
-                  color: Color(0xFFF7EF8A),
-                  // gradient: LinearGradient(
-                  //   begin: Alignment.topLeft,
-                  //   end: Alignment.bottomRight,
-                  //   colors: [
-                  //     Color(0xFFAE8625),
-                  //     Color(0xFFF7EF8A),
-                  //     Color(0xFFD2AC47),
-                  //   ],
-                  // ),
+                  // color: Color(0xFFF7EF8A),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xFFFFD700),
+                      Color(0xFFF7EF8A),
+                      Color(0xFFFFE55C),
+                    ],
+                  ),
                 ),
               ),
               actions: [

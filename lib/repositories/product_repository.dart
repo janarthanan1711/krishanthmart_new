@@ -89,8 +89,8 @@ class ProductRepository {
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    // print("Category Products Api======>${response.body}");
-    // print("Pages========>${page}");
+    print("Category Products Api======>${response.body}");
+    print("Pages========>${page}");
     return productMiniResponseFromJson(response.body);
   }
 

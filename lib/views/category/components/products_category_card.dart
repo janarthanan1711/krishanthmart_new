@@ -10,6 +10,7 @@ import '../../../controllers/product_controller.dart';
 import '../../../helpers/main_helpers.dart';
 import '../../../utils/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../cart/cart_page.dart';
 import '../../product_details/components/product_bottom_sheet.dart';
 
 class ProductCategoryCardLarge extends StatelessWidget {
@@ -20,6 +21,28 @@ class ProductCategoryCardLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SnackBar _addedToCartSnackbar = SnackBar(
+      content: Text(
+        AppLocalizations.of(context)!.added_to_cart,
+        style: TextStyle(
+            color: MyTheme.black, fontWeight: FontWeight.bold, fontSize: 18.sp),
+      ),
+      // backgroundColor: MyTheme.soft_accent_color,
+      backgroundColor: MyTheme.accent_color2,
+      duration: const Duration(seconds: 3),
+      action: SnackBarAction(
+        label: AppLocalizations.of(context)!.show_cart_all_capital,
+        onPressed: () {
+          Get.to(
+            () => CartPage(
+              has_bottomnav: false,
+            ),
+          );
+        },
+        textColor: MyTheme.black,
+        disabledTextColor: Colors.grey,
+      ),
+    );
     SnackBar removeFromWishlist = SnackBar(
       content: Text(
         "Remove From Wishlist",
@@ -258,15 +281,17 @@ class ProductCategoryCardLarge extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ChooseOptionButton(
-                          height: 20.h,
-                          width: 140.w,
-                          onTap: () async {
-                            await variantBottomSheet();
-                          },
-                          iconColor: MyTheme.black,
-                          bgColor: MyTheme.green_light,
-                        ),
+                        iconButton(context, onTap: () {
+                          productController.addToCart(
+                              id: product.id,
+                              mode: "add_to_cart",
+                              context: context,
+                              snackbar: _addedToCartSnackbar);
+                        },
+                            height: 20.h,
+                            width: 50.w,
+                            icon: Icons.shopping_cart_rounded,
+                            color: MyTheme.white),
                         iconButton(
                           context,
                           onTap: () {
@@ -278,11 +303,18 @@ class ProductCategoryCardLarge extends StatelessWidget {
                                     : addToWishList);
                           },
                           height: 20.h,
-                          width: 60.w,
+                          width: 50.w,
                           icon: Icons.favorite,
-                          color: productController.isInWishList
-                              ? const Color.fromRGBO(230, 46, 4, 1)
-                              : MyTheme.white,
+                          color:  MyTheme.white,
+                        ),
+                        ChooseOptionButton(
+                          height: 20.h,
+                          width: 108.w,
+                          onTap: () async {
+                            await variantBottomSheet();
+                          },
+                          iconColor: MyTheme.black,
+                          bgColor: MyTheme.green_light,
                         ),
                       ],
                     ),
@@ -317,8 +349,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
     );
   }
 
-  static iconButton(
-  context,
+  static iconButton(context,
       {required onTap,
       required height,
       required width,

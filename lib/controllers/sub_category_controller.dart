@@ -13,8 +13,10 @@ class SubCategoryController extends GetxController {
   var mainCategoryList = [].obs;
   var mainCategoryListSheet = [].obs;
   var totalData = 0.obs;
+  var lastPage = 0.obs;
+  var lastPageAll = 0.obs;
   var subCategoryIndex = 0.obs;
-  bool showLoadingContainer = false;
+  var showLoadingContainer = false.obs;
   RxBool isInitial = true.obs;
   RxBool showAllProducts = true.obs;
   RxBool isLoading = false.obs;
@@ -64,9 +66,7 @@ class SubCategoryController extends GetxController {
 
   getCategoryProducts(
       {int? categoryId, int? page, String? searchKey, int? index}) async {
-    categoryProductList.clear();
-    isLoading(true);
-    // print("called");
+    // categoryProductList.clear();
     var productResponse = await ProductRepository()
         .getCategoryProducts(id: categoryId, page: page, name: searchKey);
     // categoryProductList.addAll(productResponse.products!);
@@ -77,15 +77,14 @@ class SubCategoryController extends GetxController {
     categoryProductId.value = categoryId!;
     isInitial.value = false;
     totalData.value = productResponse.meta!.total!;
-    // isLoading(false);
-    showLoadingContainer = false;
+    lastPage.value = productResponse.meta!.lastPage!;
+    showLoadingContainer.value = false;
     update();
   }
 
   getAllCategoryProducts(
       {int? categoryId, int? page, String? searchKey, int? index}) async {
-    allCategoryProductList.clear();
-    isLoading(true);
+    // allCategoryProductList.clear();
     var allProductResponse = await ProductRepository()
         .getCategoryProducts(id: categoryId, page: page, name: searchKey);
     // allCategoryProductList.addAll(allProductResponse.products!);
@@ -93,7 +92,8 @@ class SubCategoryController extends GetxController {
     allCategoryProductId.value = categoryId!;
     isInitial.value = false;
     totalData.value = allProductResponse.meta!.total!;
-    // isLoading(false);
+    lastPageAll.value = allProductResponse.meta!.lastPage!;
+    showLoadingContainer.value = false;
     update();
   }
 
@@ -139,8 +139,10 @@ class SubCategoryController extends GetxController {
     // page = 1;
     // searchKey = "";
     totalData.value = 0;
+    lastPage.value = 0;
+    lastPageAll.value = 0;
     subCategoryIndex.value = 0;
-    showLoadingContainer = false;
+    showLoadingContainer.value = false;
     isInitial.value = true;
     showAllProducts.value = false;
     mainNameChanged.value = false;

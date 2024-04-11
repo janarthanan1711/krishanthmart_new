@@ -241,6 +241,7 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                                         ),
                                         child: Column(
                                           // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             ClipRRect(
                                               borderRadius:
@@ -252,14 +253,14 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                                                     .subChildCategories[index]
                                                     .banner,
                                                 // height: 64.0,
-                                                height: 85,
+                                                height: 90,
                                                 width: double.maxFinite,
                                                 fit: BoxFit.fill,
                                               ),
                                             ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
+                                            // const SizedBox(
+                                            //   height: 5,
+                                            // ),
                                             Text(
                                               categoryController
                                                   .subChildCategories[index]
@@ -270,6 +271,9 @@ class _CategoryListPagesState extends State<CategoryListPages> {
                                               ),
                                               textAlign: TextAlign.center,
                                             ),
+                                            // const SizedBox(
+                                            //   height: 1,
+                                            // ),
                                           ],
                                         ),
                                       ),
