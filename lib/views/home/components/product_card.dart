@@ -152,6 +152,7 @@ class _ProductCardState extends State<ProductCard> {
                         width: 150.w,
                         bgColor: MyTheme.green_light,
                         iconColor: MyTheme.black,
+                        textColor: MyTheme.black,
                       )
                     ],
                   ),

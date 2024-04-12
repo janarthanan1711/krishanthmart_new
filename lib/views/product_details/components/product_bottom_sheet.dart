@@ -298,7 +298,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                      onTap: () {
                        productController.onWishTap(
                            context,
-                           product.id,
+                           product.id!,
                            productController.isInWishList == true
                                ? removeFromWislist
                                : addToWishList);

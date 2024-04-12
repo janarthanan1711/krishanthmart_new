@@ -203,6 +203,7 @@ class LargeProductCard extends StatelessWidget {
                   },
                   iconColor: MyTheme.black,
                   bgColor: MyTheme.green_light,
+                  textColor: MyTheme.black,
                 ),
                 // InkWell(
                 //   onTap: () {},

@@ -146,6 +146,7 @@ class CarouselDealCard extends StatelessWidget {
                           },
                           width: 130.sp,
                           height: 30.sp,
+                          textColor: MyTheme.black,
                         )
                       ],
                     )

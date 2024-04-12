@@ -281,23 +281,29 @@ class ProductCategoryCardLarge extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        iconButton(context, onTap: () {
-                          productController.addToCart(
-                              id: product.id,
-                              mode: "add_to_cart",
-                              context: context,
-                              snackbar: _addedToCartSnackbar);
-                        },
-                            height: 20.h,
-                            width: 50.w,
-                            icon: Icons.shopping_cart_rounded,
-                            color: MyTheme.white),
                         iconButton(
                           context,
+                          MyTheme.white,
                           onTap: () {
+                            productController.addToCart(
+                                id: product.id,
+                                mode: "add_to_cart",
+                                context: context,
+                                snackbar: _addedToCartSnackbar);
+                          },
+                          height: 20.h,
+                          width: 50.w,
+                          icon: Icons.shopping_cart_rounded,
+                        ),
+                        iconButton(
+                          context,
+                            MyTheme.white,
+                          onTap: () {
+                            print(
+                                "can wishlist=====>${productController.isInWishList}");
                             productController.onWishTap(
                                 context,
-                                product.id,
+                                product.id!,
                                 productController.isInWishList == true
                                     ? removeFromWishlist
                                     : addToWishList);
@@ -305,7 +311,6 @@ class ProductCategoryCardLarge extends StatelessWidget {
                           height: 20.h,
                           width: 50.w,
                           icon: Icons.favorite,
-                          color:  MyTheme.white,
                         ),
                         ChooseOptionButton(
                           height: 20.h,
@@ -313,8 +318,9 @@ class ProductCategoryCardLarge extends StatelessWidget {
                           onTap: () async {
                             await variantBottomSheet();
                           },
-                          iconColor: MyTheme.black,
-                          bgColor: MyTheme.green_light,
+                          iconColor: MyTheme.white,
+                          bgColor: MyTheme.green,
+                          textColor: MyTheme.white,
                         ),
                       ],
                     ),
@@ -349,12 +355,14 @@ class ProductCategoryCardLarge extends StatelessWidget {
     );
   }
 
-  static iconButton(context,
-      {required onTap,
-      required height,
-      required width,
-      required icon,
-      required color}) {
+  iconButton(
+    context,
+    Color color, {
+    required onTap,
+    required height,
+    required width,
+    required icon,
+  }) {
     return InkWell(
       onTap: onTap,
       child: Container(

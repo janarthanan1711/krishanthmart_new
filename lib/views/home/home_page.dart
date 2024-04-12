@@ -128,12 +128,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                   // color: Color(0xFFF7EF8A),
                   gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                     colors: [
                       Color(0xFFFFD700),
                       Color(0xFFF7EF8A),
-                      Color(0xFFFFE55C),
+                      Color(0xFFFFFFFF)
+                      // Color(0xFFFFE55C),
                     ],
                   ),
                 ),

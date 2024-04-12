@@ -166,6 +166,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                         .getSubChildCategories(
                                             subCategoryController
                                                 .subCategoryList[index].id!);
+                                    subCategoryController.allCategoryProductList
+                                        .clear();
                                     await subCategoryController
                                         .getAllCategoryProducts(
                                       categoryId: subCategoryController
@@ -225,7 +227,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                 preferredSize: const Size.fromHeight(0.0),
               ),
       ),
-      body: Column(
+      body: Stack(
         children: [
           widget.from_banner == false
               ? GetBuilder<SubCategoryController>(
@@ -291,7 +293,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                   //     page: page,
                                   //     searchKey: searchKey);
                                   // subCategoryController.categoryProductList.clear();
-
+                                  subCategoryController.allCategoryProductList
+                                      .clear();
                                   //hERE ASSIGNED THE SUBCATEGORY INDEX VALUE TO FETCH ALL PRODUCTS
                                   await subCategoryController
                                       .getAllCategoryProducts(
@@ -411,7 +414,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                     //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
                                     // print(
                                     //     "subChildCategory Value ${subCategoryController.categoryProductList[index].name}");
-
+                                    subCategoryController.categoryProductList
+                                        .clear();
                                     await subCategoryController
                                         .getCategoryProducts(
                                             categoryId: subCategoryController
@@ -438,46 +442,52 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                   );
                 })
               : SizedBox(),
-          Expanded(
-            child: Stack(
-              children: [
-                subCategoryController.showAllProducts.value == true
-                    ? buildAllProductList()
-                    : buildProductList(),
-                // buildProductList(),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: buildLoadingContainer(),
-                ),
-              ],
-            ),
+          Positioned.fill(
+            top: widget.from_banner == false ? 50 : 0,
+            child: subCategoryController.showAllProducts.value == true
+                ? buildAllProductList()
+                : buildProductList(),
+          ),
+
+          // buildProductList(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: buildLoadingContainer(),
           ),
         ],
       ),
     );
   }
 
-  Container buildProductList() {
-    return Container(
-      child: Column(
-        children: [
-          Expanded(
-            child: buildProductScrollableList(),
-          )
-        ],
-      ),
+  CustomScrollView buildProductList() {
+    return CustomScrollView(
+      controller: ycrollController,
+      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      slivers: <Widget>[
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              buildProductScrollableList(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
-  Container buildAllProductList() {
-    return Container(
-      child: Column(
-        children: [
-          Expanded(
-            child: buildAllProductScrollableList(),
-          )
-        ],
-      ),
+  CustomScrollView buildAllProductList() {
+    return CustomScrollView(
+      controller: xcrollController,
+      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      slivers: <Widget>[
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              buildAllProductScrollableList(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -524,18 +534,19 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             } else if (subCategoryController.allCategoryProductList.length >
                 0) {
               return ListView.builder(
-                controller: xcrollController,
-                physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics(),
-                ),
-                // physics: NeverScrollableScrollPhysics(),
+                // controller: xcrollController,
+                // physics: const BouncingScrollPhysics(
+                //   parent: AlwaysScrollableScrollPhysics(),
+                // ),
+                physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: subCategoryController.allCategoryProductList.length,
                 itemBuilder: (context, index) {
                   return Obx(
                     () => ProductCategoryCardLarge(
-                        product: subCategoryController
-                            .allCategoryProductList[index]),
+                      product:
+                          subCategoryController.allCategoryProductList[index],
+                    ),
                   );
                 },
               );
@@ -552,7 +563,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
               );
             } else {
               return SingleChildScrollView(
-                  child: ShimmerHelper().buildListShimmer());
+                child: ShimmerHelper().buildListShimmer(),
+              );
             }
           },
         );
@@ -573,10 +585,10 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
               );
             } else if (subCategoryController.categoryProductList.length > 0) {
               return ListView.builder(
-                // physics: NeverScrollableScrollPhysics(),
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                controller: ycrollController,
+                physics: NeverScrollableScrollPhysics(),
+                // physics: const BouncingScrollPhysics(
+                //     parent: AlwaysScrollableScrollPhysics()),
+                // controller: ycrollController,
                 shrinkWrap: true,
                 itemCount: subCategoryController.categoryProductList.length,
                 itemBuilder: (context, index) {
@@ -761,6 +773,8 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   allProductsScroll() {
     xcrollController.addListener(() {
+      print("position: " + xcrollController.position.pixels.toString());
+      print("max: " + xcrollController.position.maxScrollExtent.toString());
       if (xcrollController.position.pixels ==
           xcrollController.position.maxScrollExtent) {
         // User reached the bottom
@@ -771,10 +785,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             page++;
           });
           subCategoryController.showLoadingContainer.value = true;
-          subCategoryController.getAllCategoryProducts(
-              categoryId: subCategoryController.allCategoryProductId.value,
-              page: page,
-              searchKey: searchKey);
+          getAllProductsList();
         } else if (page > 1) {
           print(
               "Last Page Reached=======>${page}:::${subCategoryController.lastPageAll.value}");
@@ -787,10 +798,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             });
             // Fetch data based on the updated page value
             subCategoryController.showLoadingContainer.value = true;
-            subCategoryController.getAllCategoryProducts(
-                categoryId: subCategoryController.allCategoryProductId.value,
-                page: page,
-                searchKey: searchKey);
+            getAllProductsList();
 
             // subCategoryController.showLoadingContainer.value = true;
           }
@@ -805,11 +813,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
           });
           // Fetch data based on the updated page value
           subCategoryController.showLoadingContainer.value = true;
-          subCategoryController.getAllCategoryProducts(
-              categoryId: subCategoryController.allCategoryProductId.value,
-              page: page,
-              searchKey: searchKey);
-
+          getAllProductsList();
           // subCategoryController.showLoadingContainer.value = true;
         }
       }
@@ -828,10 +832,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             pageSub++;
           });
           subCategoryController.showLoadingContainer.value = true;
-          subCategoryController.getCategoryProducts(
-              categoryId: subCategoryController.subChildCategoryId.value,
-              page: pageSub,
-              searchKey: searchKey);
+          getProductsList();
         }
       } else if (pageSub > 1) {
         print(
@@ -841,14 +842,11 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
           // User reached the top
           // Check if the list is not empty before decrementing the page count
           setState(() {
-            page--;
+            pageSub--;
           });
           // Fetch data based on the updated page value
           subCategoryController.showLoadingContainer.value = true;
-          subCategoryController.getCategoryProducts(
-              categoryId: subCategoryController.subChildCategoryId.value,
-              page: pageSub,
-              searchKey: searchKey);
+          getProductsList();
 
           // subCategoryController.showLoadingContainer.value = true;
         }
@@ -861,10 +859,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             pageSub--;
           });
           // Fetch data based on the updated page value
-          subCategoryController.getCategoryProducts(
-              categoryId: subCategoryController.subChildCategoryId.value,
-              page: pageSub,
-              searchKey: searchKey);
+          getProductsList();
 
           // subCategoryController.showLoadingContainer.value = true;
         }
@@ -872,20 +867,31 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
     });
   }
 
-  getAll() {
-    setState(() {
-      subCategoryController.getMainCategories(widget.categoryId);
-      subCategoryController.getAllCategoryProducts(
-          categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
-      subCategoryController.getCategoryProducts(
-          categoryId: widget.subCategoryId,
-          page: pageSub,
-          searchKey: searchKey);
-      subCategoryController.getSubCategory(widget.categoryId!);
-      subCategoryController.getSubChildCategories(widget.subCategoryId!);
-      subCategoryController.subCategoryIndexSelection(widget.subCategoryId);
-      subCategoryController.showAllProducts.value = true;
-    });
+  getProductsList() async {
+    await subCategoryController.getCategoryProducts(
+        categoryId: subCategoryController.subChildCategoryId.value,
+        page: pageSub,
+        searchKey: searchKey);
+  }
+
+  getAllProductsList() async {
+    await subCategoryController.getAllCategoryProducts(
+        categoryId: subCategoryController.allCategoryProductId.value,
+        page: page,
+        searchKey: searchKey);
+  }
+
+  getAll() async {
+    await subCategoryController.getMainCategories(widget.categoryId);
+    await subCategoryController.getAllCategoryProducts(
+        categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
+    await subCategoryController.getCategoryProducts(
+        categoryId: widget.subCategoryId, page: pageSub, searchKey: searchKey);
+    await subCategoryController.getSubCategory(widget.categoryId!);
+    await subCategoryController.getSubChildCategories(widget.subCategoryId!);
+    await subCategoryController.subCategoryIndexSelection(widget.subCategoryId);
+    subCategoryController.showAllProducts.value = true;
+    setState(() {});
     // subCategoryIndexSelection();
     // assignSelectedIndexes(index: 0);
   }

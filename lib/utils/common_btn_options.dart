@@ -3,12 +3,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'colors.dart';
 
 class ChooseOptionButton extends StatelessWidget {
-  const ChooseOptionButton({super.key, this.onTap, this.height, this.width, this.bgColor, this.iconColor});
+  const ChooseOptionButton({super.key, this.onTap, this.height, this.width, this.bgColor, this.iconColor,required this.textColor});
   final onTap;
   final height;
   final width;
   final bgColor;
   final iconColor;
+  final textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class ChooseOptionButton extends StatelessWidget {
           children: [
             Text(
               AppLocalizations.of(context)!.choose_option,
-              style: TextStyle(color: MyTheme.black,fontWeight: FontWeight.w700,fontSize: 12),
+              style: TextStyle(color: textColor,fontWeight: FontWeight.w700,fontSize: 12),
             ),
             Icon(
               Icons.arrow_drop_down_outlined,

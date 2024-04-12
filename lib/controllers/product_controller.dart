@@ -199,6 +199,7 @@ class ProductController extends GetxController {
     update();
   }
 
+
   onWishTap(context,id,snackbar) {
     if (is_logged_in.$ == false) {
       ToastComponent.showDialog(
@@ -208,6 +209,7 @@ class ProductController extends GetxController {
       return;
     }
     if (isInWishList) {
+      print("wishlistssssssss ${isInWishList}");
       isInWishList = false;
       if(snackbar != null && context != null){
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
