@@ -28,21 +28,25 @@ class HomeController extends GetxController {
   var bannerOneImageList = [].obs;
   var bannerThreeImageList = [].obs;
   var bannerFiveImageList = [].obs;
+  var bannerSevenImageList = [].obs;
   var bannerTwoIdList = [].obs;
   var bannerFourIdList = [].obs;
   var bannerSixIdList = [].obs;
+  var bannerSevenIdList = [].obs;
   var bannerOneIdList = [].obs;
   var bannerThreeIdList = [].obs;
   var bannerFiveIdList = [].obs;
   var bannerTwoNameList = [].obs;
   var bannerFourNameList = [].obs;
   var bannerSixNameList = [].obs;
+  var bannerSevenNameList = [].obs;
   var bannerOneNameList = [].obs;
   var bannerThreeNameList = [].obs;
   var bannerFiveNameList = [].obs;
   var bannerTwoChildIDList = [].obs;
   var bannerFourChildIDList = [].obs;
   var bannerSixChildIDList = [].obs;
+  var bannerSevenChildIDList = [].obs;
   var bannerOneChildIDList = [].obs;
   var bannerThreeChildIDList = [].obs;
   var bannerFiveChildIDList = [].obs;
@@ -413,6 +417,23 @@ class HomeController extends GetxController {
     update();
   }
 
+  fetchBannerSevenImages() async {
+    var bannerSevenImages = await SliderRepository().getBannerSevenImages();
+    for (var slider in bannerSevenImages.image!) {
+      bannerSevenImageList.add(slider);
+    }
+    for (var ids in bannerSevenImages.parentId!) {
+      bannerSevenIdList.add(ids);
+    }
+    for (var names in bannerSevenImages.parentName!) {
+      bannerSevenNameList.add(names);
+    }
+    for (var childId in bannerSevenImages.childId!) {
+      bannerSevenChildIDList.add(childId);
+    }
+    update();
+  }
+
   openWhatsApp(context) async {
     var whatsapp = "+919597959797";
     var whatsappURl_android = "whatsapp://send?phone=" +
@@ -448,6 +469,7 @@ class HomeController extends GetxController {
     fetchBannerFiveImages();
     fetchBannerThreeImages();
     fetchBannerSixImages();
+    fetchBannerSevenImages();
     fetchBestSellingProducts();
     fetchTodaysDealproducts();
     fetchBrandsData();
@@ -473,7 +495,9 @@ class HomeController extends GetxController {
     bannerSixImageList.clear();
     bannerOneImageList.clear();
     bannerFiveImageList.clear();
+    bannerSevenImageList.clear();
     bannerFiveIdList.clear();
+    bannerSevenIdList.clear();
     bannerOneIdList.clear();
     bannerTwoIdList.clear();
     bannerThreeIdList.clear();
@@ -483,12 +507,14 @@ class HomeController extends GetxController {
     bannerOneNameList.clear();
     bannerThreeNameList.clear();
     bannerFiveNameList.clear();
+    bannerSevenNameList.clear();
     bannerFourNameList.clear();
     bannerSixNameList.clear();
     bannerTwoChildIDList.clear();
     bannerOneChildIDList.clear();
     bannerThreeChildIDList.clear();
     bannerFiveChildIDList.clear();
+    bannerSevenChildIDList.clear();
     bannerFourChildIDList.clear();
     bannerSixChildIDList.clear();
     subChildCategoriesHome.clear();

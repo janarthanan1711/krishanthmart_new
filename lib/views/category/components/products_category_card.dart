@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:krishanthmart_new/models/product_response_model.dart';
 import 'package:krishanthmart_new/utils/common_btn_options.dart';
 import 'package:krishanthmart_new/views/product_details/product_details.dart';
-import 'package:social_share/social_share.dart';
 import '../../../controllers/product_controller.dart';
 import '../../../helpers/main_helpers.dart';
 import '../../../utils/colors.dart';
@@ -13,11 +12,27 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../cart/cart_page.dart';
 import '../../product_details/components/product_bottom_sheet.dart';
 
-class ProductCategoryCardLarge extends StatelessWidget {
-  ProductCategoryCardLarge({super.key, required this.product});
+class ProductCategoryCardLarge extends StatefulWidget {
+  ProductCategoryCardLarge(
+      {super.key, required this.product, required this.id});
 
   Product product;
+  int id;
+
+  @override
+  State<ProductCategoryCardLarge> createState() =>
+      _ProductCategoryCardLargeState();
+}
+
+class _ProductCategoryCardLargeState extends State<ProductCategoryCardLarge> {
   ProductController productController = Get.find();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    productController.fetchProductDetailsMain(widget.product.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,12 +82,12 @@ class ProductCategoryCardLarge extends StatelessWidget {
       onTap: () {
         Get.to(
           () => ProductDetails(
-            id: product.id,
+            id: widget.product.id,
           ),
         );
       },
       child: Container(
-        height: 128.h,
+        height: 133.h,
         margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
         child: Card(
           elevation: 10,
@@ -87,14 +102,14 @@ class ProductCategoryCardLarge extends StatelessWidget {
                     width: 105.w,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(product.thumbnail_image!),
+                        image: NetworkImage(widget.product.thumbnail_image!),
                       ),
                     ),
                   ),
                   onTap: () {
                     Get.to(
                       () => ProductDetails(
-                        id: product.id,
+                        id: widget.product.id,
                       ),
                     );
                   }),
@@ -133,7 +148,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                     SizedBox(
                       width: 250.h,
                       child: Text(
-                        product.name!,
+                        widget.product.name!,
                         style: TextStyle(
                             fontSize: 12.sp, fontWeight: FontWeight.bold),
                       ),
@@ -164,7 +179,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 4.w),
                           child: Text(
-                            product.rating.toString(),
+                            widget.product.rating.toString(),
                             style: TextStyle(
                                 color: const Color.fromRGBO(152, 152, 153, 1),
                                 fontSize: 10.sp,
@@ -179,7 +194,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          height: 30.h,
+                          height: 35.h,
                           width: 65.w,
                           color: MyTheme.green.withOpacity(0.300),
                           child: Column(
@@ -188,15 +203,15 @@ class ProductCategoryCardLarge extends StatelessWidget {
                                 AppLocalizations.of(context)!.ourPrice,
                                 style: TextStyle(
                                   color: MyTheme.medium_grey_50,
-                                  fontSize: 11.sp,
+                                  fontSize: 13.sp,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
                               Text(
-                                convertPrice(product.main_price!),
+                                convertPrice(widget.product.main_price!),
                                 style: TextStyle(
                                   color: MyTheme.accent_color,
-                                  fontSize: 11.sp,
+                                  fontSize: 13.sp,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -206,9 +221,9 @@ class ProductCategoryCardLarge extends StatelessWidget {
                         SizedBox(
                           width: 10.w,
                         ),
-                        if (product.has_discount!)
+                        if (widget.product.has_discount!)
                           Container(
-                            height: 30.h,
+                            height: 35.h,
                             width: 65.w,
                             color: MyTheme.shimmer_highlighted,
                             child: Column(
@@ -217,16 +232,16 @@ class ProductCategoryCardLarge extends StatelessWidget {
                                   AppLocalizations.of(context)!.mrp,
                                   style: TextStyle(
                                     color: MyTheme.medium_grey_50,
-                                    fontSize: 11.sp,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 Text(
-                                  convertPrice(product.stroked_price!),
+                                  convertPrice(widget.product.stroked_price!),
                                   style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
                                     color: MyTheme.medium_grey,
-                                    fontSize: 11.sp,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -236,7 +251,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                         SizedBox(
                           width: 10.w,
                         ),
-                        product.has_discount!
+                        widget.product.has_discount!
                             ? Container(
                                 decoration: const BoxDecoration(
                                   color: MyTheme.accent_color2,
@@ -258,7 +273,7 @@ class ProductCategoryCardLarge extends StatelessWidget {
                                 width: 60.w,
                                 child: Center(
                                   child: Text(
-                                    product.discount ?? "",
+                                    widget.product.discount ?? "",
                                     style: const TextStyle(
                                       fontSize: 14,
                                       color: Color(0xffffffff),
@@ -279,42 +294,48 @@ class ProductCategoryCardLarge extends StatelessWidget {
                       height: 5.h,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        iconButton(
-                          context,
-                          MyTheme.white,
-                          onTap: () {
-                            productController.addToCart(
-                                id: product.id,
-                                mode: "add_to_cart",
-                                context: context,
-                                snackbar: _addedToCartSnackbar);
-                          },
-                          height: 20.h,
-                          width: 50.w,
-                          icon: Icons.shopping_cart_rounded,
-                        ),
-                        iconButton(
-                          context,
-                            MyTheme.white,
-                          onTap: () {
-                            print(
-                                "can wishlist=====>${productController.isInWishList}");
-                            productController.onWishTap(
-                                context,
-                                product.id!,
-                                productController.isInWishList == true
-                                    ? removeFromWishlist
-                                    : addToWishList);
-                          },
-                          height: 20.h,
-                          width: 50.w,
-                          icon: Icons.favorite,
-                        ),
+                        // iconButton(context, onTap: () {
+                        //   productController.addToCart(
+                        //       id: widget.product.id,
+                        //       mode: "add_to_cart",
+                        //       context: context,
+                        //       snackbar: _addedToCartSnackbar);
+                        // },
+                        //     height: 20.h,
+                        //     width: 50.w,
+                        //     icon: Icons.shopping_cart_rounded,
+                        //     color: MyTheme.white),
+                       iconButton(
+                            context,
+                            onTap: () {
+                              productController.onWishTap(
+                                  context,
+                                  widget.id,
+                                  productController.isInWishList.value == true
+                                      ? removeFromWishlist
+                                      : addToWishList);
+                            },
+                            height: 20.h,
+                            // width: 50.w,
+                           width: 70.w,
+                            icon: Icons.favorite,
+                            // color: widget.id ==
+                            //         productController.getProductId.value
+                            //     ? MyTheme.red
+                            //     : MyTheme.white
+                            // color: _getWishlistIconColor(widget.product.id!)
+                         color:MyTheme.white,
+                            // color: widget.product.isInWishList == true ? MyTheme.red : MyTheme.white
+                            // color: productController.isInWishList.value == true
+                            //     ? MyTheme.red
+                            //     : MyTheme.white,
+                          ),
                         ChooseOptionButton(
                           height: 20.h,
-                          width: 108.w,
+                          // width: 108.w,
+                          width: 120.w,
                           onTap: () async {
                             await variantBottomSheet();
                           },
@@ -337,13 +358,22 @@ class ProductCategoryCardLarge extends StatelessWidget {
     );
   }
 
+  // Color _getWishlistIconColor(int productId) {
+  //   if (widget.product.id == productController.getProductId.value) {
+  //     return productController.isInWishList.value == true
+  //         ? MyTheme.red
+  //         : MyTheme.white;
+  //   }
+  //   return MyTheme.white;
+  // }
+
   Future variantBottomSheet() async {
-    await productController.fetchProductDetailsMain(product.id);
+    await productController.fetchProductDetailsMain(widget.product.id);
     await Get.bottomSheet(
       isDismissible: false,
       GetBuilder<ProductController>(builder: (productController) {
         return ProductVariantBottomSheet(
-          product: product,
+          product: widget.product,
           productController: productController,
         );
       }),
@@ -356,12 +386,12 @@ class ProductCategoryCardLarge extends StatelessWidget {
   }
 
   iconButton(
-    context,
-    Color color, {
+    context, {
     required onTap,
     required height,
     required width,
     required icon,
+    required color,
   }) {
     return InkWell(
       onTap: onTap,

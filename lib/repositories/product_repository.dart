@@ -17,7 +17,7 @@ class ProductRepository {
       // "Currency-Exchange-Rate":
       // SystemConfig.systemCurrency!.exchangeRate.toString(),
     });
-    // print("Best Selling Product=========> ${response.body}");
+    print("Best Selling Product=========> ${response.body}");
     return productMiniResponseFromJson(response.body);
   }
 
@@ -57,7 +57,7 @@ class ProductRepository {
           "Content-Type": "application/json",
         },
         body: postBody);
-    // print("Variant Response1 ${response.body}");
+    print("Variant Response1 ${response.body}");
     // Find the index of the first '{' character in the response
     int startIndex = response.body.indexOf('{');
 // Extract the substring from the first '{' to the end

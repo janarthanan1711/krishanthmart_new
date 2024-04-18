@@ -931,43 +931,37 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        // Container(
-                        //   color: MyTheme.noColor,
-                        //   width: DeviceInfo(context).width,
-                        //   child: ListView.builder(
-                        //       padding: const EdgeInsets.all(0),
-                        //       shrinkWrap: true,
-                        //       physics: const NeverScrollableScrollPhysics(),
-                        //       itemCount: 1,
-                        //       itemBuilder: (context, index) {
-                        //         String imageUrl =
-                        //             homeController.bannerThreeImageList[0];
-                        //         int productId =
-                        //             homeController.bannerThreeIdList[0];
-                        //         String categoryName =
-                        //             homeController.bannerThreeNameList[0];
-                        //         String subCategoryId =
-                        //             homeController.bannerThreeChildIDList[0];
-                        //         // homeController.getChildSubCategories(
-                        //         //     int.parse(productId));
-                        //         // int subCategoryId = homeController
-                        //         //     .subChildCategoriesHome[index].id;
-                        //         // String productName = homeController
-                        //         //     .subChildCategoriesHome[index].name;
-                        //         if (homeController
-                        //             .bannerThreeImageList.isEmpty) {
-                        //           return const Center(
-                        //               child: CircularProgressIndicator());
-                        //         } else {
-                        //           return BannersHomeList(
-                        //             imageUrl: imageUrl,
-                        //             productId: productId,
-                        //             productName: categoryName,
-                        //             subCategoryId: subCategoryId,
-                        //           );
-                        //         }
-                        //       }),
-                        // ),
+                        Container(
+                          color: MyTheme.noColor,
+                          width: DeviceInfo(context).width,
+                          child: ListView.builder(
+                              padding: const EdgeInsets.all(0),
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: homeController.bannerSevenImageList.length,
+                              itemBuilder: (context, index) {
+                                String imageUrl =
+                                homeController.bannerSevenImageList[index];
+                                int productId =
+                                homeController.bannerSevenIdList[index];
+                                String categoryName =
+                                homeController.bannerSevenNameList[index];
+                                String subCategoryId =
+                                homeController.bannerSevenChildIDList[index];
+                                if (homeController
+                                    .bannerThreeImageList.isEmpty) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  return BannersHomeList(
+                                    imageUrl: imageUrl,
+                                    productId: productId,
+                                    productName: categoryName,
+                                    subCategoryId: subCategoryId,
+                                  );
+                                }
+                              }),
+                        ),
                         Container(
                           color: Color(0xFFfaf3cf),
                           width: DeviceInfo(context).width,
@@ -1043,7 +1037,7 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.all(0),
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: 1,
+                              itemCount: homeController.bannerThreeImageList.length,
                               itemBuilder: (context, index) {
                                 String imageUrl =
                                     homeController.bannerThreeImageList[index];

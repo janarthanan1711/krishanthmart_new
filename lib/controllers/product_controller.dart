@@ -32,9 +32,11 @@ class ProductController extends GetxController {
   var quantityText = "1".obs;
   var itemsIndex = 0.obs;
   var getProductId = 0.obs;
-  bool isInWishList = false;
+  // bool isInWishList = false;
+  RxBool isInWishList = false.obs;
   String? mrpPrice = '';
   String discountVariant = '';
+
 
 
   @override
@@ -179,7 +181,8 @@ class ProductController extends GetxController {
       product_id: id,
     );
     //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
-    isInWishList = wishListCheckResponse.is_in_wishlist;
+    getProductId.value = wishListCheckResponse.product_id;
+    isInWishList.value = wishListCheckResponse.is_in_wishlist;
     update();
   }
 
@@ -187,7 +190,9 @@ class ProductController extends GetxController {
     var wishListCheckResponse =
     await WishListRepository().add(product_id: id);
     //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
-    isInWishList = wishListCheckResponse.is_in_wishlist;
+    getProductId.value = wishListCheckResponse.product_id;
+    isInWishList.value = wishListCheckResponse.is_in_wishlist;
+    print("getProduct Id======>${getProductId.value}");
     update();
   }
 
@@ -195,7 +200,9 @@ class ProductController extends GetxController {
     var wishListCheckResponse =
     await WishListRepository().remove(product_id: id);
     //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
-    isInWishList = wishListCheckResponse.is_in_wishlist;
+    getProductId.value = wishListCheckResponse.product_id;
+    isInWishList.value = wishListCheckResponse.is_in_wishlist;
+    print("getProduct Id Remove======>${getProductId.value}");
     update();
   }
 
@@ -208,16 +215,15 @@ class ProductController extends GetxController {
           duration: Toast.lengthLong);
       return;
     }
-    if (isInWishList) {
-      print("wishlistssssssss ${isInWishList}");
-      isInWishList = false;
+    if (isInWishList.value) {
+      isInWishList.value = false;
       if(snackbar != null && context != null){
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
       }
       removeFromWishList(id);
       update();
     } else {
-      isInWishList = true;
+      isInWishList.value = true;
       if(snackbar != null && context != null){
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
       }
@@ -235,7 +241,7 @@ class ProductController extends GetxController {
     variant = "";
     selectedColorIndex = 0;
     quantity = 1;
-    isInWishList = false;
+    isInWishList.value = false;
     getProductId.value = 0;
   }
 }

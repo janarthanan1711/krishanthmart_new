@@ -542,10 +542,14 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                 shrinkWrap: true,
                 itemCount: subCategoryController.allCategoryProductList.length,
                 itemBuilder: (context, index) {
+                  print(
+                      "iS PRODUXT IN WISHLIST???${subCategoryController.allCategoryProductList[index].isInWishList} ${subCategoryController.allCategoryProductList[index].id!}");
                   return Obx(
                     () => ProductCategoryCardLarge(
                       product:
                           subCategoryController.allCategoryProductList[index],
+                      id: subCategoryController
+                          .allCategoryProductList[index].id!,
                     ),
                   );
                 },
@@ -595,6 +599,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                   return Obx(
                     () => ProductCategoryCardLarge(
                       product: subCategoryController.categoryProductList[index],
+                      id: subCategoryController.categoryProductList[index].id!,
                     ),
                   );
                 },
@@ -663,19 +668,19 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             ),
           ),
           const Spacer(),
-          SizedBox(
-            width: 20,
-            child: IconButton(
-                onPressed: () {
-                  showSearchBar = true;
-                  setState(() {});
-                },
-                padding: EdgeInsets.zero,
-                icon: const Icon(
-                  Icons.search,
-                  size: 25,
-                )),
-          ),
+          // SizedBox(
+          //   width: 20,
+          //   child: IconButton(
+          //       onPressed: () {
+          //         showSearchBar = true;
+          //         setState(() {});
+          //       },
+          //       padding: EdgeInsets.zero,
+          //       icon: const Icon(
+          //         Icons.search,
+          //         size: 25,
+          //       )),
+          // ),
           SizedBox(
             width: 10,
           ),
@@ -730,16 +735,16 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
           searchKey = txt;
           clearAll();
           // getAll();
-          subCategoryController.getCategoryProducts(
-              categoryId: widget.categoryId, page: page, searchKey: searchKey);
+          subCategoryController.getAllCategoryProducts(
+              categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
         },
         onSubmitted: (txt) {
           searchKey = txt;
           clearAll();
           // getAll();
-          subCategoryController.getCategoryProducts(
-              categoryId: widget.categoryId,
-              page: pageSub,
+          subCategoryController.getAllCategoryProducts(
+              categoryId: widget.subCategoryId,
+              page: page,
               searchKey: searchKey);
         },
         autofocus: false,

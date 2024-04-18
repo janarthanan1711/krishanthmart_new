@@ -104,4 +104,16 @@ class SliderRepository {
     print("slider six images============>${response.body}");
     return sliderResponseFromJson(response.body);
   }
+
+  Future<SliderResponse> getBannerSevenImages() async {
+
+    String url =  ("${AppConfig.BASE_URL}/banners-seven");
+    final response =
+    await ApiRequest.get(url: url,
+      headers: {
+        "App-Language": app_language.$!,
+      },);
+    print("slider seven images============>${response.body}");
+    return sliderResponseFromJson(response.body);
+  }
 }

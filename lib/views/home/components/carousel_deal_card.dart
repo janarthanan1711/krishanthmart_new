@@ -33,7 +33,7 @@ class CarouselDealCard extends StatelessWidget {
               InkWell(
                 onTap: () {
                   Get.to(
-                    ProductDetails(
+                    () => ProductDetails(
                       id: product.id,
                     ),
                   );

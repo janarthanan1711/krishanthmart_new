@@ -109,6 +109,7 @@ class CartRepository {
         },
         body: post_body,
         middleware: BannedUser());
+    print("cart Post Body========>${post_body}");
     print("cartAdd Response========>${response.body}");
     print("status code ${response.statusCode}");
     print("Access Tokennnnnnn =========>${access_token.$}");

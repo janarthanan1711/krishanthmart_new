@@ -119,7 +119,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  height: 35.h,
+                                  height: 38.h,
                                   width: 85.w,
                                   color: MyTheme.green.withOpacity(0.300),
                                   child: Column(
@@ -128,7 +128,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                         AppLocalizations.of(context)!.ourPrice,
                                         style: TextStyle(
                                           color: MyTheme.medium_grey_50,
-                                          fontSize: 12.sp,
+                                          fontSize: 14.sp,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -137,7 +137,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                             productController.totalPrice!),
                                         style: TextStyle(
                                           color: MyTheme.accent_color,
-                                          fontSize: 12.sp,
+                                          fontSize: 14.sp,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -146,7 +146,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                 ),
                                 if (product.has_discount!)
                                   Container(
-                                    height: 35.h,
+                                    height: 38.h,
                                     width: 85.w,
                                     color: MyTheme.shimmer_highlighted,
                                     child: Column(
@@ -155,7 +155,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                           AppLocalizations.of(context)!.mrp,
                                           style: TextStyle(
                                             color: MyTheme.medium_grey_50,
-                                            fontSize: 12.sp,
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
@@ -165,7 +165,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                                             decoration:
                                                 TextDecoration.lineThrough,
                                             color: MyTheme.medium_grey,
-                                            fontSize: 12.sp,
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -306,7 +306,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                      height: 35.h,
                      width: 100.w,
                      icon: Icons.favorite,
-                    color: productController.isInWishList
+                    color: productController.isInWishList.value
                          ? const Color.fromRGBO(230, 46, 4, 1)
                          : MyTheme.white,
                    ),
@@ -655,7 +655,7 @@ class ProductVariantBottomSheet extends StatelessWidget {
                       productController.selectedChoices[choiceOptionsIndex] ==
                               option
                           ? MyTheme.accent_color2
-                          : MyTheme.noColor,
+                          : MyTheme.black,
                   width: 2),
               borderRadius: BorderRadius.circular(3.0),
               color: MyTheme.white,
@@ -677,7 +677,8 @@ class ProductVariantBottomSheet extends StatelessWidget {
                         productController.selectedChoices[choiceOptionsIndex] ==
                                 option
                             ? MyTheme.accent_color2
-                            : const Color.fromRGBO(224, 224, 225, 1),
+                         : MyTheme.black,
+                            // : const Color.fromRGBO(224, 224, 225, 1),
                     fontSize: 10.sp,
                     fontWeight: FontWeight.bold),
               ),
