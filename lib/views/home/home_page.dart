@@ -263,12 +263,12 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   width: 130.w,
                                   child: Obx(
-                                  ()=> Text(
+                                    () => Text(
                                       homeController.headerText1.value,
                                       style: TextStyle(
-                                          color: const Color(0xFF996515),
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF996515),
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
@@ -395,37 +395,60 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        Container(
-                          color: Colors.red[100],
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            child: Obx(
-                              () => Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  pincode_matched.$ == true
-                                      ? Text(
-                                          "Service Available for this pincode ${locationController.pincodeData.value}",
-                                          style: TextStyle(
-                                            color: MyTheme.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : locationController.isLoading
-                                              .value // Assuming you have an isLoading variable in your LocationController
-                                          ? CircularProgressIndicator() // Show loader if isLoading is true
-                                          : Text(
-                                              "Service Not Available for this pincode ${locationController.pincodeData.value}",
-                                              style: TextStyle(
-                                                color: MyTheme.black,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        pincode_matched.$ == true
+                            ? Container(
+                                color: Colors.red[100],
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Service Available for this pincode ${locationController.pincodeData.value}",
+                                        style: TextStyle(
+                                          color: MyTheme.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            // : locationController.isLoading
+                            //         .value // Assuming you have an isLoading variable in your LocationController
+                            //     ? CircularProgressIndicator()
+                                : SizedBox(),
+                        // Container(
+                        //   color: Colors.red[100],
+                        //   child: Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 5),
+                        //     child: Obx(
+                        //       () => Row(
+                        //         mainAxisAlignment: MainAxisAlignment.center,
+                        //         children: [
+                        //           pincode_matched.$ == true
+                        //               ? Text(
+                        //                   "Service Available for this pincode ${locationController.pincodeData.value}",
+                        //                   style: TextStyle(
+                        //                     color: MyTheme.black,
+                        //                     fontWeight: FontWeight.bold,
+                        //                   ),
+                        //                 )
+                        //               : locationController.isLoading
+                        //                       .value // Assuming you have an isLoading variable in your LocationController
+                        //                   ? CircularProgressIndicator() // Show loader if isLoading is true
+                        //                   : Text(
+                        //                       "Service Not Available for this pincode ${locationController.pincodeData.value}",
+                        //                       style: TextStyle(
+                        //                         color: MyTheme.black,
+                        //                         fontWeight: FontWeight.bold,
+                        //                       ),
+                        //                     ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
 
                         const CustomCarousel(),
                         SizedBox(
@@ -938,16 +961,17 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.all(0),
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: homeController.bannerSevenImageList.length,
+                              itemCount:
+                                  homeController.bannerSevenImageList.length,
                               itemBuilder: (context, index) {
                                 String imageUrl =
-                                homeController.bannerSevenImageList[index];
+                                    homeController.bannerSevenImageList[index];
                                 int productId =
-                                homeController.bannerSevenIdList[index];
+                                    homeController.bannerSevenIdList[index];
                                 String categoryName =
-                                homeController.bannerSevenNameList[index];
-                                String subCategoryId =
-                                homeController.bannerSevenChildIDList[index];
+                                    homeController.bannerSevenNameList[index];
+                                String subCategoryId = homeController
+                                    .bannerSevenChildIDList[index];
                                 if (homeController
                                     .bannerThreeImageList.isEmpty) {
                                   return const Center(
@@ -1037,7 +1061,8 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.all(0),
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: homeController.bannerThreeImageList.length,
+                              itemCount:
+                                  homeController.bannerThreeImageList.length,
                               itemBuilder: (context, index) {
                                 String imageUrl =
                                     homeController.bannerThreeImageList[index];
@@ -1045,8 +1070,8 @@ class _HomePageState extends State<HomePage> {
                                     homeController.bannerThreeIdList[index];
                                 String categoryName =
                                     homeController.bannerThreeNameList[index];
-                                String subCategoryId =
-                                    homeController.bannerThreeChildIDList[index];
+                                String subCategoryId = homeController
+                                    .bannerThreeChildIDList[index];
                                 if (homeController
                                     .bannerThreeImageList.isEmpty) {
                                   return const Center(
@@ -1188,22 +1213,26 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 4.w,vertical: 4.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 4.w, vertical: 4.h),
                           child: Container(
                             height: 195.h,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(20.0) //                 <--- border radius here
-                              ),
-                              gradient:  LinearGradient(
+                                borderRadius: BorderRadius.all(Radius.circular(
+                                        20.0) //                 <--- border radius here
+                                    ),
+                                gradient: LinearGradient(
                                   begin: Alignment.centerLeft,
                                   end: Alignment.centerRight,
-                                  colors: [MyTheme.couponFirstColor, MyTheme.couponSecondColor],
+                                  colors: [
+                                    MyTheme.couponFirstColor,
+                                    MyTheme.couponSecondColor
+                                  ],
                                 )
-                              // color: homeController
-                              //     .hexToColor(homeController.couponColor.value),
-                            ),
+                                // color: homeController
+                                //     .hexToColor(homeController.couponColor.value),
+                                ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -1228,11 +1257,14 @@ class _HomePageState extends State<HomePage> {
                                     width: 150.w,
                                     decoration: BoxDecoration(
                                         color: MyTheme.medium_grey,
-                                        border: Border.all(color: MyTheme.white),
-                                        borderRadius: BorderRadius.circular(15)),
+                                        border:
+                                            Border.all(color: MyTheme.white),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
                                     child: Center(
                                       child: Text(
-                                        AppLocalizations.of(context)!.view_coupon,
+                                        AppLocalizations.of(context)!
+                                            .view_coupon,
                                         style: const TextStyle(
                                             color: MyTheme.white,
                                             fontWeight: FontWeight.bold),

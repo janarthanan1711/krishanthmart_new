@@ -128,7 +128,7 @@ class ProductRepository {
     });
     return productMiniResponseFromJson(response.body);
   }
-  Future<ProductMiniResponse> getAllProducts({int? page = 1}) async {
+  Future<ProductMiniResponse> getAllProducts({page = 1}) async {
     String url = ("${AppConfig.BASE_URL}/products?page=$page");
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,

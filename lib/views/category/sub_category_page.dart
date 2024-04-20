@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:krishanthmart_new/controllers/sub_category_controller.dart';
 import 'package:krishanthmart_new/utils/device_info.dart';
@@ -12,6 +13,7 @@ import '../../utils/image_directory.dart';
 import '../../utils/shared_value.dart';
 import '../../utils/shimmer_utils.dart';
 import '../cart/cart_page.dart';
+import '../home/components/product_card.dart';
 import 'components/products_category_card.dart';
 import 'package:badges/badges.dart' as badges;
 
@@ -96,360 +98,19 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
   Widget build(BuildContext context) {
     // subCategoryController.selectedIndex.value = widget.categoryId!;
     return Scaffold(
-      appBar: AppBar(
-        title: buildAppBarTitle(context),
-        backgroundColor: MyTheme.shimmer_base,
-        foregroundColor: MyTheme.black,
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        bottom: widget.from_banner == false
-            ? PreferredSize(
-                preferredSize: const Size.fromHeight(45.0),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      // width: 350.w,
-                      height: 45,
-                      width: Get.width,
-                      // key: _itemKey,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        child: Container(
-                          width: Get.width,
-                          child: Obx(
-                            () => CarouselSlider.builder(
-                              options: CarouselOptions(
-                                // You can customize carousel options here
-                                // aspectRatio: 16 / 9,
-                                // viewportFraction: 0.8,
-                                initialPage: widget.selectedIndexes!,
-                                enableInfiniteScroll: true,
-                                reverse: false,
-                                autoPlay: false,
-                                autoPlayInterval: Duration(seconds: 3),
-                                autoPlayAnimationDuration:
-                                    Duration(milliseconds: 800),
-                                autoPlayCurve: Curves.fastOutSlowIn,
-                                enlargeCenterPage: true,
-                                scrollDirection: Axis.horizontal,
-                                onPageChanged: (index, reason) {
-                                  setState(() {
-                                    // widget.selectedIndexes = index;
-                                    index = widget.selectedIndexes!;
-                                    print(
-                                        "selected Index=======>${widget.selectedIndexes!} ${index}");
-                                  });
-                                },
-                              ),
-                              carouselController: carouselController,
-                              itemCount:
-                                  subCategoryController.subCategoryList.length,
-                              itemBuilder: (BuildContext context, int index,
-                                  int realIndex) {
-                                GlobalKey itemKey = GlobalKey();
-                                return InkWell(
-                                  key: itemKey,
-                                  onTap: () async {
-                                    subCategoryController
-                                        .showAllProducts.value = true;
-                                    setState(() {
-                                      page = 1;
-                                    });
-                                    widget.subCategoryId = subCategoryController
-                                        .subCategoryList[index].id;
-                                    subCategoryController
-                                            .subCategoryIndex.value =
-                                        subCategoryController
-                                            .selectedIndex.value;
-                                    await subCategoryController
-                                        .getSubChildCategories(
-                                            subCategoryController
-                                                .subCategoryList[index].id!);
-                                    subCategoryController.allCategoryProductList
-                                        .clear();
-                                    await subCategoryController
-                                        .getAllCategoryProducts(
-                                      categoryId: subCategoryController
-                                          .subCategoryList[index].id,
-                                      page: page,
-                                      searchKey: searchKey,
-                                      index: index,
-                                    );
-                                  },
-                                  child: Container(
-                                    height: 35.h,
-                                    decoration: BoxDecoration(
-                                      color: widget.subCategoryId ==
-                                              subCategoryController
-                                                  .subCategoryList[index].id
-                                          ? Colors.green
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: widget.subCategoryId ==
-                                                subCategoryController
-                                                    .subCategoryList[index].id
-                                            ? Colors.black
-                                            : MyTheme.green,
-                                      ),
-                                    ),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: Center(
-                                      child: Text(
-                                        subCategoryController
-                                            .subCategoryList[index].name!,
-                                        style: TextStyle(
-                                          color: widget.subCategoryId ==
-                                                  subCategoryController
-                                                      .subCategoryList[index].id
-                                              ? Colors.black
-                                              : MyTheme.green,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : PreferredSize(
-                child: SizedBox(),
-                preferredSize: const Size.fromHeight(0.0),
-              ),
-      ),
       body: Stack(
+        fit: StackFit.loose,
         children: [
-          widget.from_banner == false
-              ? GetBuilder<SubCategoryController>(
-                  builder: (subCategoryController) {
-                  return Container(
-                    width: DeviceInfo(context).width!,
-                    color: MyTheme.white,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Obx(
-                            () => InkWell(
-                              child: Container(
-                                height: 35.h,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: subCategoryController
-                                              .showAllProducts.value ==
-                                          true
-                                      ? Colors.green
-                                      : Colors.transparent,
-                                  border: Border.all(
-                                      color: subCategoryController
-                                                  .showAllProducts.value ==
-                                              true
-                                          ? Colors.black
-                                          : MyTheme.green),
-                                ),
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Center(
-                                  child: Text(
-                                    "All",
-                                    style: TextStyle(
-                                        color: subCategoryController
-                                                    .showAllProducts.value ==
-                                                true
-                                            ? Colors.black
-                                            : MyTheme.green),
-                                  ),
-                                ),
-                              ),
-                              onTap: () async {
-                                try {
-                                  subCategoryController.showAllProducts.value =
-                                      true;
-                                  subCategoryController.isLoading.value = true;
-                                  setState(() {
-                                    page = 1;
-                                  });
-                                  // print(
-                                  //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
-                                  // print(
-                                  //     "All Part set index ${subCategoryController.subCategoryIndex.value}");
-                                  // await subCategoryController.getCategoryProducts(
-                                  //     categoryId: subCategoryController
-                                  //         .allCategoryProductList[subCategoryController.subCategoryIndex.value].id,
-                                  //     page: page,
-                                  //     searchKey: searchKey);
-                                  // subCategoryController.categoryProductList.clear();
-                                  subCategoryController.allCategoryProductList
-                                      .clear();
-                                  //hERE ASSIGNED THE SUBCATEGORY INDEX VALUE TO FETCH ALL PRODUCTS
-                                  await subCategoryController
-                                      .getAllCategoryProducts(
-                                          categoryId: subCategoryController
-                                              .subCategoryList[
-                                                  widget.selectedIndexes!]
-                                              .id,
-                                          page: page,
-                                          searchKey: searchKey,
-                                          index: subCategoryController
-                                              .subCategoryIndex.value);
-                                  // await subCategoryController
-                                  //     .getAllCategoryProducts(
-                                  //         categoryId: subCategoryController
-                                  //             .subCategoryList[
-                                  //                 subCategoryController
-                                  //                     .subCategoryIndex.value]
-                                  //             .id,
-                                  //         page: page,
-                                  //         searchKey: searchKey,
-                                  //         index: subCategoryController
-                                  //             .subCategoryIndex.value);
-                                  // subCategoryController.categoryProductId.value =
-                                  //     subCategoryController
-                                  //         .subCategoryList[subCategoryController
-                                  //             .subCategoryIndex.value]
-                                  //         .id;
-                                  // print(
-                                  //     "All Part set index ${subCategoryController.subCategoryIndex.value}");
-                                  //
-                                  // print(
-                                  //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
-                                } catch (e) {
-                                  // Handle errors (e.g., show an error message)
-                                  debugPrint("Error fetching products: $e");
-                                } finally {
-                                  subCategoryController.isLoading.value = false;
-                                }
-                              },
-                            ),
-                          ),
-                          Row(
-                            children: List.generate(
-                              subCategoryController.subChildCategories.length,
-                              growable: true,
-                              (index) => Obx(
-                                () => InkWell(
-                                  child: Container(
-                                    height: 35.h,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: subCategoryController
-                                                        .subSelectedIndex
-                                                        .value ==
-                                                    index &&
-                                                subCategoryController
-                                                        .showAllProducts
-                                                        .value ==
-                                                    false
-                                            ? Colors.green
-                                            : Colors.transparent,
-                                        border: Border.all(
-                                            color: subCategoryController
-                                                            .subSelectedIndex
-                                                            .value ==
-                                                        index &&
-                                                    subCategoryController
-                                                            .showAllProducts
-                                                            .value ==
-                                                        false
-                                                ? Colors.black
-                                                : MyTheme.green)),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: Center(
-                                      child: Text(
-                                        subCategoryController
-                                            .subChildCategories[index].name!,
-                                        style: TextStyle(
-                                            color: subCategoryController
-                                                            .subSelectedIndex
-                                                            .value ==
-                                                        index &&
-                                                    subCategoryController
-                                                            .showAllProducts
-                                                            .value ==
-                                                        false
-                                                ? Colors.black
-                                                : MyTheme.green),
-                                      ),
-                                    ),
-                                  ),
-                                  onTap: () async {
-                                    setState(() {
-                                      pageSub = 1;
-                                    });
-                                    // print("Calling");
-                                    subCategoryController
-                                        .showAllProducts.value = false;
-                                    subCategoryController
-                                        .subSelectedIndex.value = index;
-                                    subCategoryController.isInitial.value =
-                                        true;
-                                    subCategoryController
-                                            .subChildCategoryId.value =
-                                        subCategoryController
-                                            .subChildCategories[index].id!;
-                                    print(
-                                        "Show All Products========>${subCategoryController.showAllProducts.value}");
-                                    print(
-                                        "Show selected ID==========>${subCategoryController.subChildCategoryId.value} ${subCategoryController.subChildCategories[index].id!}");
-                                    // subCategoryController.categoryProductList.clear();
-                                    // subCategoryController.isLoading.value = true;
-                                    // print(
-                                    //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
-                                    // print(
-                                    //     "subChildCategory Value ${subCategoryController.categoryProductList[index].name}");
-                                    subCategoryController.categoryProductList
-                                        .clear();
-                                    await subCategoryController
-                                        .getCategoryProducts(
-                                            categoryId: subCategoryController
-                                                .subChildCategories[index].id!,
-                                            page: pageSub,
-                                            searchKey: searchKey,
-                                            index: index);
-                                    // print(
-                                    //     "Passing Ids =====>${subCategoryController.subChildCategories[index].id}");
-                                    // print(
-                                    //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
-                                    // print(subCategoryController
-                                    //     .categoryProductList.isEmpty);
-                                    // print(
-                                    //     "subChildCategory Value ${subCategoryController.categoryProductList[index].name}");
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                })
-              : SizedBox(),
-          Positioned.fill(
-            top: widget.from_banner == false ? 50 : 0,
-            child: subCategoryController.showAllProducts.value == true
-                ? buildAllProductList()
-                : buildProductList(),
-          ),
-
+          subCategoryController.showAllProducts.value == true
+              ? buildAllProductList()
+              : buildProductList(),
           // buildProductList(),
+          Positioned(
+            top: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: buildAppBar(context),
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: buildLoadingContainer(),
@@ -459,63 +120,88 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
     );
   }
 
-  CustomScrollView buildProductList() {
-    return CustomScrollView(
-      controller: ycrollController,
-      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      slivers: <Widget>[
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              buildProductScrollableList(),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  CustomScrollView buildAllProductList() {
-    return CustomScrollView(
-      controller: xcrollController,
-      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      slivers: <Widget>[
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              buildAllProductScrollableList(),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Container buildLoadingContainer() {
+  Container buildProductList() {
     return Container(
-      height:
-          subCategoryController.showLoadingContainer.value == true ? 10.h : 0,
-      width: double.infinity,
-      color: MyTheme.white,
-      child: Center(
-        child:
-            // subCategoryController.showAllProducts.value == true
-            //     ?
-            Text(
-          subCategoryController.totalData.value ==
-                  subCategoryController.allCategoryProductList.length
-              ? AppLocalizations.of(context)!.no_more_products_ucf
-              : AppLocalizations.of(context)!.loading_more_products_ucf,
-        ),
+      child: Column(
+        children: [
+          SizedBox(height: 145
+              //MediaQuery.of(context).viewPadding.top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
+              ),
+          Expanded(
+            child: CustomScrollView(
+              controller: ycrollController,
+              physics: BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              shrinkWrap: true,
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      buildProductScrollableList(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-        // : Obx(
-        //     () => Text(
-        //       subCategoryController.totalData.value ==
-        //               subCategoryController.categoryProductList.length
-        //           ? AppLocalizations.of(context)!.no_more_products_ucf
-        //           : AppLocalizations.of(context)!.loading_more_products_ucf,
-        //     ),
-        //   ),
+  Container buildAllProductList() {
+    return Container(
+      child: Column(
+        children: [
+          SizedBox(height: 145
+              //MediaQuery.of(context).viewPadding.top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
+              ),
+          Expanded(
+            child: CustomScrollView(
+              controller: xcrollController,
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              shrinkWrap: true,
+              // physics: NeverScrollableScrollPhysics(),
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      buildAllProductScrollableList(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Obx buildLoadingContainer() {
+    return Obx(
+      () => Container(
+        height:
+            subCategoryController.showLoadingContainer.value == true ? 10.h : 0,
+        width: double.infinity,
+        color: MyTheme.white,
+        child: Center(
+          child: subCategoryController.showAllProducts.value == true
+              ? Text(
+                  subCategoryController.totalData.value ==
+                          subCategoryController.allCategoryProductList.length
+                      ? AppLocalizations.of(context)!.no_more_products_ucf
+                      : AppLocalizations.of(context)!.loading_more_products_ucf,
+                )
+              : Text(
+                  subCategoryController.totalData.value ==
+                          subCategoryController.categoryProductList.length
+                      ? AppLocalizations.of(context)!.no_more_products_ucf
+                      : AppLocalizations.of(context)!.loading_more_products_ucf,
+                ),
+        ),
       ),
     );
   }
@@ -542,22 +228,20 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                 shrinkWrap: true,
                 itemCount: subCategoryController.allCategoryProductList.length,
                 itemBuilder: (context, index) {
-                  print(
-                      "iS PRODUXT IN WISHLIST???${subCategoryController.allCategoryProductList[index].isInWishList} ${subCategoryController.allCategoryProductList[index].id!}");
-                  return Obx(
-                    () => ProductCategoryCardLarge(
-                      product:
-                          subCategoryController.allCategoryProductList[index],
-                      id: subCategoryController
-                          .allCategoryProductList[index].id!,
-                    ),
+                  return ProductCategoryCardLarge(
+                    product:
+                        subCategoryController.allCategoryProductList[index],
+                    id: subCategoryController.allCategoryProductList[index].id!,
                   );
                 },
               );
             } else if (subCategoryController.totalData.value == 0) {
-              return Center(
-                child:
-                    Text(AppLocalizations.of(context)!.no_product_is_available),
+              return Padding(
+                padding: const EdgeInsets.only(top: 300.0),
+                child: Center(
+                  child:
+                      Text(AppLocalizations.of(context)!.no_product_is_available),
+                ),
               );
             } else if (page > 1 &&
                 subCategoryController.allCategoryProductList.isEmpty &&
@@ -596,18 +280,19 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                 shrinkWrap: true,
                 itemCount: subCategoryController.categoryProductList.length,
                 itemBuilder: (context, index) {
-                  return Obx(
-                    () => ProductCategoryCardLarge(
-                      product: subCategoryController.categoryProductList[index],
-                      id: subCategoryController.categoryProductList[index].id!,
-                    ),
+                  return ProductCategoryCardLarge(
+                    product: subCategoryController.categoryProductList[index],
+                    id: subCategoryController.categoryProductList[index].id!,
                   );
                 },
               );
             } else if (subCategoryController.totalData.value == 0) {
-              return Center(
-                child:
-                    Text(AppLocalizations.of(context)!.no_product_is_available),
+              return Padding(
+                padding: const EdgeInsets.only(top: 300.0),
+                child: Center(
+                  child:
+                      Text(AppLocalizations.of(context)!.no_product_is_available),
+                ),
               );
             } else if (pageSub > 1 &&
                 subCategoryController.categoryProductList.isEmpty &&
@@ -736,7 +421,9 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
           clearAll();
           // getAll();
           subCategoryController.getAllCategoryProducts(
-              categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
+              categoryId: widget.subCategoryId,
+              page: page,
+              searchKey: searchKey);
         },
         onSubmitted: (txt) {
           searchKey = txt;
@@ -778,98 +465,489 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
 
   allProductsScroll() {
     xcrollController.addListener(() {
-      print("position: " + xcrollController.position.pixels.toString());
-      print("max: " + xcrollController.position.maxScrollExtent.toString());
       if (xcrollController.position.pixels ==
           xcrollController.position.maxScrollExtent) {
-        // User reached the bottom
-        if (subCategoryController.allCategoryProductList.length <
-                subCategoryController.totalData.value &&
-            page < subCategoryController.lastPageAll.value) {
-          setState(() {
-            page++;
-          });
-          subCategoryController.showLoadingContainer.value = true;
-          getAllProductsList();
-        } else if (page > 1) {
-          print(
-              "Last Page Reached=======>${page}:::${subCategoryController.lastPageAll.value}");
-          if (xcrollController.position.pixels ==
-              xcrollController.position.minScrollExtent) {
-            // User reached the top
-            // Check if the list is not empty before decrementing the page count
-            setState(() {
-              page--;
-            });
-            // Fetch data based on the updated page value
-            subCategoryController.showLoadingContainer.value = true;
-            getAllProductsList();
-
-            // subCategoryController.showLoadingContainer.value = true;
-          }
-        }
-      } else if (xcrollController.position.pixels ==
-          xcrollController.position.minScrollExtent) {
-        // User reached the top
-        if (page > 1) {
-          // Check if the list is not empty before decrementing the page count
-          setState(() {
-            page--;
-          });
-          // Fetch data based on the updated page value
-          subCategoryController.showLoadingContainer.value = true;
-          getAllProductsList();
-          // subCategoryController.showLoadingContainer.value = true;
-        }
+        setState(() {
+          page++;
+        });
+        subCategoryController.showLoadingContainer.value = true;
+        getAllProductsList();
       }
     });
+
+    // xcrollController.addListener(() {
+    //   print("position: " + xcrollController.position.pixels.toString());
+    //   print("max: " + xcrollController.position.maxScrollExtent.toString());
+    //   if (xcrollController.position.pixels ==
+    //       xcrollController.position.maxScrollExtent) {
+    //     // User reached the bottom
+    //     if (subCategoryController.allCategoryProductList.length <
+    //             subCategoryController.totalData.value &&
+    //         page < subCategoryController.lastPageAll.value) {
+    //       setState(() {
+    //         page++;
+    //       });
+    //       subCategoryController.showLoadingContainer.value = true;
+    //       getAllProductsList();
+    //     } else if (page > 1) {
+    //       print(
+    //           "Last Page Reached=======>${page}:::${subCategoryController.lastPageAll.value}");
+    //       if (xcrollController.position.pixels ==
+    //           xcrollController.position.minScrollExtent) {
+    //         // User reached the top
+    //         // Check if the list is not empty before decrementing the page count
+    //         setState(() {
+    //           page--;
+    //         });
+    //         // Fetch data based on the updated page value
+    //         subCategoryController.showLoadingContainer.value = true;
+    //         getAllProductsList();
+    //
+    //         // subCategoryController.showLoadingContainer.value = true;
+    //       }
+    //     }
+    //   } else if (xcrollController.position.pixels ==
+    //       xcrollController.position.minScrollExtent) {
+    //     // User reached the top
+    //     if (page > 1) {
+    //       // Check if the list is not empty before decrementing the page count
+    //       setState(() {
+    //         page--;
+    //       });
+    //       // Fetch data based on the updated page value
+    //       subCategoryController.showLoadingContainer.value = true;
+    //       getAllProductsList();
+    //       // subCategoryController.showLoadingContainer.value = true;
+    //     }
+    //   }
+    // });
   }
 
   categoryProductsScroll() {
     ycrollController.addListener(() {
       if (ycrollController.position.pixels ==
           ycrollController.position.maxScrollExtent) {
-        // User reached the bottom
-        if (subCategoryController.categoryProductList.length <
-                subCategoryController.totalData.value &&
-            pageSub < subCategoryController.lastPage.value) {
-          setState(() {
-            pageSub++;
-          });
-          subCategoryController.showLoadingContainer.value = true;
-          getProductsList();
-        }
-      } else if (pageSub > 1) {
-        print(
-            "Last Page Reached=======>${page}:::${subCategoryController.lastPage.value}");
-        if (ycrollController.position.pixels ==
-            ycrollController.position.minScrollExtent) {
-          // User reached the top
-          // Check if the list is not empty before decrementing the page count
-          setState(() {
-            pageSub--;
-          });
-          // Fetch data based on the updated page value
-          subCategoryController.showLoadingContainer.value = true;
-          getProductsList();
-
-          // subCategoryController.showLoadingContainer.value = true;
-        }
-      } else if (ycrollController.position.pixels ==
-          ycrollController.position.minScrollExtent) {
-        // User reached the top
-        if (pageSub > 1) {
-          // Check if the list is not empty before decrementing the page count
-          setState(() {
-            pageSub--;
-          });
-          // Fetch data based on the updated page value
-          getProductsList();
-
-          // subCategoryController.showLoadingContainer.value = true;
-        }
+        setState(() {
+          pageSub++;
+        });
+        subCategoryController.showLoadingContainer.value = true;
+        getProductsList();
       }
     });
+    // ycrollController.addListener(() {
+    //   if (ycrollController.position.pixels ==
+    //       ycrollController.position.maxScrollExtent) {
+    //     // User reached the bottom
+    //     if (subCategoryController.categoryProductList.length <
+    //             subCategoryController.totalData.value &&
+    //         pageSub < subCategoryController.lastPage.value) {
+    //       setState(() {
+    //         pageSub++;
+    //       });
+    //       subCategoryController.showLoadingContainer.value = true;
+    //       getProductsList();
+    //     }
+    //   } else if (pageSub > 1) {
+    //     print(
+    //         "Last Page Reached=======>${page}:::${subCategoryController.lastPage.value}");
+    //     if (ycrollController.position.pixels ==
+    //         ycrollController.position.minScrollExtent) {
+    //       // User reached the top
+    //       // Check if the list is not empty before decrementing the page count
+    //       setState(() {
+    //         pageSub--;
+    //       });
+    //       // Fetch data based on the updated page value
+    //       subCategoryController.showLoadingContainer.value = true;
+    //       getProductsList();
+    //
+    //       // subCategoryController.showLoadingContainer.value = true;
+    //     }
+    //   } else if (ycrollController.position.pixels ==
+    //       ycrollController.position.minScrollExtent) {
+    //     // User reached the top
+    //     if (pageSub > 1) {
+    //       // Check if the list is not empty before decrementing the page count
+    //       setState(() {
+    //         pageSub--;
+    //       });
+    //       // Fetch data based on the updated page value
+    //       getProductsList();
+    //
+    //       // subCategoryController.showLoadingContainer.value = true;
+    //     }
+    //   }
+    // });
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white.withOpacity(0.95),
+      foregroundColor: MyTheme.black,
+      automaticallyImplyLeading: false,
+      centerTitle: true,
+      flexibleSpace: widget.from_banner == false
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 0.0),
+              child: Column(
+                children: [
+                  buildAppBarTitle(context),
+                  Row(
+                    children: [
+                      SizedBox(
+                        // width: 350.w,
+                        height: 45,
+                        width: Get.width,
+                        // key: _itemKey,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 5),
+                          child: Container(
+                            width: Get.width,
+                            child: Obx(
+                              () => CarouselSlider.builder(
+                                options: CarouselOptions(
+                                  // You can customize carousel options here
+                                  // aspectRatio: 16 / 9,
+                                  // viewportFraction: 0.8,
+                                  initialPage: widget.selectedIndexes!,
+                                  enableInfiniteScroll: true,
+                                  reverse: false,
+                                  autoPlay: false,
+                                  autoPlayInterval: Duration(seconds: 3),
+                                  autoPlayAnimationDuration:
+                                      Duration(milliseconds: 800),
+                                  autoPlayCurve: Curves.fastOutSlowIn,
+                                  enlargeCenterPage: true,
+                                  scrollDirection: Axis.horizontal,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      // widget.selectedIndexes = index;
+                                      index = widget.selectedIndexes!;
+                                      print(
+                                          "selected Index=======>${widget.selectedIndexes!} ${index}");
+                                    });
+                                  },
+                                ),
+                                carouselController: carouselController,
+                                itemCount: subCategoryController
+                                    .subCategoryList.length,
+                                itemBuilder: (BuildContext context, int index,
+                                    int realIndex) {
+                                  GlobalKey itemKey = GlobalKey();
+                                  return InkWell(
+                                    key: itemKey,
+                                    onTap: () async {
+                                      subCategoryController
+                                          .showAllProducts.value = true;
+                                      setState(() {
+                                        page = 1;
+                                      });
+                                      widget.subCategoryId =
+                                          subCategoryController
+                                              .subCategoryList[index].id;
+                                      subCategoryController
+                                              .subCategoryIndex.value =
+                                          subCategoryController
+                                              .selectedIndex.value;
+                                      await subCategoryController
+                                          .getSubChildCategories(
+                                              subCategoryController
+                                                  .subCategoryList[index].id!);
+                                      subCategoryController
+                                          .allCategoryProductList
+                                          .clear();
+                                      await subCategoryController
+                                          .getAllCategoryProducts(
+                                        categoryId: subCategoryController
+                                            .subCategoryList[index].id,
+                                        page: page,
+                                        searchKey: searchKey,
+                                        index: index,
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 35.h,
+                                      decoration: BoxDecoration(
+                                        color: widget.subCategoryId ==
+                                                subCategoryController
+                                                    .subCategoryList[index].id
+                                            ? Colors.green
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: widget.subCategoryId ==
+                                                  subCategoryController
+                                                      .subCategoryList[index].id
+                                              ? Colors.black
+                                              : MyTheme.green,
+                                        ),
+                                      ),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Center(
+                                        child: Text(
+                                          subCategoryController
+                                              .subCategoryList[index].name!,
+                                          style: TextStyle(
+                                            color: widget.subCategoryId ==
+                                                    subCategoryController
+                                                        .subCategoryList[index]
+                                                        .id
+                                                ? Colors.black
+                                                : MyTheme.green,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  widget.from_banner == false
+                      ? GetBuilder<SubCategoryController>(
+                          builder: (subCategoryController) {
+                          return Container(
+                            width: DeviceInfo(context).width!,
+                            color: MyTheme.white,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 5),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  Obx(
+                                    () => InkWell(
+                                      child: Container(
+                                        height: 35.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: subCategoryController
+                                                      .showAllProducts.value ==
+                                                  true
+                                              ? Colors.green
+                                              : Colors.transparent,
+                                          border: Border.all(
+                                              color: subCategoryController
+                                                          .showAllProducts
+                                                          .value ==
+                                                      true
+                                                  ? Colors.black
+                                                  : MyTheme.green),
+                                        ),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Center(
+                                          child: Text(
+                                            "All",
+                                            style: TextStyle(
+                                                color: subCategoryController
+                                                            .showAllProducts
+                                                            .value ==
+                                                        true
+                                                    ? Colors.black
+                                                    : MyTheme.green),
+                                          ),
+                                        ),
+                                      ),
+                                      onTap: () async {
+                                        try {
+                                          subCategoryController
+                                              .showAllProducts.value = true;
+                                          subCategoryController
+                                              .isLoading.value = true;
+                                          setState(() {
+                                            page = 1;
+                                          });
+                                          // print(
+                                          //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
+                                          // print(
+                                          //     "All Part set index ${subCategoryController.subCategoryIndex.value}");
+                                          // await subCategoryController.getCategoryProducts(
+                                          //     categoryId: subCategoryController
+                                          //         .allCategoryProductList[subCategoryController.subCategoryIndex.value].id,
+                                          //     page: page,
+                                          //     searchKey: searchKey);
+                                          // subCategoryController.categoryProductList.clear();
+                                          subCategoryController
+                                              .allCategoryProductList
+                                              .clear();
+                                          //hERE ASSIGNED THE SUBCATEGORY INDEX VALUE TO FETCH ALL PRODUCTS
+                                          await subCategoryController
+                                              .getAllCategoryProducts(
+                                                  categoryId:
+                                                      subCategoryController
+                                                          .subCategoryList[widget
+                                                              .selectedIndexes!]
+                                                          .id,
+                                                  page: page,
+                                                  searchKey: searchKey,
+                                                  index: subCategoryController
+                                                      .subCategoryIndex.value);
+                                          // await subCategoryController
+                                          //     .getAllCategoryProducts(
+                                          //         categoryId: subCategoryController
+                                          //             .subCategoryList[
+                                          //                 subCategoryController
+                                          //                     .subCategoryIndex.value]
+                                          //             .id,
+                                          //         page: page,
+                                          //         searchKey: searchKey,
+                                          //         index: subCategoryController
+                                          //             .subCategoryIndex.value);
+                                          // subCategoryController.categoryProductId.value =
+                                          //     subCategoryController
+                                          //         .subCategoryList[subCategoryController
+                                          //             .subCategoryIndex.value]
+                                          //         .id;
+                                          // print(
+                                          //     "All Part set index ${subCategoryController.subCategoryIndex.value}");
+                                          //
+                                          // print(
+                                          //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
+                                        } catch (e) {
+                                          // Handle errors (e.g., show an error message)
+                                          debugPrint(
+                                              "Error fetching products: $e");
+                                        } finally {
+                                          subCategoryController
+                                              .isLoading.value = false;
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  Row(
+                                    children: List.generate(
+                                      subCategoryController
+                                          .subChildCategories.length,
+                                      growable: true,
+                                      (index) => Obx(
+                                        () => InkWell(
+                                          child: Container(
+                                            height: 35.h,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: subCategoryController
+                                                                .subSelectedIndex
+                                                                .value ==
+                                                            index &&
+                                                        subCategoryController
+                                                                .showAllProducts
+                                                                .value ==
+                                                            false
+                                                    ? Colors.green
+                                                    : Colors.transparent,
+                                                border: Border.all(
+                                                    color: subCategoryController
+                                                                    .subSelectedIndex
+                                                                    .value ==
+                                                                index &&
+                                                            subCategoryController
+                                                                    .showAllProducts
+                                                                    .value ==
+                                                                false
+                                                        ? Colors.black
+                                                        : MyTheme.green)),
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: Center(
+                                              child: Text(
+                                                subCategoryController
+                                                    .subChildCategories[index]
+                                                    .name!,
+                                                style: TextStyle(
+                                                    color: subCategoryController
+                                                                    .subSelectedIndex
+                                                                    .value ==
+                                                                index &&
+                                                            subCategoryController
+                                                                    .showAllProducts
+                                                                    .value ==
+                                                                false
+                                                        ? Colors.black
+                                                        : MyTheme.green),
+                                              ),
+                                            ),
+                                          ),
+                                          onTap: () async {
+                                            setState(() {
+                                              pageSub = 1;
+                                            });
+                                            // print("Calling");
+                                            subCategoryController
+                                                .showAllProducts.value = false;
+                                            subCategoryController
+                                                .subSelectedIndex.value = index;
+                                            subCategoryController
+                                                .isInitial.value = true;
+                                            subCategoryController
+                                                    .subChildCategoryId.value =
+                                                subCategoryController
+                                                    .subChildCategories[index]
+                                                    .id!;
+                                            print(
+                                                "Show All Products========>${subCategoryController.showAllProducts.value}");
+                                            print(
+                                                "Show selected ID==========>${subCategoryController.subChildCategoryId.value} ${subCategoryController.subChildCategories[index].id!}");
+                                            // subCategoryController.categoryProductList.clear();
+                                            // subCategoryController.isLoading.value = true;
+                                            // print(
+                                            //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
+                                            // print(
+                                            //     "subChildCategory Value ${subCategoryController.categoryProductList[index].name}");
+                                            subCategoryController
+                                                .categoryProductList
+                                                .clear();
+                                            await subCategoryController
+                                                .getCategoryProducts(
+                                                    categoryId:
+                                                        subCategoryController
+                                                            .subChildCategories[
+                                                                index]
+                                                            .id!,
+                                                    page: pageSub,
+                                                    searchKey: searchKey,
+                                                    index: index);
+                                            // print(
+                                            //     "Passing Ids =====>${subCategoryController.subChildCategories[index].id}");
+                                            // print(
+                                            //     "subcategory product length =======>${subCategoryController.categoryProductList.length}");
+                                            // print(subCategoryController
+                                            //     .categoryProductList.isEmpty);
+                                            // print(
+                                            //     "subChildCategory Value ${subCategoryController.categoryProductList[index].name}");
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        })
+                      : SizedBox(),
+                ],
+              ),
+            )
+          : PreferredSize(
+              child: SizedBox(),
+              preferredSize: const Size.fromHeight(0.0),
+            ),
+    );
   }
 
   getProductsList() async {
@@ -886,15 +964,15 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
         searchKey: searchKey);
   }
 
-  getAll() async {
-    await subCategoryController.getMainCategories(widget.categoryId);
-    await subCategoryController.getAllCategoryProducts(
+  getAll()  {
+     subCategoryController.getMainCategories(widget.categoryId);
+     subCategoryController.getAllCategoryProducts(
         categoryId: widget.subCategoryId, page: page, searchKey: searchKey);
-    await subCategoryController.getCategoryProducts(
+     subCategoryController.getCategoryProducts(
         categoryId: widget.subCategoryId, page: pageSub, searchKey: searchKey);
-    await subCategoryController.getSubCategory(widget.categoryId!);
-    await subCategoryController.getSubChildCategories(widget.subCategoryId!);
-    await subCategoryController.subCategoryIndexSelection(widget.subCategoryId);
+     subCategoryController.getSubCategory(widget.categoryId!);
+     subCategoryController.getSubChildCategories(widget.subCategoryId!);
+     subCategoryController.subCategoryIndexSelection(widget.subCategoryId);
     subCategoryController.showAllProducts.value = true;
     setState(() {});
     // subCategoryIndexSelection();

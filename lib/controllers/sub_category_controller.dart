@@ -69,8 +69,8 @@ class SubCategoryController extends GetxController {
     // categoryProductList.clear();
     var productResponse = await ProductRepository()
         .getCategoryProducts(id: categoryId, page: page, name: searchKey);
-    // categoryProductList.addAll(productResponse.products!);
-    categoryProductList.value = productResponse.products!;
+    categoryProductList.addAll(productResponse.products!);
+    // categoryProductList.value = productResponse.products!;
     // print("Check is Empty ${categoryProductList.isEmpty}");
     // print("closed $page");
     print("Total Page of product======>${page}");
@@ -87,8 +87,8 @@ class SubCategoryController extends GetxController {
     // allCategoryProductList.clear();
     var allProductResponse = await ProductRepository()
         .getCategoryProducts(id: categoryId, page: page, name: searchKey);
-    // allCategoryProductList.addAll(allProductResponse.products!);
-    allCategoryProductList.value = allProductResponse.products!;
+    allCategoryProductList.addAll(allProductResponse.products!);
+    // allCategoryProductList.value = allProductResponse.products!;
     allCategoryProductId.value = categoryId!;
     isInitial.value = false;
     totalData.value = allProductResponse.meta!.total!;

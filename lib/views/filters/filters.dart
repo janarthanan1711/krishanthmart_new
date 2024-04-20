@@ -439,10 +439,12 @@ class _FilterState extends State<Filter> {
       children: [
         Container(
           decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.symmetric(
-                  vertical: BorderSide(color: MyTheme.light_grey, width: .5),
-                  horizontal: BorderSide(color: MyTheme.light_grey, width: 1))),
+            color: Colors.white,
+            border: Border.symmetric(
+              vertical: BorderSide(color: MyTheme.light_grey, width: .5),
+              horizontal: BorderSide(color: MyTheme.light_grey, width: 1),
+            ),
+          ),
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           height: 36,
           width: MediaQuery.of(context).size.width * .33,
@@ -1104,7 +1106,7 @@ class _FilterState extends State<Filter> {
         children: [
           Expanded(
             child: buildProductScrollableList(),
-          )
+          ),
         ],
       ),
     );
